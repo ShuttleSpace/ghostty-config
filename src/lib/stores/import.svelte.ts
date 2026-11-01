@@ -1,10 +1,11 @@
 import {parse} from "$lib/utils/parse";
-import {diffFromDefaults, load} from "$lib/stores/config.svelte";
+import config, {diffFromDefaults, load} from "$lib/stores/config.svelte";
 import {decodeConfig, getSharePayloadFromHash, removeSharePayloadFromHash} from "$lib/utils/share";
 import {error, success} from "$lib/stores/toasts.svelte";
 import {alert as showAlert} from "$lib/stores/modals.svelte";
+import {t} from "$lib/i18n";
 
-export type ImportSource = "share" | "clipboard" | "file";
+export type ImportSource = "share" | "clipboard" | "file" | "style";
 
 export interface PreviewState {
     source: ImportSource;
@@ -12,58 +13,104 @@ export interface PreviewState {
     parsed: Record<string, string | string[]> | null;
     parsedDiff: Record<string, string | string[]> | null;
     parseError: boolean;
+    /** Keys present in the incoming text that this app's registry doesn't know (dropped on load). */
+    unsupportedKeys: string[];
+    /** Unsafe keys removed from a remote style before it reached the preview. */
+    strippedKeys: string[];
 }
 
-const SOURCE_INFO: Record<ImportSource, {title: string; description: string; noConfigMessage: string; successMessage: string;}> = {
+export interface ImportMeta {
+    strippedKeys?: string[];
+}
+
+const SOURCE_INFO_KEYS: Record<
+    ImportSource,
+    {title: string; description: string; noConfigMessage: string; successMessage: string}
+> = {
     share: {
-        title: "Shared Config",
-        description: "Someone shared a Ghostty config with you. Review it before importing.",
-        noConfigMessage: "We couldn't find any valid config settings in the shared URL.",
-        successMessage: "Shared config imported"
+        title: "ui.import.shareTitle",
+        description: "ui.import.shareDescription",
+        noConfigMessage: "ui.import.shareNoConfig",
+        successMessage: "ui.import.shareSuccess"
     },
     clipboard: {
-        title: "Import Config",
-        description: "Importing will overwrite any changes you have made. Review it before importing.",
-        noConfigMessage: "We couldn't find any valid config settings in the clipboard you provided.",
-        successMessage: "Config imported"
+        title: "ui.import.importTitle",
+        description: "ui.import.importDescription",
+        noConfigMessage: "ui.import.clipboardNoConfig",
+        successMessage: "ui.import.importSuccess"
     },
     file: {
-        title: "Import Config",
-        description: "Importing will overwrite any changes you have made. Review it before importing.",
-        noConfigMessage: "We couldn't find any valid config settings in the file you provided.",
-        successMessage: "Config imported"
+        title: "ui.import.importTitle",
+        description: "ui.import.importDescription",
+        noConfigMessage: "ui.import.fileNoConfig",
+        successMessage: "ui.import.importSuccess"
+    },
+    style: {
+        title: "ui.import.styleTitle",
+        description: "ui.import.styleDescription",
+        noConfigMessage: "ui.import.styleNoConfig",
+        successMessage: "ui.import.styleSuccess"
     }
 };
 
-export const incomingImport = $state<{preview: PreviewState | null; show: boolean;}>({preview: null, show: false});
+export const incomingImport = $state<{preview: PreviewState | null; show: boolean}>({
+    preview: null,
+    show: false
+});
 
 export function getSourceInfo(source: ImportSource) {
-    return SOURCE_INFO[source];
+    const keys = SOURCE_INFO_KEYS[source];
+    return {
+        title: t(keys.title),
+        description: t(keys.description),
+        noConfigMessage: t(keys.noConfigMessage),
+        successMessage: t(keys.successMessage)
+    };
 }
 
 function clearHash() {
     if (typeof window === "undefined") return;
     const cleaned = removeSharePayloadFromHash(window.location.hash);
-    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${cleaned}`);
+    window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}${cleaned}`
+    );
 }
 
-function buildPreview(source: ImportSource, text: string): PreviewState {
+function buildPreview(source: ImportSource, text: string, meta?: ImportMeta): PreviewState {
+    const strippedKeys = meta?.strippedKeys ?? [];
     try {
         const parsed = parse(text);
         const parsedDiff = diffFromDefaults(parsed);
-        return {source, text, parsed, parsedDiff, parseError: false};
+        const unsupportedKeys = Object.keys(parsed)
+            .filter((key) => !(key in config))
+            .sort();
+        return {source, text, parsed, parsedDiff, parseError: false, unsupportedKeys, strippedKeys};
     }
     catch {
-        return {source, text, parsed: null, parsedDiff: null, parseError: true};
+        return {
+            source,
+            text,
+            parsed: null,
+            parsedDiff: null,
+            parseError: true,
+            unsupportedKeys: [],
+            strippedKeys
+        };
     }
 }
 
-export function checkTextForImport(source: ImportSource, text: string) {
-    const preview = buildPreview(source, text);
+export function checkTextForImport(source: ImportSource, text: string, meta?: ImportMeta) {
+    const preview = buildPreview(source, text, meta);
     const hasKeys = preview.parsedDiff && Object.keys(preview.parsedDiff).length > 0;
 
     if (!hasKeys && !preview.parseError) {
-        void showAlert({title: "No config found", message: SOURCE_INFO[source].noConfigMessage, buttonText: "Dismiss"});
+        void showAlert({
+            title: t("ui.import.noConfigFound"),
+            message: getSourceInfo(source).noConfigMessage,
+            buttonText: t("ui.modals.dismiss")
+        });
         if (source === "share") clearHash();
         return;
     }
@@ -81,7 +128,7 @@ export function checkHashForShare() {
         checkTextForImport("share", decodeConfig(payload));
     }
     catch {
-        error("Failed to read shared config from URL");
+        error(t("ui.import.readSharedFailed"));
         clearHash();
     }
 }
@@ -92,14 +139,14 @@ export async function applyIncomingImport() {
 
     try {
         load(parsed);
-        success(SOURCE_INFO[source].successMessage);
+        success(getSourceInfo(source).successMessage);
     }
-    catch (err) {
+ catch (err) {
         console.error(err); // eslint-disable-line no-console
         await showAlert({
-            title: "Could not load config",
-            message: "Something went wrong while loading your parsed config. Please open an issue on GitHub.",
-            buttonText: "Dismiss"
+            title: t("ui.import.loadFailedTitle"),
+            message: t("ui.import.loadFailedMessage"),
+            buttonText: t("ui.modals.dismiss")
         });
     }
 

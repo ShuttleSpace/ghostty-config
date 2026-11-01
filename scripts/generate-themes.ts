@@ -31,11 +31,18 @@
  */
 
 import {execSync} from "node:child_process";
-import {mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync, existsSync, mkdirSync} from "node:fs";
+import {
+    mkdtempSync,
+    readdirSync,
+    readFileSync,
+    rmSync,
+    writeFileSync,
+    existsSync,
+    mkdirSync
+} from "node:fs";
 import {tmpdir} from "node:os";
 import {join} from "node:path";
 import type {HexColor, ColorScheme} from "$lib/utils/colors";
-
 
 const REPO_URL = "https://github.com/mbadolato/iTerm2-Color-Schemes.git";
 const SPARSE_PATH = "ghostty";
@@ -147,7 +154,9 @@ async function main(): Promise<void> {
 
         const themeDir = join(workDir, SPARSE_PATH);
         if (!existsSync(themeDir)) {
-            throw new Error(`Expected directory ${themeDir} after sparse checkout but it does not exist`);
+            throw new Error(
+                `Expected directory ${themeDir} after sparse checkout but it does not exist`
+            );
         }
 
         const files = readdirSync(themeDir).filter((name) => {
@@ -165,13 +174,15 @@ async function main(): Promise<void> {
             try {
                 themes[fileName] = parseThemeFile(content);
             }
-            catch (err) {
+ catch (err) {
                 console.warn(`Skipping "${fileName}": failed to parse (${(err as Error).message})`);
             }
         }
 
         const sortedThemes: ThemeMap = {};
-        for (const name of Object.keys(themes).sort((a, b) => a.localeCompare(b, undefined, {sensitivity: "base", numeric: true}))) {
+        for (const name of Object.keys(themes).sort((a, b) =>
+            a.localeCompare(b, undefined, {sensitivity: "base", numeric: true})
+        )) {
             sortedThemes[name] = themes[name];
         }
 
@@ -184,7 +195,7 @@ async function main(): Promise<void> {
 
         console.log(`Wrote ${Object.keys(sortedThemes).length} themes to ${OUTPUT_PATH}`);
     }
-    finally {
+ finally {
         rmSync(workDir, {recursive: true, force: true});
     }
 }
@@ -204,11 +215,13 @@ async function readPreviousThemes(): Promise<ThemeMap> {
     try {
         // Cache-bust via query param so re-runs in the same process (tests,
         // watch mode) don't get a stale module from Bun's import cache.
-        const mod = await import(`${OUTPUT_PATH}?t=${Date.now()}`) as {themes?: ThemeMap;};
+        const mod = (await import(`${OUTPUT_PATH}?t=${Date.now()}`)) as {themes?: ThemeMap};
         return mod.themes ?? {};
     }
-    catch (err) {
-        console.warn(`Could not read previous themes module for diffing (${(err as Error).message}); treating as empty`);
+ catch (err) {
+        console.warn(
+            `Could not read previous themes module for diffing (${(err as Error).message}); treating as empty`
+        );
         return {};
     }
 }
@@ -258,7 +271,10 @@ function writeSummary(previous: ThemeMap, next: ThemeMap): void {
     const added = [...nextNames].filter((n: string) => !prevNames.has(n)).sort();
     const removed = [...prevNames].filter((n: string) => !nextNames.has(n)).sort();
     const changed = [...nextNames]
-        .filter((n: string) => prevNames.has(n) && JSON.stringify(previous[n]) !== JSON.stringify(next[n]))
+        .filter(
+            (n: string) =>
+                prevNames.has(n) && JSON.stringify(previous[n]) !== JSON.stringify(next[n])
+        )
         .sort();
 
     const lines: string[] = [];

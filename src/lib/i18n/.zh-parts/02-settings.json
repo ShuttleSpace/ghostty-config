@@ -1,0 +1,166 @@
+{
+    "configDefaultFiles": {
+        "name": "加载默认配置文件",
+        "description": "为 true 时，将加载默认配置文件路径（例如 `$XDG_CONFIG_HOME/ghostty/config`）。设为 false 可让 Ghostty 从 CLI 使用时尽量减少外部影响。仅限 CLI 配置；在配置文件中设置无效。"
+    },
+    "configFile": {
+        "name": "附加配置文件",
+        "description": "要读取的附加配置文件。可以重复。路径相对于包含该指令的配置文件。在前面加 `?` 可在文件不存在时抑制错误。不允许循环引用。配置文件会在定义它们的配置之后加载。"
+    },
+    "confirmCloseSurface": {
+        "name": "关闭表面时确认",
+        "description": "关闭表面之前先确认。\n\n- `true` - 如果 shell 集成检测到正在运行的进程则确认（默认）\n- `false` - 不确认直接关闭\n- `always` - 始终确认，即使 shell 集成表示没有进程在运行"
+    },
+    "copyOnSelect": {
+        "name": "选中时复制",
+        "description": "是否自动将选中的文本复制到剪贴板。\n\n- `true` - 复制到选择剪贴板（Linux 和 macOS 上默认）\n- `false` - 禁用选中时复制\n- `clipboard` - 同时复制到选择剪贴板和系统剪贴板\n\n中键粘贴始终使用选择剪贴板。"
+    },
+    "cursorClickToMove": {
+        "name": "启用点击移动光标",
+        "description": "启用后，可在提示符处使用 alt+点击（Linux）或 option+点击（macOS）移动光标。需要 shell 集成（OSC 133），且仅在主屏幕模式下有效。"
+    },
+    "cursorColor": {
+        "name": "光标颜色",
+        "description": "光标的颜色。如果未设置，将自动选择默认值。可指定为十六进制或 X11 颜色名称。自 1.2.0 起，可设置为 `cell-foreground` 或 `cell-background`。"
+    },
+    "cursorOpacity": {
+        "name": "光标不透明度",
+        "description": "光标的不透明度。值为 1 时完全不透明，为 0 时完全透明。足够小的值（如 0.3）可能实际上不可见。"
+    },
+    "cursorStyle": {
+        "name": "光标样式",
+        "description": "光标的样式。设置默认样式；正在运行的程序可以通过转义序列（CSI q）覆盖。Shell 集成会自动在提示符处将光标设为竖线（可通过 `shell-integration-features = no-cursor` 禁用）。\n\n值：`block`、`bar`、`underline`、`block_hollow`"
+    },
+    "cursorStyleBlink": {
+        "name": "光标闪烁样式",
+        "description": "设置光标的默认闪烁状态。如果未设置（`undefined`/未设置），Ghostty 将遵循 DEC 模式 12（AT&T 光标闪烁）作为开启/关闭闪烁的替代方式。如果设为任意值，DEC 模式 12 将被忽略，但 DECSCUSR 仍会被遵循。\n\n值：`true`、`false`，或留空（null/undefined）以遵循 DEC 模式 12。",
+        "note": "<code>default</code> 选项会交由 DEC 模式 12 决定闪烁状态。"
+    },
+    "cursorText": {
+        "name": "光标下文本颜色",
+        "description": "光标下方文本的颜色。如果未设置，将自动选择默认值。可指定为十六进制或 X11 颜色名称。自 1.2.0 起，可设置为 `cell-foreground` 或 `cell-background`。"
+    },
+    "customShader": {
+        "name": "自定义着色器",
+        "description": "在默认着色器之后运行的自定义着色器。路径指向与 Shadertoy API 兼容的 GLSL 语法着色器。着色器应指定 `mainImage` 函数。\n\n警告：无效的着色器可能导致 Ghostty 无法使用（窗口完全变黑）。\n\n可以重复以加载多个按顺序运行的着色器。",
+        "note": "这与 Shadertoy 的 API 一致。"
+    },
+    "customShaderAnimation": {
+        "name": "允许着色器动画",
+        "description": "如果为 `true`（默认），使用自定义着色器时，聚焦的终端表面会运行动画循环。\n\n- `false` - 仅在终端更新时渲染着色器\n- `true` - 终端聚焦时运行动画循环\n- `always` - 无论是否聚焦都始终运行动画循环（占用更多 CPU）"
+    },
+    "desktopNotifications": {
+        "name": "允许桌面通知",
+        "description": "如果为 true（默认），终端中运行的应用程序可以使用某些转义序列（如 OSC 9 或 OSC 777）显示桌面通知。"
+    },
+    "enquiryResponse": {
+        "name": "对 ENQ 的响应",
+        "description": "收到来自运行命令的 ENQ（0x05）时要发送的字符串。默认为空字符串。"
+    },
+    "env": {
+        "name": "环境变量",
+        "description": "传递给终端表面中启动的命令的额外环境变量。格式：`KEY=VALUE`。将某个键设为空字符串会移除它。将 `env` 设为空字符串会重置整个映射。"
+    },
+    "faintOpacity": {
+        "name": "淡色文本不透明度",
+        "description": "淡色文本的不透明度。值为 1 时完全不透明，为 0 时完全透明。"
+    },
+    "focusFollowsMouse": {
+        "name": "鼠标移动时聚焦分屏",
+        "description": "如果为 true，当存在多个分屏窗格时，鼠标会选中获得焦点的窗格。仅适用于当前聚焦的窗口。"
+    },
+    "fontCodepointMap": {
+        "name": "Unicode 专用字体映射",
+        "description": "强制将一个或一段 Unicode 码点映射到指定的命名字体。语法：`codepoint=fontname`，其中 codepoint 可以是单个码点（`U+ABCD`）或范围（`U+ABCD-U+DEFG`）。同一字体的多个范围可以用逗号分隔。"
+    },
+    "fontFamily": {
+        "name": "主字体族",
+        "description": "要使用的字体族。你可以使用 CLI 生成有效值列表：`ghostty +list-fonts`。\n\n此配置可以重复多次，以指定当主字体中缺少所需码点时使用的首选回退字体。这对于多语言、符号字体等特别有用。\n\n如果你想覆盖之前设置的值而不是追加回退字体，请将值指定为 `\"\"`（空字符串）以重置列表。"
+    },
+    "fontFamilyBold": {
+        "name": "粗体文本字体族",
+        "description": "用于粗体文本的字体族。如果未设置或未找到，则回退到 `font-family`。"
+    },
+    "fontFamilyBoldItalic": {
+        "name": "粗斜体文本字体族",
+        "description": "用于粗斜体文本的字体族。如果未设置或未找到，则回退到 `font-family`。"
+    },
+    "fontFamilyItalic": {
+        "name": "斜体文本字体族",
+        "description": "用于斜体文本的字体族。如果未设置或未找到，则回退到 `font-family`。"
+    },
+    "fontFeature": {
+        "name": "字体连字设置",
+        "description": "应用字体特性。要启用多个字体特性，可以重复此项，或使用逗号分隔的列表。\n\n语法：`feat`、`+feat`、`-feat`、`feat on`、`feat off`、`feat=1`、`feat=0`。\n\n要禁用编程连字，请使用 `-calt`。要大体禁用大多数连字，请使用 `-calt, -liga, -dlig`。"
+    },
+    "fontShapingBreak": {
+        "name": "字体整形断点",
+        "description": "将字体整形拆分为多个运行段的位置。运行段是一起整形的连续文本片段。断开运行段可防止在某些位置形成连字。\n\n用逗号组合多个值以设置多个选项。在选项前加 `no-` 可禁用它。\n\n可用选项：\n- `cursor` - 在光标处断开运行段。"
+    },
+    "fontSize": {
+        "name": "基础字体大小",
+        "description": "字体大小，单位为磅。此值可以是非整数，将选择最接近的整数像素大小。\n\nmacOS 上默认为 13，其他平台上默认为 12。"
+    },
+    "fontStyle": {
+        "name": "主字体样式",
+        "description": "主字体的命名样式。例如对于 `Iosevka Heavy`，使用样式 `Heavy`。设为 `false` 可完全禁用该样式。"
+    },
+    "fontStyleBold": {
+        "name": "粗体文本字体样式",
+        "description": "粗体文本的命名字体样式。例如对于 `Iosevka Heavy`，使用样式 `Heavy`。设为 `false` 可完全禁用该样式。"
+    },
+    "fontStyleBoldItalic": {
+        "name": "粗斜体文本字体样式",
+        "description": "粗斜体文本的命名字体样式。设为 `false` 可完全禁用该样式。"
+    },
+    "fontStyleItalic": {
+        "name": "斜体文本字体样式",
+        "description": "斜体文本的命名字体样式。设为 `false` 可完全禁用该样式。"
+    },
+    "fontSyntheticStyle": {
+        "name": "合成样式",
+        "description": "控制当指定字体族中缺少所需样式时，Ghostty 是否应合成样式。\n\n设为 `false` 或 `true` 可完全禁用或启用合成样式。你可以使用 `bold`、`italic` 和 `bold-italic`（启用）或 `no-bold`、`no-italic` 和 `no-bold-italic`（禁用）来启用或禁用特定样式。多个样式可以用逗号组合。\n\n可用样式键：`bold`、`italic`、`bold-italic`。",
+        "note": "更多信息请参阅文档。"
+    },
+    "fontThicken": {
+        "name": "加粗字体",
+        "description": "如果支持，以更粗的笔画绘制字体。目前仅在 macOS 上支持。",
+        "note": "目前仅影响 macOS。"
+    },
+    "fontThickenStrength": {
+        "name": "加粗强度",
+        "description": "启用 `font-thicken` 时的加粗强度。有效值为 0 到 255 之间的整数。0 并不表示不加粗——它表示可用的最细加粗。当 `font-thicken` 为 false 时无效。仅 macOS。"
+    },
+    "fontVariation": {
+        "name": "主字体变体",
+        "description": "可重复的配置，用于为可变字体设置一个或多个字体变体值。格式：`id=value`，其中 `id` 是轴标识符（始终为 4 个字符，例如 `wght`）。常见轴：`wght`（字重）、`slnt`（倾斜）、`ital`（斜体）、`opsz`（光学尺寸）、`wdth`（宽度）。"
+    },
+    "fontVariationBold": {
+        "name": "粗体文本字体变体",
+        "description": "粗体文本的可变字体变体。参见 `font-variation`。"
+    },
+    "fontVariationBoldItalic": {
+        "name": "粗斜体文本字体变体",
+        "description": "粗斜体文本的可变字体变体。参见 `font-variation`。"
+    },
+    "fontVariationItalic": {
+        "name": "斜体文本字体变体",
+        "description": "斜体文本的可变字体变体。参见 `font-variation`。"
+    },
+    "foreground": {
+        "name": "前景颜色",
+        "description": "窗口的前景颜色。可指定为十六进制（`#RRGGBB` 或 `RRGGBB`）或 X11 颜色名称。"
+    },
+    "freetypeLoadFlags": {
+        "name": "FreeType 加载标志",
+        "description": "要启用的 FreeType 加载标志。格式：逗号分隔的标志。加上 `no-` 前缀可禁用。使用 `true`/`false` 开启或关闭所有标志。\n\n可用标志：\n- `hinting` - 启用 hinting（默认：开启）\n- `force-autohint` - 始终使用 FreeType 自动 hinter（默认：关闭）\n- `monochrome` - 使用 1 位单色渲染，禁用抗锯齿（默认：关闭）\n- `autohint` - 启用 FreeType 自动 hinter（默认：开启）\n- `light` - 使用轻量 hinting 风格，更好地保留字形（默认：开启）\n\n仅适用于使用 FreeType 的 Ghostty 构建（通常是 Linux 构建）。"
+    },
+    "fullscreen": {
+        "name": "以全屏模式启动",
+        "description": "以全屏模式启动新窗口。\n\n- `false` - 不以全屏启动（默认）\n- `true` - 以原生全屏启动\n- `non-native` - （仅 macOS）无动画的非原生全屏，隐藏菜单栏\n- `non-native-visible-menu` - （仅 macOS）非原生全屏，保持菜单栏可见\n- `non-native-padded-notch` - （仅 macOS）非原生全屏，隐藏菜单栏但为刘海留出空间\n\n重要：标签页不能与原生全屏模式配合使用。"
+    },
+    "graphemeWidthMethod": {
+        "name": "字素宽度计算",
+        "description": "用于计算字素簇单元格宽度的方法。\n\n- `unicode` - 使用 Unicode 标准（默认，正确但可能与旧程序产生光标不同步）。\n- `legacy` - 使用旧方法，如 wcswidth（最大化与旧程序的兼容性）。\n\n如果正在运行的程序显式启用了终端模式 2027，则无论此配置如何，都会强制使用 `unicode` 宽度。"
+    }
+}

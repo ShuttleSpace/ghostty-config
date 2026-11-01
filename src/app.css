@@ -9,32 +9,33 @@
 
     /* Put -apple-system and BlinkMacSystemFont first for sf pro on macOS */
     /* Base text variables */
-    --font-family: -apple-system, BlinkMacSystemFont, "Inter Variable", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    --font-family:
+        -apple-system, BlinkMacSystemFont, "Inter Variable", "Segoe UI", Roboto, Oxygen, Ubuntu,
+        Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     --font-family-mono: monospace, monospace;
     --font-size: 14px;
-    --font-color: #EBE6EE;
-    --font-color-muted: #A19FA3;
+    --font-color: #ebe6ee;
+    --font-color-muted: #a19fa3;
     --input-icon-color: #fff;
 
-
     /* Background levels */
-    --bg-level-1: #2C2733;
-    --bg-level-2: #2F2935;
-    --bg-level-3: #332D38;
-    --bg-level-4: #39343F;
-    --bg-separator: #39333F;
-    --bg-input-focus: #1F1E1F;
-    --bg-modal: #231E2A;
-    --bg-basic-button: #635F68;
+    --bg-level-1: #2c2733;
+    --bg-level-2: #2f2935;
+    --bg-level-3: #332d38;
+    --bg-level-4: #39343f;
+    --bg-separator: #39333f;
+    --bg-input-focus: #1f1e1f;
+    --bg-modal: #231e2a;
+    --bg-basic-button: #635f68;
     --bg-stepper: #535258;
     --bg-handle: #434049;
 
     /* Corresponding border levels */
     --border-level-1: #000000;
-    --border-level-2: #4F4A54;
-    --border-level-3: #4C4651;
-    --border-level-4: #423E48;
-    --border-separator: #302B37;
+    --border-level-2: #4f4a54;
+    --border-level-3: #4c4651;
+    --border-level-4: #423e48;
+    --border-separator: #302b37;
     --border-input: #443e4b;
     --border-input-focus: 3px solid var(--color-input-accent);
 
@@ -52,34 +53,62 @@
     --switch-active-checked-color: hsl(from var(--switch-checked-color) h s calc(l + 10));
 
     /* Special colors */
-    --font-color-accent: #56A4F5;
-    --color-selected: #134FAC;
-    --color-input-accent: #1769E6;
+    --font-color-accent: #56a4f5;
+    --color-selected: #134fac;
+    --color-input-accent: #1769e6;
 
-    --color-danger: #F25F58;
-    --color-warning: #FBBE3C;
-    --color-success: #58CB42;
+    --color-danger: #f25f58;
+    --color-warning: #fbbe3c;
+    --color-success: #58cb42;
+    /* Badge accents (platform / version / theme). */
+    --color-badge-platform: #6b8cff;
+    --color-badge-version: #f0a500;
+    --color-badge-theme: #b583ff;
+    /* macOS traffic light colors (red / yellow / green). */
+    --color-traffic-red: #ff5f57;
+    --color-traffic-yellow: #febc2e;
+    --color-traffic-green: #28c840;
+
+    /*
+     * Unified interactive scheme: every control, selection and scrollbar color
+     * resolves from these tokens. Do not hardcode these values in components —
+     * change them here and the whole app follows.
+     */
+    --color-accent: var(--font-color-accent);
+    --color-on-accent: #ffffff;
+    /* Row highlight in the keybind / command-palette lists. */
+    --color-selected-row: #2457c9;
+    /* Primary (checked/pressed) control gradient: buttons, checkboxes, radios. */
+    --color-control-checked-top: #3c6ec9;
+    --color-control-checked-bottom: #437ae2;
+    /* Neutral (unchecked) control gradient. */
+    --color-control-unchecked-top: #615e65;
+    --color-control-unchecked-bottom: #4e4b53;
+    --color-button-neutral-bg: #59575c;
+    --color-danger-text: #ff9b9b;
+    --color-scrollbar-thumb: #959595;
+    --color-scrollbar-track-hover: #171717;
     /*
     tab color #134FAC
     switch color #1675DB
     slider #1769E6
     */
 
-
     font-size: var(--font-size);
     font-family: var(--font-family);
     color: var(--font-color);
 }
 
-* {box-sizing: border-box;}
-
+* {
+    box-sizing: border-box;
+}
 
 ::-webkit-scrollbar {
     width: 7px;
 }
 
 ::-webkit-scrollbar:hover {
-    background-color: #171717;
+    background-color: var(--color-scrollbar-track-hover);
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -89,7 +118,7 @@
 ::-webkit-scrollbar-thumb {
     display: initial;
     border-radius: 10px;
-    background-color: #959595;
+    background-color: var(--color-scrollbar-thumb);
     border: 2px solid var(--bg-level-1);
     /* padding: 12px; */
 }
@@ -98,17 +127,18 @@
     border-width: 0;
 }
 
-
 body {
     min-height: 100vh;
+    height: 100vh;
     margin: 0;
-	background-image: url("$lib/images/monterey.webp");
-	background-attachment: fixed;
-	background-size: cover;
-	background-position: center center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    background-image: url("$lib/images/monterey.webp");
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 a {

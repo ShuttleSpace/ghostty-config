@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.tauri.app/config/2/capabilities/default.json",
+    "identifier": "default",
+    "description": "Default capabilities for Ghostty Config",
+    "windows": ["main"],
+    "permissions": [
+        "core:default",
+        "clipboard-manager:allow-read-text",
+        "clipboard-manager:allow-write-text",
+        "dialog:default",
+        "dialog:allow-open",
+        "dialog:allow-save",
+        "fs:default",
+        {
+            "identifier": "fs:allow-read-text-file",
+            "allow": [{"path": "$HOME/**"}, {"path": "$APPCONFIG/**"}, {"path": "$APPDATA/**"}]
+        },
+        {
+            "identifier": "fs:allow-write-text-file",
+            "allow": [{"path": "$HOME/**"}, {"path": "$APPCONFIG/**"}, {"path": "$APPDATA/**"}]
+        },
+        {
+            "identifier": "fs:allow-exists",
+            "allow": [{"path": "$HOME/**"}, {"path": "$APPCONFIG/**"}, {"path": "$APPDATA/**"}]
+        },
+        {
+            "identifier": "fs:allow-mkdir",
+            "allow": [{"path": "$HOME/**"}, {"path": "$APPCONFIG/**"}, {"path": "$APPDATA/**"}]
+        },
+        "shell:allow-open"
+    ]
+}

@@ -1,3 +1,5 @@
+import {t} from "$lib/i18n";
+
 type ConfirmModalRequest = {
     id: string;
     kind: "confirm";
@@ -63,10 +65,10 @@ export function confirm(options: ConfirmOptions): Promise<boolean> {
             kind: "confirm",
             title: options.title,
             message: options.message ?? null,
-            confirmText: options.confirmText ?? "Confirm",
-            cancelText: options.cancelText ?? "Cancel",
+            confirmText: options.confirmText ?? t("ui.modals.confirm"),
+            cancelText: options.cancelText ?? t("ui.modals.cancel"),
             iconSrc: options.iconSrc,
-            iconAlt: options.iconAlt ?? "Warning",
+            iconAlt: options.iconAlt ?? t("ui.modals.warning"),
             resolve
         };
         modalStack = [...modalStack, modal];
@@ -80,9 +82,9 @@ export function alert(options: AlertOptions): Promise<void> {
             kind: "alert",
             title: options.title,
             message: options.message ?? null,
-            buttonText: options.buttonText ?? "Close",
+            buttonText: options.buttonText ?? t("ui.modals.close"),
             iconSrc: options.iconSrc,
-            iconAlt: options.iconAlt ?? "Notice",
+            iconAlt: options.iconAlt ?? t("ui.modals.notice"),
             resolve
         };
         modalStack = [...modalStack, modal];
@@ -110,7 +112,7 @@ export function dismissTopModal() {
     if (modal.kind === "confirm") {
         modal.resolve(false);
     }
-    else {
+ else {
         modal.resolve();
     }
 

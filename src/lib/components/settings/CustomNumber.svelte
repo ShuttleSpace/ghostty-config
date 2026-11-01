@@ -14,23 +14,37 @@
         widget?: "dropdown" | "pills"; // default: pills if 2 or fewer presets, dropdown if more than 2
     }
 
-    // eslint-disable-next-line prefer-const
-    let {value = $bindable(""), presets, min, max, step, size, placeholder, integer, widget}: Props = $props();
+
+    /* eslint-disable prefer-const -- value is $bindable, so the destructure must stay `let` */
+    let {
+        value = $bindable(""),
+        presets,
+        min,
+        max,
+        step,
+        size,
+        placeholder,
+        integer,
+        widget
+    }: Props = $props();
+    /* eslint-enable prefer-const */
 </script>
 
-<CustomInput
-    bind:value
-    {presets}
-    {widget}
-    customDefault="0"
->
+<CustomInput bind:value {presets} {widget} customDefault="0">
     <!-- TODO: figure out why eslint can't resolve the injected ControlProps callback -->
     <!-- eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return -->
     {#snippet control({value: customNumber, onChange: setCustom, disabled}: ControlProps)}
         <Number
             value={customNumber}
             onchange={(n: number | undefined) => setCustom(n === undefined ? "" : n.toString())}
-            {min} {max} {step} {size} {placeholder} {integer} {disabled} nullable
+            {min}
+            {max}
+            {step}
+            {size}
+            {placeholder}
+            {integer}
+            {disabled}
+            nullable
         />
     {/snippet}
     <!-- eslint-enable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return -->

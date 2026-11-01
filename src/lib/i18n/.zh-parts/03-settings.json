@@ -1,0 +1,177 @@
+{
+    "gtkCustomCss": {
+        "name": "自定义 CSS 文件",
+        "description": "要加载的自定义 CSS 文件。可以重复以加载多个文件。在前面加 `?` 可在文件不存在时抑制错误。每个样式表的大小限制：5MiB。"
+    },
+    "gtkOpenglDebug": {
+        "name": "OpenGL 调试",
+        "description": "启用或禁用 GTK 的 OpenGL 调试日志。调试构建默认为 true，其他构建默认为 false。"
+    },
+    "gtkQuickTerminalLayer": {
+        "name": "快速终端层",
+        "description": "快速终端窗口所在的层。\n\n- `overlay` - 在所有窗口之前\n- `top` - 在普通窗口之前，但在全屏覆盖层之后（默认）\n- `bottom` - 在普通窗口之后，但在壁纸之前\n- `background` - 在所有窗口之后\n\n仅 GTK Wayland。",
+        "note": "控制快速终端显示在哪一层。仅 GTK Wayland。"
+    },
+    "gtkQuickTerminalNamespace": {
+        "name": "快速终端命名空间",
+        "description": "快速终端窗口的命名空间（标识符），供 Wayland 合成器和/或脚本判断层表面的类型。\n\n仅 GTK Wayland。",
+        "note": "快速终端层表面的标识符。仅 GTK Wayland。"
+    },
+    "gtkSingleInstance": {
+        "name": "单实例模式",
+        "description": "控制 Ghostty GTK 应用是否以单实例模式运行。\n\n- `true` - 单实例模式：新进程在现有实例中创建窗口\n- `false` - 每个新进程启动一个独立应用\n- `detect` - 除非设置了 TERM_PROGRAM 或存在 CLI 参数，否则假定为单实例（默认）\n\n注意：调试构建使用单独的单实例 ID，以避免与发布构建冲突。"
+    },
+    "gtkTabsLocation": {
+        "name": "标签页位置",
+        "description": "决定 GTK 标签栏固定在屏幕的哪一侧。当为 `hidden` 时，标题栏中会显示一个带标签页数量的按钮。"
+    },
+    "gtkTitlebar": {
+        "name": "显示标题栏",
+        "description": "启用后，将显示完整的 GTK 标题栏，而不是窗口管理器的简单标题栏。当 `window-decoration` 为 none 或在 macOS 下运行时无效。"
+    },
+    "gtkTitlebarHideWhenMaximized": {
+        "name": "最大化时隐藏标题栏",
+        "description": "如果为 true，窗口最大化时将隐藏标题栏，取消最大化时重新显示。仅 GTK。"
+    },
+    "gtkTitlebarStyle": {
+        "name": "标题栏样式",
+        "description": "GTK 标题栏的样式。\n\n- `native` - 传统标题栏，包含标题、按钮和窗口控件。打开多个标签页时，标签栏显示在下方。\n- `tabs` - 合并标签栏和标题栏以节省垂直空间。无法通过标签标题拖动窗口。",
+        "note": "<code>tabs</code> 会合并标签栏和标题栏以节省垂直空间。"
+    },
+    "gtkToolbarStyle": {
+        "name": "工具栏样式",
+        "description": "决定 GTK 终端顶部和底部栏的外观。\n\n- `flat` - 顶部和底部栏与终端窗口齐平\n- `raised` - 顶部和底部栏在终端区域投下阴影\n- `raised-border` - 类似 `raised`，但阴影替换为细微边框"
+    },
+    "gtkWideTabs": {
+        "name": "使用宽标签页",
+        "description": "如果为 true（默认），GTK 标签页将为“宽”样式（填满可用空间，GNOME 风格）。如果为 false，标签页只占用所需空间。",
+        "note": "将此设为 <code>false</code> 会让标签页只使用所需的最少空间。"
+    },
+    "imageStorageLimit": {
+        "name": "图像缓冲区上限（字节）",
+        "description": "每个终端屏幕可用于图像数据（例如 Kitty 图像协议）的总字节数。最大值为 4,294,967,295（4GiB）。默认为 320MB。如果设为零，将禁用所有图像协议。主屏幕和备用屏幕分别计算。"
+    },
+    "initialCommand": {
+        "name": "首次启动时运行的命令",
+        "description": "与 `command` 相同，但仅应用于 Ghostty 启动时创建的第一个终端表面。也可以通过 `-e` CLI 标志设置（例如 `ghostty -e fish --with --custom --args`）。",
+        "note": "与上一个设置不同，此命令在应用生命周期内只运行一次。"
+    },
+    "initialWindow": {
+        "name": "启动时显示窗口",
+        "description": "控制运行 Ghostty 时是否创建初始窗口。仅在 Linux 和 macOS 上实现。"
+    },
+    "input": {
+        "name": "初始输入",
+        "description": "启动时作为输入发送给命令的数据。格式：\n- `raw:<string>` - 发送原始文本（Zig 字符串字面量语法）\n- `path:<path>` - 读取文件并发送其内容（最大 10MB）\n- 裸值会被视为 `raw:`\n\n可以重复；数据会直接拼接。",
+        "note": "用于 tty 启动的输入。可以是原始文本、Zig 字符串字面量或 path:/to/file。"
+    },
+    "keybind": {
+        "description": "按键绑定。格式：`trigger=action`。重复的触发键会覆盖之前的值。\n\n触发键：以 `+` 分隔的按键和修饰键列表（例如 `ctrl+a`、`ctrl+shift+b`）。\n\n物理按键可以使用 W3C 键码指定（例如 `KeyA`、`key_a`）。\n\n特殊触发键前缀：\n- `all:` - 应用于所有终端表面\n- `global:` - 使快捷键全局生效（系统范围）\n- `unconsumed:` - 不消耗输入\n- `performable:` - 仅在操作可执行时消耗\n\n特殊值：\n- `keybind=clear` - 清除所有按键绑定\n\n链式操作（自 1.3.0 起）：使用 `chain=action` 作为后续快捷键条目。\n\n按键表（自 1.3.0 起）：使用 `<table>/<binding>` 语法。"
+    },
+    "language": {
+        "name": "界面语言",
+        "description": "将 Ghostty 的图形用户界面语言设置为系统默认语言之外的语言。必须完整指定语言，包括编码。例如：`language = de_DE.UTF-8` 会强制 Ghostty 图形用户界面中的字符串使用德语，而不是系统默认语言。\n\n这不会影响 Ghostty 中运行的程序所使用的语言。它们将继续使用系统默认语言。\n\n警告：此设置无法在运行时重新加载。要更改语言，必须完全重启 Ghostty。",
+        "note": "设置 Ghostty 的 GTK GUI 语言（例如 <code>de</code>、<code>fr</code>）。需要完全重启。仅 GTK。"
+    },
+    "link": {
+        "name": "链接处理",
+        "description": "将正则表达式与终端文本匹配，并将点击与某个操作关联。较早配置的链接优先。始终存在一个匹配 URL 并在系统打开器中打开的默认链接（可通过 `link-url` 禁用）。",
+        "note": "用于创建可点击链接的正则表达式，当前已禁用。"
+    },
+    "linkPreviews": {
+        "name": "显示链接预览",
+        "description": "为匹配的 URL 显示链接预览。\n\n- `true` - 为所有匹配的 URL 显示预览\n- `false` - 从不显示链接预览\n- `osc8` - 仅显示 OSC 8 超链接的预览（链接文本可以与目标不同）",
+        "note": "设为 <code>osc8</code> 时，仅显示使用 OSC 8 序列创建的超链接预览。"
+    },
+    "linkUrl": {
+        "name": "自动链接 URL",
+        "description": "启用 URL 匹配。悬停时按住 control（Linux）或 command（macOS）匹配 URL，并使用系统默认应用打开。URL 匹配器的优先级始终低于任何已配置的链接。",
+        "note": "按住 control（Linux）或 command（macOS）键时进行匹配。"
+    },
+    "linuxCgroup": {
+        "name": "使用专用 cgroup",
+        "description": "将每个表面（标签页、分屏、窗口）放入临时 systemd scope，以便按表面管理资源。\n\n- `never` - 从不使用 cgroup\n- `always` - 始终使用 cgroup\n- `single-instance` - 仅为以单实例应用启动的 Ghostty 实例启用 cgroup（Linux 上默认）\n\n需要 systemd。会导致启动稍慢。更改不会反映在现有表面上。"
+    },
+    "linuxCgroupHardFail": {
+        "name": "启动时硬失败",
+        "description": "如果为 false，创建临时 systemd scope 失败时将被静默允许。如果为 true，任何临时 systemd scope 创建失败都会导致表面创建失败。"
+    },
+    "linuxCgroupMemoryLimit": {
+        "name": "内存上限（字节）",
+        "description": "任何单个终端进程（标签页、分屏、窗口）的内存上限，单位为字节。如果未设置，则不设限制。设置临时 systemd scope 的 `MemoryHigh`（软限制）。更改不会反映在现有表面上。"
+    },
+    "linuxCgroupProcessesLimit": {
+        "name": "最大进程数",
+        "description": "任何单个终端进程（标签页、分屏、窗口）的进程数限制。如果未设置，则不设限制。设置 `TasksMax`（硬限制）。更改不会反映在现有表面上。"
+    },
+    "macosApplescript": {
+        "name": "启用 AppleScript 支持",
+        "description": "如果为 true（默认），Ghostty 会在 macOS 上公开并处理内置 AppleScript 字典。如果为 false，所有 AppleScript 交互都会被禁用，包括 AppleScript 命令以及窗口、标签页和终端的对象查找。",
+        "note": "如果禁用，所有与 Ghostty 的 AppleScript 交互都会关闭。"
+    },
+    "macosAutoSecureInput": {
+        "name": "自动安全输入",
+        "description": "如果为 true，macOS 上的 Ghostty 会在检测到密码提示时自动启用安全输入。安全输入可防止应用程序读取键盘事件。请注意，自动检测基于启发式规则，可能无法通过 SSH 工作。"
+    },
+    "macosCustomIcon": {
+        "name": "图标文件",
+        "description": "自定义图标文件的绝对路径。支持的格式：PNG、JPEG、ICNS。默认为 `~/.config/ghostty/Ghostty.icns`。在 `macos-icon = custom` 时使用。",
+        "note": "仅在上方选择 <code>custom</code> 时使用。"
+    },
+    "macosDockDropBehavior": {
+        "name": "程序坞拖放行为",
+        "description": "控制将文件或文件夹拖放到 macOS 程序坞中的 Ghostty 图标时的窗口行为。\n\n- `new-tab` - 在当前窗口中创建新标签页（默认）\n- `new-window` - 无条件创建新窗口",
+        "note": "将文件拖放到 Ghostty 程序坞图标上时发生的情况。"
+    },
+    "macosHidden": {
+        "name": "从程序坞和切换器中隐藏",
+        "description": "控制是否将 macOS 应用从程序坞和应用切换器中排除。主要面向主要使用快速终端模式的用户。\n\n- `never` - 应用从不隐藏（默认）\n- `always` - 应用始终隐藏\n\n注意：隐藏时，键盘布局更改不会自动生效。"
+    },
+    "macosIcon": {
+        "name": "图标",
+        "description": "自定义 macOS 应用图标（影响程序坞、应用切换器等）。\n\n- `official` - 官方 Ghostty 图标\n- `blueprint`、`chalkboard`、`microchip`、`glass`、`holographic`、`paper`、`retro`、`xray` - 官方图标变体\n- `custom` - 完全自定义图标（使用 `macos-custom-icon` 设置路径）\n- `custom-style` - 带自定义样式的官方图标（需要 `macos-icon-ghost-color` 和 `macos-icon-screen-color`）",
+        "note": "自定义样式必须同时指定幽灵色和屏幕色。"
+    },
+    "macosIconFrame": {
+        "name": "图标边框",
+        "description": "用于 macOS 应用图标边框的材质。当 `macos-icon = custom-style` 时必填。\n\n- `aluminum` - 拉丝铝边框（默认）\n- `beige` - 经典 90 年代电脑米色边框\n- `plastic` - 光泽深色塑料边框\n- `chrome` - 闪亮镀铬边框"
+    },
+    "macosIconGhostColor": {
+        "name": "幽灵颜色",
+        "description": "macOS 应用图标中幽灵的颜色。当 `macos-icon = custom-style` 时必填。可指定为十六进制或 X11 颜色名称。"
+    },
+    "macosIconScreenColor": {
+        "name": "屏幕颜色",
+        "description": "macOS 应用图标中屏幕的颜色。屏幕是线性渐变；最多可指定 64 个逗号分隔的颜色。第一个颜色是渐变底部，最后一个是顶部。当 `macos-icon = custom-style` 时必填。"
+    },
+    "macosNonNativeFullscreen": {
+        "name": "使用非原生全屏",
+        "description": "如果不为 false，macOS 上的全屏将不使用原生全屏，而是使用新空间以无动画方式使窗口全屏。\n\n重要：标签页在此模式下不能使用。\n\n- `false` - 使用原生 macOS 全屏（默认）\n- `true` - 非原生全屏，隐藏菜单栏\n- `visible-menu` - 非原生全屏，保持菜单栏可见\n- `padded-notch` - 非原生全屏，隐藏菜单栏，为刘海留出空间",
+        "note": "标签页目前不能与非原生全屏窗口配合使用"
+    },
+    "macosOptionAsAlt": {
+        "name": "将 option 键用作 alt 键",
+        "description": "更改 macOS option 键的行为，使其充当 alt。\n\n默认值（未设置）取决于键盘布局：美国标准/国际布局为 `true`，其他为 `false`。\n\n- `true` - 将 Option 视为 Alt（会破坏 Unicode 输入序列）\n- `false` - 恢复 macOS Alt 键 Unicode 序列（会破坏终端 Alt 序列）\n- `left` - 仅对左 Option 键启用\n- `right` - 仅对右 Option 键启用"
+    },
+    "macosSecureInputIndication": {
+        "name": "指示安全输入",
+        "description": "如果为 true，启用安全输入时 Ghostty 会显示图形指示。"
+    },
+    "macosShortcuts": {
+        "name": "macOS 快捷指令",
+        "description": "是否允许 macOS 快捷指令控制 Ghostty。Ghostty 公开了允许快捷指令创建终端、发送文本、运行命令等操作的动作。\n\n- `ask` - 询问用户权限（会记住，像其他 macOS 权限一样）（默认）\n- `allow` - 不询问直接允许\n- `deny` - 拒绝快捷指令控制 Ghostty",
+        "note": "控制是否可以捕获 macOS 系统快捷键（例如 Cmd+Space）。"
+    },
+    "macosTitlebarProxyIcon": {
+        "name": "标题栏代理图标",
+        "description": "macOS 标题栏中的代理图标是否可见。代理图标代表当前工作目录的文件夹。仅在使用原生 macOS 标题栏样式时可见。"
+    },
+    "macosTitlebarStyle": {
+        "name": "标题栏样式",
+        "description": "macOS 标题栏的样式。\n\n- `native` - 标准原生 macOS 标题栏\n- `transparent` - 原生但透明，显示窗口背景颜色\n- `tabs` - 集成标签栏的自定义标题栏（macOS 13 及以下有限制）\n- `hidden` - 隐藏标题栏（与 `window-decoration = none` 不同，窗口边框和圆角仍保留）"
+    },
+    "macosWindowButtons": {
+        "name": "窗口按钮（红绿灯）",
+        "description": "macOS 标题栏中的窗口按钮（红绿灯）是否可见。\n\n- `visible` - 显示窗口按钮（默认）\n- `hidden` - 隐藏窗口按钮\n\n当 `window-decoration = none` 或 `macos-titlebar-style = hidden` 时无效。"
+    }
+}

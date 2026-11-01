@@ -3,6 +3,7 @@
     import {page} from "$app/state";
     import type {Pathname} from "$app/types";
     import logo from "$lib/images/avatar.webp";
+    import {t} from "$lib/i18n";
 
     const {route = "/", name = "Ghostty Config"} = $props();
     const path = $derived(page.url.pathname);
@@ -10,17 +11,15 @@
     const selected = $derived(path === route);
 </script>
 
-
 <a href={resolve(route as Pathname)} class="user-tab" class:selected>
     <div class="user-avatar">
-        <img src={logo} alt="Ghostty Config Logo" />
+        <img src={logo} alt={t("ui.app.logoAlt")} />
     </div>
     <div class="user-label">
         <div class="user-name">{name}</div>
-        <div class="user-subtext">by @zerebos</div>
+        <div class="user-subtext">{t("ui.app.byBefore")}@zerebos</div>
     </div>
 </a>
-
 
 <style>
     .user-tab {

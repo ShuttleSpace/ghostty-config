@@ -7,6 +7,10 @@ Usage (from repo root):
 
 - `bun run scripts/fetch-ghostty-key-names.ts > /tmp/ghostty-keys.json`
 - `bun run scripts/fetch-ghostty-action-names.ts > /tmp/ghostty-actions.json`
+- `bun run sync:styles` (regenerates `src/lib/data/styles.ts` from ghostty.style)
+
+`generate-styles.ts` accepts `--include-seed`, `--featured`, `--endpoint=URL`,
+`--from-fixture=PATH`, `--allow-stale`, and `--allow-empty`; see the file header for details.
 
 Outputs are JSON payloads containing:
 

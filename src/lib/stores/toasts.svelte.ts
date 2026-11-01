@@ -32,7 +32,7 @@ export function getToasts() {
 
 function addToast(options: ToastOptions | string, type: ToastType) {
     const message = typeof options === "string" ? options : options.message;
-    const duration = typeof options === "string" ? DEFAULT_DURATION : options.duration ?? DEFAULT_DURATION;
+    const duration = typeof options === "string" ? DEFAULT_DURATION : (options.duration ?? DEFAULT_DURATION);
 
     const toast: ToastRequest = {
         id: getNextId(),

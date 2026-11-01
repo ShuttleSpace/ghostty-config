@@ -29,7 +29,14 @@ import config, {diffFromDefaults, load, resetSetting} from "$lib/stores/config.s
 import {alert as showAlert} from "$lib/stores/modals.svelte";
 import {error, success} from "$lib/stores/toasts.svelte";
 import {encodeConfig, SHARE_HASH_KEY} from "$lib/utils/share";
-import {applyIncomingImport, checkHashForShare, checkTextForImport, dismissIncomingImport, getSourceInfo, incomingImport} from "./import.svelte";
+import {
+    applyIncomingImport,
+    checkHashForShare,
+    checkTextForImport,
+    dismissIncomingImport,
+    getSourceInfo,
+    incomingImport
+} from "./import.svelte";
 
 afterEach(() => {
     for (const k of ["fontSize", "keybind", "palette"] as const) resetSetting(k);
@@ -46,6 +53,8 @@ describe("getSourceInfo", () => {
         expect(getSourceInfo("clipboard").title).toBe("Import Config");
         expect(getSourceInfo("clipboard").successMessage).toBe("Config imported");
         expect(getSourceInfo("file").title).toBe("Import Config");
+        expect(getSourceInfo("style").title).toBe("Apply Style");
+        expect(getSourceInfo("style").successMessage).toBe("Style applied");
     });
 });
 
@@ -58,7 +67,19 @@ describe("checkTextForImport", () => {
         expect(incomingImport.preview?.parsed?.fontSize).toBe("20");
         expect(incomingImport.preview?.parsedDiff?.["font-size"]).toBe("20");
         expect(incomingImport.preview?.parseError).toBe(false);
+        expect(incomingImport.preview?.unsupportedKeys).toEqual([]);
+        expect(incomingImport.preview?.strippedKeys).toEqual([]);
         expect(showAlert).not.toHaveBeenCalled();
+    });
+
+    it("records unsupported and stripped keys for a style import", () => {
+        checkTextForImport("style", "font-size = 14\nnot-a-real-setting = 1\n", {
+            strippedKeys: ["command"]
+        });
+
+        expect(incomingImport.preview?.source).toBe("style");
+        expect(incomingImport.preview?.unsupportedKeys).toEqual(["notARealSetting"]);
+        expect(incomingImport.preview?.strippedKeys).toEqual(["command"]);
     });
 
     it("alerts and stages nothing when the text has no changes over defaults", () => {

@@ -5,7 +5,7 @@ type DebouncedFunction<Args extends unknown[]> = ((...args: Args) => void) & {
 export function debounce<Args extends unknown[]>(
     fn: (...args: Args) => void,
     wait: number,
-    {leading = true, trailing = false}: {leading?: boolean; trailing?: boolean;} = {}
+    {leading = true, trailing = false}: {leading?: boolean; trailing?: boolean} = {}
 ): DebouncedFunction<Args> {
     let timeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -30,7 +30,6 @@ export function debounce<Args extends unknown[]>(
     return debounced;
 }
 
-
 type PendingGuardedFunction<Args extends unknown[]> = ((...args: Args) => void) & {
     readonly pending: boolean;
 };
@@ -51,14 +50,14 @@ export function withPendingGuard<Args extends unknown[]>(
                 pending = false;
             });
         }
-        catch (err) {
+ catch (err) {
             pending = false;
             throw err;
         }
     };
 
     Object.defineProperty(guarded, "pending", {
-        get: () => pending,
+        get: () => pending
     });
 
     return guarded as PendingGuardedFunction<Args>;

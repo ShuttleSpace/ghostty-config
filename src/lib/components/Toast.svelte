@@ -92,7 +92,7 @@
             rgba(52, 199, 89, 0.85) 0%,
             rgba(48, 176, 79, 0.85) 100%
         );
-        color: #ffffff;
+        color: var(--color-on-accent);
     }
 
     .toast-error {
@@ -101,7 +101,7 @@
             rgba(255, 69, 58, 0.85) 0%,
             rgba(235, 61, 50, 0.85) 100%
         );
-        color: #ffffff;
+        color: var(--color-on-accent);
     }
 
     .toast-icon {

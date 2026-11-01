@@ -9,12 +9,12 @@
     import Item from "./Item.svelte";
     import Separator from "./Separator.svelte";
     import Switch from "./Switch.svelte";
-
+    import {t, tWidgetLabel} from "$lib/i18n";
 
     interface Props {
         value: string;
         features: FeatureDef[];
-    };
+    }
 
     // eslint-disable-next-line prefer-const
     let {value = $bindable(), features}: Props = $props();
@@ -50,30 +50,39 @@
 </script>
 
 <Button onclick={openEditor}>
-    Configure…
+    {t("ui.widgets.configure")}
 </Button>
 
 <svelte:document onkeydown={handleEditorKeydown} />
 
-
 {#if isEditorOpen}
-    <DialogModal title={settingInfo?.name ?? "Configure Features"} onclose={closeEditor}>
+    <DialogModal
+        title={settingInfo?.name ?? t("ui.widgets.configureFeatures")}
+        onclose={closeEditor}
+    >
         {#snippet icon()}
             <CheckListIcon />
         {/snippet}
 
         <Group>
             {#each features as feature, i (feature.id)}
-                <Item name={feature.label} isNonDefault={draftState[feature.id] !== feature.default} onReset={() => draftState[feature.id] = feature.default}>
-                    <Switch bind:value={() => boolCodec.serialize(draftState[feature.id]), (v: string) => draftState[feature.id] = boolCodec.parse(v)} />
+                <Item
+                    name={tWidgetLabel(feature.label)}
+                    isNonDefault={draftState[feature.id] !== feature.default}
+                    onReset={() => (draftState[feature.id] = feature.default)}
+                >
+                    <Switch
+                        bind:value={() => boolCodec.serialize(draftState[feature.id]),
+                            (v: string) => (draftState[feature.id] = boolCodec.parse(v))}
+                    />
                 </Item>
                 {#if i < features.length - 1}<Separator />{/if}
             {/each}
         </Group>
 
         {#snippet footer()}
-            <Button onclick={closeEditor}>Close</Button>
-            <Button primary onclick={onEditorSave}>Save</Button>
+            <Button onclick={closeEditor}>{t("ui.widgets.close")}</Button>
+            <Button primary onclick={onEditorSave}>{t("ui.widgets.save")}</Button>
         {/snippet}
     </DialogModal>
 {/if}

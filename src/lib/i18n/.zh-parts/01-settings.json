@@ -1,0 +1,174 @@
+{
+    "abnormalCommandExitRuntime": {
+        "name": "异常命令退出运行时长",
+        "description": "进程运行时间低于此毫秒数时，退出被视为异常。用于在进程退出过快时显示错误消息。"
+    },
+    "adjustBoxThickness": {
+        "name": "框线粗细",
+        "description": "以像素或百分比调整制表符绘图字符的粗细。"
+    },
+    "adjustCellHeight": {
+        "name": "单元格高度",
+        "description": "调整由字体决定的单元格高度。字体会在单元格中垂直居中。值可以是整数或百分比。"
+    },
+    "adjustCellWidth": {
+        "name": "单元格宽度",
+        "description": "调整由字体决定的单元格宽度。值可以是整数（1、-1）或百分比（20%、-15%）。表示在原值基础上变化的量，而不是绝对值。"
+    },
+    "adjustCursorHeight": {
+        "name": "光标高度",
+        "description": "以像素或百分比调整光标高度。目前适用于所有光标类型：竖线、方块和空心方块。"
+    },
+    "adjustCursorThickness": {
+        "name": "光标粗细",
+        "description": "以像素或百分比调整竖线光标和空心方块光标的粗细。"
+    },
+    "adjustFontBaseline": {
+        "name": "字体基线",
+        "description": "以像素或百分比调整从单元格底部到文本基线的距离。增大值会向上移动基线，减小值会向下移动基线。"
+    },
+    "adjustIconHeight": {
+        "name": "Nerd Font 图标高度",
+        "description": "以像素或百分比调整 Nerd Font 图标的最大高度。Powerline 符号不受影响。"
+    },
+    "adjustOverlinePosition": {
+        "name": "上划线位置",
+        "description": "以像素或百分比调整从单元格顶部到上划线顶部的距离。增大值会向下移动上划线，减小值会向上移动上划线。"
+    },
+    "adjustOverlineThickness": {
+        "name": "上划线粗细",
+        "description": "以像素或百分比调整上划线粗细。"
+    },
+    "adjustStrikethroughPosition": {
+        "name": "删除线位置",
+        "description": "以像素或百分比调整从单元格顶部到删除线顶部的距离。增大值会向下移动删除线，减小值会向上移动删除线。"
+    },
+    "adjustStrikethroughThickness": {
+        "name": "删除线粗细",
+        "description": "以像素或百分比调整删除线粗细。"
+    },
+    "adjustUnderlinePosition": {
+        "name": "下划线位置",
+        "description": "以像素或百分比调整从单元格顶部到下划线顶部的距离。增大值会向下移动下划线，减小值会向上移动下划线。"
+    },
+    "adjustUnderlineThickness": {
+        "name": "下划线粗细",
+        "description": "以下像素调整下划线粗细。"
+    },
+    "alphaBlending": {
+        "name": "Alpha 混合色彩空间",
+        "description": "执行 Alpha 混合时使用的色彩空间。默认值因平台而异：macOS 上为 `native`，其他所有平台为 `linear-corrected`。\n\n值：\n- `native` - 在操作系统的原生色彩空间中执行 Alpha 混合（macOS 上为 Display P3，Linux 上为 sRGB）。\n- `linear` - 在线性空间中执行 Alpha 混合。\n- `linear-corrected` - 与 `linear` 相同，但对文本应用了校正步骤，使其看起来几乎或完全与 `native` 一致，同时没有变暗伪影。"
+    },
+    "appNotifications": {
+        "name": "应用通知",
+        "description": "控制 Ghostty 显示的应用内通知（GTK 上的 toast）。\n\n通知：\n- `clipboard-copy` - 文本复制到剪贴板时显示（默认：开启）\n- `config-reload` - 配置重新加载时显示（默认：开启）\n\n加上 `no-` 前缀可禁用。使用 `true`/`false` 启用/禁用全部。仅 GTK。",
+        "note": "以逗号分隔的通知启用/禁用列表。可用：clipboard-copy、config-reload。加上 <code>no-</code> 前缀可禁用。<code>true</code>/<code>false</code> 启用/禁用全部。"
+    },
+    "asyncBackend": {
+        "name": "异步后端",
+        "description": "配置用于异步 IO、事件处理等功能的底层 API。\n\n- `auto` - 自动选择最佳后端（默认）\n- `epoll` - 使用 epoll API\n- `io_uring` - 使用 io_uring API\n\n仅支持 Linux。需要完全重启应用才能生效。",
+        "note": "如果不确定，请保持为 auto。"
+    },
+    "autoUpdate": {
+        "name": "自动更新",
+        "description": "控制自动更新功能。仅支持 macOS。\n\n- `off` - 禁用自动更新\n- `check` - 检查更新并通知，但不下载\n- `download` - 自动下载更新，但不安装\n\n如果未设置，则遵循 Sparkle 的默认行为。",
+        "note": "保持未设置将回退到你的 Sparkle 偏好设置。"
+    },
+    "autoUpdateChannel": {
+        "name": "更新通道",
+        "description": "用于自动更新的发布通道。默认与当前运行的 Ghostty 版本的发布通道一致。\n\n- `stable` - 稳定的标记发布版\n- `tip` - 来自主分支的预发布版本\n\n需要完全重启才能生效。仅 macOS。",
+        "note": "默认情况下，这将与你下载的版本保持一致。"
+    },
+    "background": {
+        "name": "背景颜色",
+        "description": "窗口的背景颜色。可指定为十六进制（`#RRGGBB` 或 `RRGGBB`）或 X11 颜色名称。"
+    },
+    "backgroundBlur": {
+        "name": "背景模糊",
+        "description": "当 `background-opacity` 小于 1 时是否模糊背景。\n\n值：\n- 非负整数，指定模糊强度\n- `false`（等同于强度 0）\n- `true`（等同于默认强度 20）\n- `macos-glass-regular` - 标准玻璃效果（macOS 26.0+）\n- `macos-glass-clear` - 高透明玻璃效果（macOS 26.0+）\n\n支持 macOS 和部分 Linux 桌面环境（KDE Plasma）。在 KDE Plasma 上，具体的模糊强度会被忽略——任何真值都会启用模糊。",
+        "note": "设置为 <code>true</code> 启用模糊，<code>false</code> 禁用，数字表示特定半径（macOS），或 <code>macos-glass-regular</code>/<code>macos-glass-clear</code> 使用 macOS 玻璃效果。"
+    },
+    "backgroundImage": {
+        "name": "背景图片",
+        "description": "终端的背景图片。应为 PNG 或 JPEG 文件的路径。\n\n背景图片是按终端而不是按窗口设置的。背景图片会按终端在显存中重复存储。\n\n警告：大图片可能导致大量显存占用。",
+        "note": "用作终端背景的图片文件路径。"
+    },
+    "backgroundImageFit": {
+        "name": "背景图片适配",
+        "description": "背景图片的适配方式。\n\n- `contain` - 在保持宽高比的前提下，缩放到适合终端的最大尺寸。\n- `cover` - 在保持宽高比的前提下，缩放到完全覆盖终端的最小尺寸（可能裁切边缘）。\n- `stretch` - 拉伸到终端完整尺寸，不保持宽高比。\n- `none` - 不缩放背景图片。"
+    },
+    "backgroundImageOpacity": {
+        "name": "背景图片不透明度",
+        "description": "背景图片的不透明度，相对于 `background-opacity`。值为 1.0 时图片位于背景颜色之上。大于 1.0 的值会使图片比一般背景更不透明。"
+    },
+    "backgroundImagePosition": {
+        "name": "背景图片位置",
+        "description": "背景图片的位置。"
+    },
+    "backgroundImageRepeat": {
+        "name": "重复背景图片",
+        "description": "当背景图片未完全填满终端区域时，是否重复显示。"
+    },
+    "backgroundOpacity": {
+        "name": "背景不透明度",
+        "description": "背景的不透明度。值为 1 时完全不透明，为 0 时完全透明。在 macOS 上，原生全屏时会禁用背景不透明度。在 macOS 上，更改此设置需要完全重启 Ghostty。"
+    },
+    "backgroundOpacityCells": {
+        "name": "强制单元格背景不透明度",
+        "description": "对设置了显式背景颜色的单元格应用背景不透明度。通常，`background-opacity` 只应用于窗口背景。将其设为 true 后，无论单元格是否设置了显式背景颜色，都会应用该不透明度。"
+    },
+    "bellAudioPath": {
+        "name": "响铃音频文件",
+        "description": "如果 `audio` 是启用的响铃特性，此项为音频文件的路径。支持 `~/` 前缀。相对路径相对于配置文件目录；作为 CLI 参数使用时相对于当前工作目录。仅 GTK。",
+        "note": "响铃时播放的音频文件路径。需要在响铃特性中启用 <code>audio</code>。仅 GTK。"
+    },
+    "bellAudioVolume": {
+        "name": "响铃音量",
+        "description": "如果 `audio` 是启用的响铃特性，此项为播放音频文件的音量（相对于系统音量）。范围为 0.0（静音）到 1.0（尽可能大）。仅 GTK。",
+        "note": "响铃音频的音量，从 0（静音）到 1（最大）。仅 GTK。"
+    },
+    "bellFeatures": {
+        "name": "响铃特性",
+        "description": "要启用的响铃特性。以逗号分隔的列表。加上 `no-` 前缀可禁用。\n\n特性：\n- `system` - 使用内置系统功能（在 macOS 上播放系统提示音）\n- `audio` - 播放自定义声音（仅 GTK）\n- `attention` - 在未聚焦时请求用户注意（默认：开启）\n- `title` - 在标题前添加响铃表情（🔔），直到重新聚焦（默认：开启）\n- `border` - 在警报表面周围显示边框，直到重新聚焦（GTK 自 1.2.0 起，macOS 自 1.2.1 起）",
+        "note": "以逗号分隔的特性列表。可用：system、audio、attention、title、border。加上 <code>no-</code> 前缀可禁用。"
+    },
+    "boldColor": {
+        "name": "粗体文本颜色",
+        "description": "修改终端中粗体文本使用的颜色。\n\n- 设为特定颜色（`#RRGGBB`）- 默认粗体文本始终使用此颜色。其余粗体颜色设为 `bright`。\n- 设为 `bright` - 粗体文本使用亮色调色板（替代已弃用的 `bold-is-bright`）。\n- 未设置（默认）- 粗体文本使用普通前景色。\n\n注意：之前的 `bold-is-bright` 配置已弃用，由 `bold-color = bright` 替代。",
+        "note": "设置为 <code>bright</code> 以使用亮色调色板显示粗体文本，或使用十六进制颜色值。留空以使用默认值。"
+    },
+    "class": {
+        "name": "WM_CLASS 类字段",
+        "description": "控制 WM_CLASS 类字段（X11）、Wayland 应用 ID 和 DBus 总线名称。默认值为 `com.mitchellh.ghostty`。更改此项会创建独立的单实例 Ghostty 实例。",
+        "note": "默认为 <code>com.mitchellh.ghostty</code>"
+    },
+    "clickRepeatInterval": {
+        "name": "多击间隔毫秒数",
+        "description": "两次点击之间被视为重复点击（双击、三击等）的时间，单位为毫秒。值为零时使用平台默认值（macOS：系统设置，其他：500ms）。",
+        "note": "值为 0 表示使用操作系统的默认时间。"
+    },
+    "clipboardPasteBracketedSafe": {
+        "name": "将括号粘贴标记为安全",
+        "description": "如果为 true，括号粘贴将被视为安全。括号粘贴是指正在运行的程序启用了括号粘贴模式时的粘贴。"
+    },
+    "clipboardPasteProtection": {
+        "name": "不安全粘贴时确认",
+        "description": "在粘贴看起来不安全的文本前要求确认。有助于防止“复制/粘贴攻击”，即用户可能因粘贴包含换行符的文本而意外执行不安全命令。"
+    },
+    "clipboardRead": {
+        "name": "允许终端读取剪贴板",
+        "description": "是否允许终端中运行的程序读取系统剪贴板（OSC 52）。\n\n- `ask` - 允许前询问用户（默认）\n- `allow` - 始终允许\n- `deny` - 始终拒绝"
+    },
+    "clipboardTrimTrailingSpaces": {
+        "name": "复制时修剪行尾空格",
+        "description": "修剪复制到剪贴板的数据中的行尾空白。仅适用于包含其他字符的行的行尾空白。完全空白的行始终会修剪其空白。"
+    },
+    "clipboardWrite": {
+        "name": "允许终端写入剪贴板",
+        "description": "是否允许终端中运行的程序写入系统剪贴板（OSC 52）。\n\n- `ask` - 允许前询问用户\n- `allow` - 始终允许（默认）\n- `deny` - 始终拒绝"
+    },
+    "command": {
+        "name": "启动时运行的命令",
+        "description": "要运行的命令，通常是 shell。如果不是绝对路径，会在 PATH 中查找。如果未设置，则根据 SHELL 环境变量或 passwd 条目确定 shell。\n\n加上 `direct:` 前缀可避免 shell 展开。加上 `shell:` 前缀可始终用 shell 包装。支持附加参数。\n\n用于所有新的终端表面。"
+    }
+}

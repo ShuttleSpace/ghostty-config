@@ -58,7 +58,9 @@ describe("parse() keybind (via the generic repeatable path)", () => {
     });
 
     it("preserves the `=` inside a keybind value", () => {
-        expect(parse("keybind = super+equal=increase_font_size:1").keybind).toEqual(["super+equal=increase_font_size:1"]);
+        expect(parse("keybind = super+equal=increase_font_size:1").keybind).toEqual([
+            "super+equal=increase_font_size:1"
+        ]);
     });
 
     it("defaults to an empty array when no keybinds are present", () => {
@@ -76,7 +78,7 @@ describe("parse() palette (indexed, still special)", () => {
 
     it("ignores out-of-range indices", () => {
         const result = parse("palette = 300=#ffffff");
-        expect(result.palette.every(c => c === "")).toBe(true);
+        expect(result.palette.every((c) => c === "")).toBe(true);
     });
 });
 
@@ -84,11 +86,14 @@ describe("parse -> serialize round-trip", () => {
     it("survives scalars, repeatables, and keybinds", () => {
         const text = "font-size = 18\nfont-family = JetBrainsMono NF\nfont-family = Symbols Nerd Font\nkeybind = ctrl+a=select_all";
         const parsed = parse(text);
-        const out = serialize({
-            "font-size": parsed.fontSize,
-            "font-family": parsed.fontFamily,
-            "keybind": parsed.keybind
-        }, false);
+        const out = serialize(
+            {
+                "font-size": parsed.fontSize,
+                "font-family": parsed.fontFamily,
+                "keybind": parsed.keybind
+            },
+            false
+        );
         expect(out).toContain("font-size = 18");
         expect(out).toContain("font-family = JetBrainsMono NF");
         expect(out).toContain("font-family = Symbols Nerd Font");

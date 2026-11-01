@@ -45,7 +45,7 @@
         box-shadow:
             0px 0px 1px 0px #000000,
             inset 0px 3px 1px -3px rgba(255, 255, 255, 0.65);
-        background: #59575C;
+        background: var(--color-button-neutral-bg);
         color: var(--font-color);
         cursor: pointer;
         position: relative;
@@ -55,7 +55,11 @@
     }
 
     button.primary {
-        background: linear-gradient(0deg, #3C6EC9, #437AE2);
+        background: linear-gradient(
+            0deg,
+            var(--color-control-checked-top),
+            var(--color-control-checked-bottom)
+        );
         padding: 4px 20px;
     }
 
@@ -65,7 +69,7 @@
 
     button.danger {
         background: linear-gradient(0deg, color-mix(in srgb, var(--color-danger) 82%, #000), var(--color-danger));
-        color: #fff;
+        color: var(--color-on-accent);
     }
 
     button:disabled {

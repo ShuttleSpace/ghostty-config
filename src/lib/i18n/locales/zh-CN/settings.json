@@ -1,0 +1,1001 @@
+{
+  "nav": {
+    "application": "应用程序",
+    "terminal": "终端",
+    "clipboard": "剪贴板",
+    "window": "窗口",
+    "colors": "颜色",
+    "fonts": "字体",
+    "keybinds": "快捷键",
+    "mouse": "鼠标",
+    "gtk": "GTK",
+    "linux": "Linux",
+    "macos": "macOS"
+  },
+  "navNote": {},
+  "group": {
+    "application": {
+      "bell": "响铃",
+      "startup": "启动",
+      "shutdown": "关闭",
+      "quickTerminal": "快速终端"
+    },
+    "terminal": {
+      "notifications": "命令通知",
+      "display": "显示",
+      "compatibility": "协议与兼容性"
+    },
+    "clipboard": {},
+    "window": {
+      "appearance": "外观",
+      "resize": "尺寸与调整"
+    },
+    "colors": {
+      "base": "基础颜色",
+      "search": "搜索颜色",
+      "cursor": "光标",
+      "palette": "调色板"
+    },
+    "fonts": {
+      "family": "字体族",
+      "styles": "字体样式",
+      "variations": "字体变体",
+      "advanced": "度量调整"
+    },
+    "keybinds": {},
+    "mouse": {},
+    "gtk": {
+      "tabs": "标题栏与标签页"
+    },
+    "linux": {},
+    "macos": {
+      "icon": "应用图标"
+    }
+  },
+  "groupNote": {
+    "terminal": {
+      "compatibility": "这些设置控制底层终端协议行为。只有在你知道自己在做什么时才更改它们。"
+    },
+    "colors": {
+      "base": "此处的预览会在命令输出的第二行显示选中的文本。",
+      "cursor": "此预览中的光标会以 1 秒间隔闪烁以作强调，可能与你在 Ghostty 中看到的不一致！",
+      "palette": "前 16 种颜色是终端中最常显示的颜色。\n\n颜色 1-8 通常是黑色、红色、绿色、黄色、蓝色、品红、青色和白色。\n颜色 9-16 通常是这些颜色的“更亮”变体。"
+    },
+    "fonts": {
+      "family": "默认情况下，Ghostty 会内置并使用 JetBrainsMono Nerd Font，因此你无需在系统中安装它或在配置中设置它。",
+      "styles": "上方字段的命名字体样式。例如对于 <code>Ioveska Heavy</code>，应使用样式 <code>Heavy</code>。或者，你可以将样式设为 <code>false</code> 以完全禁用该样式并恢复默认样式。",
+      "variations": "可变字体专用设置，请仅在你了解其作用时修改！",
+      "advanced": "对单元格和字形度量的细粒度像素/百分比调整。Ghostty 对这些设置几乎没有验证，可能会使终端无法使用。修改任何一项时都要小心。"
+    },
+    "macos": {
+      "icon": "如果选择 <code>custom-style</code> 选项，你可以使用其他任何图标设置，通过实时预览来自定义图标。"
+    }
+  },
+  "setting": {
+    "abnormalCommandExitRuntime": {
+      "name": "异常命令退出运行时长",
+      "description": "进程运行时间低于此毫秒数时，退出被视为异常。用于在进程退出过快时显示错误消息。"
+    },
+    "adjustBoxThickness": {
+      "name": "框线粗细",
+      "description": "以像素或百分比调整制表符绘图字符的粗细。"
+    },
+    "adjustCellHeight": {
+      "name": "单元格高度",
+      "description": "调整由字体决定的单元格高度。字体会在单元格中垂直居中。值可以是整数或百分比。"
+    },
+    "adjustCellWidth": {
+      "name": "单元格宽度",
+      "description": "调整由字体决定的单元格宽度。值可以是整数（1、-1）或百分比（20%、-15%）。表示在原值基础上变化的量，而不是绝对值。"
+    },
+    "adjustCursorHeight": {
+      "name": "光标高度",
+      "description": "以像素或百分比调整光标高度。目前适用于所有光标类型：竖线、方块和空心方块。"
+    },
+    "adjustCursorThickness": {
+      "name": "光标粗细",
+      "description": "以像素或百分比调整竖线光标和空心方块光标的粗细。"
+    },
+    "adjustFontBaseline": {
+      "name": "字体基线",
+      "description": "以像素或百分比调整从单元格底部到文本基线的距离。增大值会向上移动基线，减小值会向下移动基线。"
+    },
+    "adjustIconHeight": {
+      "name": "Nerd Font 图标高度",
+      "description": "以像素或百分比调整 Nerd Font 图标的最大高度。Powerline 符号不受影响。"
+    },
+    "adjustOverlinePosition": {
+      "name": "上划线位置",
+      "description": "以像素或百分比调整从单元格顶部到上划线顶部的距离。增大值会向下移动上划线，减小值会向上移动上划线。"
+    },
+    "adjustOverlineThickness": {
+      "name": "上划线粗细",
+      "description": "以像素或百分比调整上划线粗细。"
+    },
+    "adjustStrikethroughPosition": {
+      "name": "删除线位置",
+      "description": "以像素或百分比调整从单元格顶部到删除线顶部的距离。增大值会向下移动删除线，减小值会向上移动删除线。"
+    },
+    "adjustStrikethroughThickness": {
+      "name": "删除线粗细",
+      "description": "以像素或百分比调整删除线粗细。"
+    },
+    "adjustUnderlinePosition": {
+      "name": "下划线位置",
+      "description": "以像素或百分比调整从单元格顶部到下划线顶部的距离。增大值会向下移动下划线，减小值会向上移动下划线。"
+    },
+    "adjustUnderlineThickness": {
+      "name": "下划线粗细",
+      "description": "以像素调整下划线粗细。"
+    },
+    "alphaBlending": {
+      "name": "Alpha 混合色彩空间",
+      "description": "执行 Alpha 混合时使用的色彩空间。默认值因平台而异：macOS 上为 `native`，其他所有平台为 `linear-corrected`。\n\n值：\n- `native` - 在操作系统的原生色彩空间中执行 Alpha 混合（macOS 上为 Display P3，Linux 上为 sRGB）。\n- `linear` - 在线性空间中执行 Alpha 混合。\n- `linear-corrected` - 与 `linear` 相同，但对文本应用了校正步骤，使其看起来几乎或完全与 `native` 一致，同时没有变暗伪影。"
+    },
+    "appNotifications": {
+      "name": "应用通知",
+      "description": "控制 Ghostty 显示的应用内通知（GTK 上的 toast）。\n\n通知：\n- `clipboard-copy` - 文本复制到剪贴板时显示（默认：开启）\n- `config-reload` - 配置重新加载时显示（默认：开启）\n\n加上 `no-` 前缀可禁用。使用 `true`/`false` 启用/禁用全部。仅 GTK。",
+      "note": "以逗号分隔的通知启用/禁用列表。可用：clipboard-copy、config-reload。加上 <code>no-</code> 前缀可禁用。<code>true</code>/<code>false</code> 启用/禁用全部。"
+    },
+    "asyncBackend": {
+      "name": "异步后端",
+      "description": "配置用于异步 IO、事件处理等功能的底层 API。\n\n- `auto` - 自动选择最佳后端（默认）\n- `epoll` - 使用 epoll API\n- `io_uring` - 使用 io_uring API\n\n仅支持 Linux。需要完全重启应用才能生效。",
+      "note": "如果不确定，请保持为 auto。"
+    },
+    "autoUpdate": {
+      "name": "自动更新",
+      "description": "控制自动更新功能。仅支持 macOS。\n\n- `off` - 禁用自动更新\n- `check` - 检查更新并通知，但不下载\n- `download` - 自动下载更新，但不安装\n\n如果未设置，则遵循 Sparkle 的默认行为。",
+      "note": "保持未设置将回退到你的 Sparkle 偏好设置。"
+    },
+    "autoUpdateChannel": {
+      "name": "更新通道",
+      "description": "用于自动更新的发布通道。默认与当前运行的 Ghostty 版本的发布通道一致。\n\n- `stable` - 稳定的标记发布版\n- `tip` - 来自主分支的预发布版本\n\n需要完全重启才能生效。仅 macOS。",
+      "note": "默认情况下，这将与你下载的版本保持一致。"
+    },
+    "background": {
+      "name": "背景颜色",
+      "description": "窗口的背景颜色。可指定为十六进制（`#RRGGBB` 或 `RRGGBB`）或 X11 颜色名称。"
+    },
+    "backgroundBlur": {
+      "name": "背景模糊",
+      "description": "当 `background-opacity` 小于 1 时是否模糊背景。\n\n值：\n- 非负整数，指定模糊强度\n- `false`（等同于强度 0）\n- `true`（等同于默认强度 20）\n- `macos-glass-regular` - 标准玻璃效果（macOS 26.0+）\n- `macos-glass-clear` - 高透明玻璃效果（macOS 26.0+）\n\n支持 macOS 和部分 Linux 桌面环境（KDE Plasma）。在 KDE Plasma 上，具体的模糊强度会被忽略——任何真值都会启用模糊。",
+      "note": "设置为 <code>true</code> 启用模糊，<code>false</code> 禁用，数字表示特定半径（macOS），或 <code>macos-glass-regular</code>/<code>macos-glass-clear</code> 使用 macOS 玻璃效果。"
+    },
+    "backgroundImage": {
+      "name": "背景图片",
+      "description": "终端的背景图片。应为 PNG 或 JPEG 文件的路径。\n\n背景图片是按终端而不是按窗口设置的。背景图片会按终端在显存中重复存储。\n\n警告：大图片可能导致大量显存占用。",
+      "note": "用作终端背景的图片文件路径。"
+    },
+    "backgroundImageFit": {
+      "name": "背景图片适配",
+      "description": "背景图片的适配方式。\n\n- `contain` - 在保持宽高比的前提下，缩放到适合终端的最大尺寸。\n- `cover` - 在保持宽高比的前提下，缩放到完全覆盖终端的最小尺寸（可能裁切边缘）。\n- `stretch` - 拉伸到终端完整尺寸，不保持宽高比。\n- `none` - 不缩放背景图片。"
+    },
+    "backgroundImageOpacity": {
+      "name": "背景图片不透明度",
+      "description": "背景图片的不透明度，相对于 `background-opacity`。值为 1.0 时图片位于背景颜色之上。大于 1.0 的值会使图片比一般背景更不透明。"
+    },
+    "backgroundImagePosition": {
+      "name": "背景图片位置",
+      "description": "背景图片的位置。"
+    },
+    "backgroundImageRepeat": {
+      "name": "重复背景图片",
+      "description": "当背景图片未完全填满终端区域时，是否重复显示。"
+    },
+    "backgroundOpacity": {
+      "name": "背景不透明度",
+      "description": "背景的不透明度。值为 1 时完全不透明，为 0 时完全透明。在 macOS 上，原生全屏时会禁用背景不透明度。在 macOS 上，更改此设置需要完全重启 Ghostty。"
+    },
+    "backgroundOpacityCells": {
+      "name": "强制单元格背景不透明度",
+      "description": "对设置了显式背景颜色的单元格应用背景不透明度。通常，`background-opacity` 只应用于窗口背景。将其设为 true 后，无论单元格是否设置了显式背景颜色，都会应用该不透明度。"
+    },
+    "bellAudioPath": {
+      "name": "响铃音频文件",
+      "description": "如果 `audio` 是启用的响铃特性，此项为音频文件的路径。支持 `~/` 前缀。相对路径相对于配置文件目录；作为 CLI 参数使用时相对于当前工作目录。仅 GTK。",
+      "note": "响铃时播放的音频文件路径。需要在响铃特性中启用 <code>audio</code>。仅 GTK。"
+    },
+    "bellAudioVolume": {
+      "name": "响铃音量",
+      "description": "如果 `audio` 是启用的响铃特性，此项为播放音频文件的音量（相对于系统音量）。范围为 0.0（静音）到 1.0（尽可能大）。仅 GTK。",
+      "note": "响铃音频的音量，从 0（静音）到 1（最大）。仅 GTK。"
+    },
+    "bellFeatures": {
+      "name": "响铃特性",
+      "description": "要启用的响铃特性。以逗号分隔的列表。加上 `no-` 前缀可禁用。\n\n特性：\n- `system` - 使用内置系统功能（在 macOS 上播放系统提示音）\n- `audio` - 播放自定义声音（仅 GTK）\n- `attention` - 在未聚焦时请求用户注意（默认：开启）\n- `title` - 在标题前添加响铃表情（🔔），直到重新聚焦（默认：开启）\n- `border` - 在警报表面周围显示边框，直到重新聚焦（GTK 自 1.2.0 起，macOS 自 1.2.1 起）",
+      "note": "以逗号分隔的特性列表。可用：system、audio、attention、title、border。加上 <code>no-</code> 前缀可禁用。"
+    },
+    "boldColor": {
+      "name": "粗体文本颜色",
+      "description": "修改终端中粗体文本使用的颜色。\n\n- 设为特定颜色（`#RRGGBB`）- 默认粗体文本始终使用此颜色。其余粗体颜色设为 `bright`。\n- 设为 `bright` - 粗体文本使用亮色调色板（替代已弃用的 `bold-is-bright`）。\n- 未设置（默认）- 粗体文本使用普通前景色。\n\n注意：之前的 `bold-is-bright` 配置已弃用，由 `bold-color = bright` 替代。",
+      "note": "设置为 <code>bright</code> 以使用亮色调色板显示粗体文本，或使用十六进制颜色值。留空以使用默认值。"
+    },
+    "class": {
+      "name": "WM_CLASS 类字段",
+      "description": "控制 WM_CLASS 类字段（X11）、Wayland 应用 ID 和 DBus 总线名称。默认值为 `com.mitchellh.ghostty`。更改此项会创建独立的单实例 Ghostty 实例。",
+      "note": "默认为 <code>com.mitchellh.ghostty</code>"
+    },
+    "clickRepeatInterval": {
+      "name": "多击间隔毫秒数",
+      "description": "两次点击之间被视为重复点击（双击、三击等）的时间，单位为毫秒。值为零时使用平台默认值（macOS：系统设置，其他：500ms）。",
+      "note": "值为 0 表示使用操作系统的默认时间。"
+    },
+    "clipboardPasteBracketedSafe": {
+      "name": "将括号粘贴标记为安全",
+      "description": "如果为 true，括号粘贴将被视为安全。括号粘贴是指正在运行的程序启用了括号粘贴模式时的粘贴。"
+    },
+    "clipboardPasteProtection": {
+      "name": "不安全粘贴时确认",
+      "description": "在粘贴看起来不安全的文本前要求确认。有助于防止“复制/粘贴攻击”，即用户可能因粘贴包含换行符的文本而意外执行不安全命令。"
+    },
+    "clipboardRead": {
+      "name": "允许终端读取剪贴板",
+      "description": "是否允许终端中运行的程序读取系统剪贴板（OSC 52）。\n\n- `ask` - 允许前询问用户（默认）\n- `allow` - 始终允许\n- `deny` - 始终拒绝"
+    },
+    "clipboardTrimTrailingSpaces": {
+      "name": "复制时修剪行尾空格",
+      "description": "修剪复制到剪贴板的数据中的行尾空白。仅适用于包含其他字符的行的行尾空白。完全空白的行始终会修剪其空白。"
+    },
+    "clipboardWrite": {
+      "name": "允许终端写入剪贴板",
+      "description": "是否允许终端中运行的程序写入系统剪贴板（OSC 52）。\n\n- `ask` - 允许前询问用户\n- `allow` - 始终允许（默认）\n- `deny` - 始终拒绝"
+    },
+    "command": {
+      "name": "启动时运行的命令",
+      "description": "要运行的命令，通常是 shell。如果不是绝对路径，会在 PATH 中查找。如果未设置，则根据 SHELL 环境变量或 passwd 条目确定 shell。\n\n加上 `direct:` 前缀可避免 shell 展开。加上 `shell:` 前缀可始终用 shell 包装。支持附加参数。\n\n用于所有新的终端表面。"
+    },
+    "configDefaultFiles": {
+      "name": "加载默认配置文件",
+      "description": "为 true 时，将加载默认配置文件路径（例如 `$XDG_CONFIG_HOME/ghostty/config`）。设为 false 可让 Ghostty 从 CLI 使用时尽量减少外部影响。仅限 CLI 配置；在配置文件中设置无效。"
+    },
+    "configFile": {
+      "name": "附加配置文件",
+      "description": "要读取的附加配置文件。可以重复。路径相对于包含该指令的配置文件。在前面加 `?` 可在文件不存在时抑制错误。不允许循环引用。配置文件会在定义它们的配置之后加载。"
+    },
+    "confirmCloseSurface": {
+      "name": "关闭表面时确认",
+      "description": "关闭表面之前先确认。\n\n- `true` - 如果 shell 集成检测到正在运行的进程则确认（默认）\n- `false` - 不确认直接关闭\n- `always` - 始终确认，即使 shell 集成表示没有进程在运行"
+    },
+    "copyOnSelect": {
+      "name": "选中时复制",
+      "description": "是否自动将选中的文本复制到剪贴板。\n\n- `true` - 复制到选择剪贴板（Linux 和 macOS 上默认）\n- `false` - 禁用选中时复制\n- `clipboard` - 同时复制到选择剪贴板和系统剪贴板\n\n中键粘贴始终使用选择剪贴板。"
+    },
+    "cursorClickToMove": {
+      "name": "启用点击移动光标",
+      "description": "启用后，可在提示符处使用 alt+点击（Linux）或 option+点击（macOS）移动光标。需要 shell 集成（OSC 133），且仅在主屏幕模式下有效。"
+    },
+    "cursorColor": {
+      "name": "光标颜色",
+      "description": "光标的颜色。如果未设置，将自动选择默认值。可指定为十六进制或 X11 颜色名称。自 1.2.0 起，可设置为 `cell-foreground` 或 `cell-background`。"
+    },
+    "cursorOpacity": {
+      "name": "光标不透明度",
+      "description": "光标的不透明度。值为 1 时完全不透明，为 0 时完全透明。足够小的值（如 0.3）可能实际上不可见。"
+    },
+    "cursorStyle": {
+      "name": "光标样式",
+      "description": "光标的样式。设置默认样式；正在运行的程序可以通过转义序列（CSI q）覆盖。Shell 集成会自动在提示符处将光标设为竖线（可通过 `shell-integration-features = no-cursor` 禁用）。\n\n值：`block`、`bar`、`underline`、`block_hollow`"
+    },
+    "cursorStyleBlink": {
+      "name": "光标闪烁样式",
+      "description": "设置光标的默认闪烁状态。如果未设置（`undefined`/未设置），Ghostty 将遵循 DEC 模式 12（AT&T 光标闪烁）作为开启/关闭闪烁的替代方式。如果设为任意值，DEC 模式 12 将被忽略，但 DECSCUSR 仍会被遵循。\n\n值：`true`、`false`，或留空（null/undefined）以遵循 DEC 模式 12。",
+      "note": "<code>default</code> 选项会交由 DEC 模式 12 决定闪烁状态。"
+    },
+    "cursorText": {
+      "name": "光标下文本颜色",
+      "description": "光标下方文本的颜色。如果未设置，将自动选择默认值。可指定为十六进制或 X11 颜色名称。自 1.2.0 起，可设置为 `cell-foreground` 或 `cell-background`。"
+    },
+    "customShader": {
+      "name": "自定义着色器",
+      "description": "在默认着色器之后运行的自定义着色器。路径指向与 Shadertoy API 兼容的 GLSL 语法着色器。着色器应指定 `mainImage` 函数。\n\n警告：无效的着色器可能导致 Ghostty 无法使用（窗口完全变黑）。\n\n可以重复以加载多个按顺序运行的着色器。",
+      "note": "这与 Shadertoy 的 API 一致。"
+    },
+    "customShaderAnimation": {
+      "name": "允许着色器动画",
+      "description": "如果为 `true`（默认），使用自定义着色器时，聚焦的终端表面会运行动画循环。\n\n- `false` - 仅在终端更新时渲染着色器\n- `true` - 终端聚焦时运行动画循环\n- `always` - 无论是否聚焦都始终运行动画循环（占用更多 CPU）"
+    },
+    "desktopNotifications": {
+      "name": "允许桌面通知",
+      "description": "如果为 true（默认），终端中运行的应用程序可以使用某些转义序列（如 OSC 9 或 OSC 777）显示桌面通知。"
+    },
+    "enquiryResponse": {
+      "name": "对 ENQ 的响应",
+      "description": "收到来自运行命令的 ENQ（0x05）时要发送的字符串。默认为空字符串。"
+    },
+    "env": {
+      "name": "环境变量",
+      "description": "传递给终端表面中启动的命令的额外环境变量。格式：`KEY=VALUE`。将某个键设为空字符串会移除它。将 `env` 设为空字符串会重置整个映射。"
+    },
+    "faintOpacity": {
+      "name": "淡色文本不透明度",
+      "description": "淡色文本的不透明度。值为 1 时完全不透明，为 0 时完全透明。"
+    },
+    "focusFollowsMouse": {
+      "name": "鼠标移动时聚焦分屏",
+      "description": "如果为 true，当存在多个分屏窗格时，鼠标会选中获得焦点的窗格。仅适用于当前聚焦的窗口。"
+    },
+    "fontCodepointMap": {
+      "name": "Unicode 专用字体映射",
+      "description": "强制将一个或一段 Unicode 码点映射到指定的命名字体。语法：`codepoint=fontname`，其中 codepoint 可以是单个码点（`U+ABCD`）或范围（`U+ABCD-U+DEFG`）。同一字体的多个范围可以用逗号分隔。"
+    },
+    "fontFamily": {
+      "name": "主字体族",
+      "description": "要使用的字体族。你可以使用 CLI 生成有效值列表：`ghostty +list-fonts`。\n\n此配置可以重复多次，以指定当主字体中缺少所需码点时使用的首选回退字体。这对于多语言、符号字体等特别有用。\n\n如果你想覆盖之前设置的值而不是追加回退字体，请将值指定为 `\"\"`（空字符串）以重置列表。"
+    },
+    "fontFamilyBold": {
+      "name": "粗体文本字体族",
+      "description": "用于粗体文本的字体族。如果未设置或未找到，则回退到 `font-family`。"
+    },
+    "fontFamilyBoldItalic": {
+      "name": "粗斜体文本字体族",
+      "description": "用于粗斜体文本的字体族。如果未设置或未找到，则回退到 `font-family`。"
+    },
+    "fontFamilyItalic": {
+      "name": "斜体文本字体族",
+      "description": "用于斜体文本的字体族。如果未设置或未找到，则回退到 `font-family`。"
+    },
+    "fontFeature": {
+      "name": "字体连字设置",
+      "description": "应用字体特性。要启用多个字体特性，可以重复此项，或使用逗号分隔的列表。\n\n语法：`feat`、`+feat`、`-feat`、`feat on`、`feat off`、`feat=1`、`feat=0`。\n\n要禁用编程连字，请使用 `-calt`。要大体禁用大多数连字，请使用 `-calt, -liga, -dlig`。"
+    },
+    "fontShapingBreak": {
+      "name": "字体整形断点",
+      "description": "将字体整形拆分为多个运行段的位置。运行段是一起整形的连续文本片段。断开运行段可防止在某些位置形成连字。\n\n用逗号组合多个值以设置多个选项。在选项前加 `no-` 可禁用它。\n\n可用选项：\n- `cursor` - 在光标处断开运行段。"
+    },
+    "fontSize": {
+      "name": "基础字体大小",
+      "description": "字体大小，单位为磅。此值可以是非整数，将选择最接近的整数像素大小。\n\nmacOS 上默认为 13，其他平台上默认为 12。"
+    },
+    "fontStyle": {
+      "name": "主字体样式",
+      "description": "主字体的命名样式。例如对于 `Iosevka Heavy`，使用样式 `Heavy`。设为 `false` 可完全禁用该样式。"
+    },
+    "fontStyleBold": {
+      "name": "粗体文本字体样式",
+      "description": "粗体文本的命名字体样式。例如对于 `Iosevka Heavy`，使用样式 `Heavy`。设为 `false` 可完全禁用该样式。"
+    },
+    "fontStyleBoldItalic": {
+      "name": "粗斜体文本字体样式",
+      "description": "粗斜体文本的命名字体样式。设为 `false` 可完全禁用该样式。"
+    },
+    "fontStyleItalic": {
+      "name": "斜体文本字体样式",
+      "description": "斜体文本的命名字体样式。设为 `false` 可完全禁用该样式。"
+    },
+    "fontSyntheticStyle": {
+      "name": "合成样式",
+      "description": "控制当指定字体族中缺少所需样式时，Ghostty 是否应合成样式。\n\n设为 `false` 或 `true` 可完全禁用或启用合成样式。你可以使用 `bold`、`italic` 和 `bold-italic`（启用）或 `no-bold`、`no-italic` 和 `no-bold-italic`（禁用）来启用或禁用特定样式。多个样式可以用逗号组合。\n\n可用样式键：`bold`、`italic`、`bold-italic`。",
+      "note": "更多信息请参阅文档。"
+    },
+    "fontThicken": {
+      "name": "加粗字体",
+      "description": "如果支持，以更粗的笔画绘制字体。目前仅在 macOS 上支持。",
+      "note": "目前仅影响 macOS。"
+    },
+    "fontThickenStrength": {
+      "name": "加粗强度",
+      "description": "启用 `font-thicken` 时的加粗强度。有效值为 0 到 255 之间的整数。0 并不表示不加粗——它表示可用的最细加粗。当 `font-thicken` 为 false 时无效。仅 macOS。"
+    },
+    "fontVariation": {
+      "name": "主字体变体",
+      "description": "可重复的配置，用于为可变字体设置一个或多个字体变体值。格式：`id=value`，其中 `id` 是轴标识符（始终为 4 个字符，例如 `wght`）。常见轴：`wght`（字重）、`slnt`（倾斜）、`ital`（斜体）、`opsz`（光学尺寸）、`wdth`（宽度）。"
+    },
+    "fontVariationBold": {
+      "name": "粗体文本字体变体",
+      "description": "粗体文本的可变字体变体。参见 `font-variation`。"
+    },
+    "fontVariationBoldItalic": {
+      "name": "粗斜体文本字体变体",
+      "description": "粗斜体文本的可变字体变体。参见 `font-variation`。"
+    },
+    "fontVariationItalic": {
+      "name": "斜体文本字体变体",
+      "description": "斜体文本的可变字体变体。参见 `font-variation`。"
+    },
+    "foreground": {
+      "name": "前景颜色",
+      "description": "窗口的前景颜色。可指定为十六进制（`#RRGGBB` 或 `RRGGBB`）或 X11 颜色名称。"
+    },
+    "freetypeLoadFlags": {
+      "name": "FreeType 加载标志",
+      "description": "要启用的 FreeType 加载标志。格式：逗号分隔的标志。加上 `no-` 前缀可禁用。使用 `true`/`false` 开启或关闭所有标志。\n\n可用标志：\n- `hinting` - 启用 hinting（默认：开启）\n- `force-autohint` - 始终使用 FreeType 自动 hinter（默认：关闭）\n- `monochrome` - 使用 1 位单色渲染，禁用抗锯齿（默认：关闭）\n- `autohint` - 启用 FreeType 自动 hinter（默认：开启）\n- `light` - 使用轻量 hinting 风格，更好地保留字形（默认：开启）\n\n仅适用于使用 FreeType 的 Ghostty 构建（通常是 Linux 构建）。"
+    },
+    "fullscreen": {
+      "name": "以全屏模式启动",
+      "description": "以全屏模式启动新窗口。\n\n- `false` - 不以全屏启动（默认）\n- `true` - 以原生全屏启动\n- `non-native` - （仅 macOS）无动画的非原生全屏，隐藏菜单栏\n- `non-native-visible-menu` - （仅 macOS）非原生全屏，保持菜单栏可见\n- `non-native-padded-notch` - （仅 macOS）非原生全屏，隐藏菜单栏但为刘海留出空间\n\n重要：标签页不能与原生全屏模式配合使用。"
+    },
+    "graphemeWidthMethod": {
+      "name": "字素宽度计算",
+      "description": "用于计算字素簇单元格宽度的方法。\n\n- `unicode` - 使用 Unicode 标准（默认，正确但可能与旧程序产生光标不同步）。\n- `legacy` - 使用旧方法，如 wcswidth（最大化与旧程序的兼容性）。\n\n如果正在运行的程序显式启用了终端模式 2027，则无论此配置如何，都会强制使用 `unicode` 宽度。"
+    },
+    "gtkCustomCss": {
+      "name": "自定义 CSS 文件",
+      "description": "要加载的自定义 CSS 文件。可以重复以加载多个文件。在前面加 `?` 可在文件不存在时抑制错误。每个样式表的大小限制：5MiB。"
+    },
+    "gtkOpenglDebug": {
+      "name": "OpenGL 调试",
+      "description": "启用或禁用 GTK 的 OpenGL 调试日志。调试构建默认为 true，其他构建默认为 false。"
+    },
+    "gtkQuickTerminalLayer": {
+      "name": "快速终端层",
+      "description": "快速终端窗口所在的层。\n\n- `overlay` - 在所有窗口之前\n- `top` - 在普通窗口之前，但在全屏覆盖层之后（默认）\n- `bottom` - 在普通窗口之后，但在壁纸之前\n- `background` - 在所有窗口之后\n\n仅 GTK Wayland。",
+      "note": "控制快速终端显示在哪一层。仅 GTK Wayland。"
+    },
+    "gtkQuickTerminalNamespace": {
+      "name": "快速终端命名空间",
+      "description": "快速终端窗口的命名空间（标识符），供 Wayland 合成器和/或脚本判断层表面的类型。\n\n仅 GTK Wayland。",
+      "note": "快速终端层表面的标识符。仅 GTK Wayland。"
+    },
+    "gtkSingleInstance": {
+      "name": "单实例模式",
+      "description": "控制 Ghostty GTK 应用是否以单实例模式运行。\n\n- `true` - 单实例模式：新进程在现有实例中创建窗口\n- `false` - 每个新进程启动一个独立应用\n- `detect` - 除非设置了 TERM_PROGRAM 或存在 CLI 参数，否则假定为单实例（默认）\n\n注意：调试构建使用单独的单实例 ID，以避免与发布构建冲突。"
+    },
+    "gtkTabsLocation": {
+      "name": "标签页位置",
+      "description": "决定 GTK 标签栏固定在屏幕的哪一侧。当为 `hidden` 时，标题栏中会显示一个带标签页数量的按钮。"
+    },
+    "gtkTitlebar": {
+      "name": "显示标题栏",
+      "description": "启用后，将显示完整的 GTK 标题栏，而不是窗口管理器的简单标题栏。当 `window-decoration` 为 none 或在 macOS 下运行时无效。"
+    },
+    "gtkTitlebarHideWhenMaximized": {
+      "name": "最大化时隐藏标题栏",
+      "description": "如果为 true，窗口最大化时将隐藏标题栏，取消最大化时重新显示。仅 GTK。"
+    },
+    "gtkTitlebarStyle": {
+      "name": "标题栏样式",
+      "description": "GTK 标题栏的样式。\n\n- `native` - 传统标题栏，包含标题、按钮和窗口控件。打开多个标签页时，标签栏显示在下方。\n- `tabs` - 合并标签栏和标题栏以节省垂直空间。无法通过标签标题拖动窗口。",
+      "note": "<code>tabs</code> 会合并标签栏和标题栏以节省垂直空间。"
+    },
+    "gtkToolbarStyle": {
+      "name": "工具栏样式",
+      "description": "决定 GTK 终端顶部和底部栏的外观。\n\n- `flat` - 顶部和底部栏与终端窗口齐平\n- `raised` - 顶部和底部栏在终端区域投下阴影\n- `raised-border` - 类似 `raised`，但阴影替换为细微边框"
+    },
+    "gtkWideTabs": {
+      "name": "使用宽标签页",
+      "description": "如果为 true（默认），GTK 标签页将为“宽”样式（填满可用空间，GNOME 风格）。如果为 false，标签页只占用所需空间。",
+      "note": "将此设为 <code>false</code> 会让标签页只使用所需的最少空间。"
+    },
+    "imageStorageLimit": {
+      "name": "图像缓冲区上限（字节）",
+      "description": "每个终端屏幕可用于图像数据（例如 Kitty 图像协议）的总字节数。最大值为 4,294,967,295（4GiB）。默认为 320MB。如果设为零，将禁用所有图像协议。主屏幕和备用屏幕分别计算。"
+    },
+    "initialCommand": {
+      "name": "首次启动时运行的命令",
+      "description": "与 `command` 相同，但仅应用于 Ghostty 启动时创建的第一个终端表面。也可以通过 `-e` CLI 标志设置（例如 `ghostty -e fish --with --custom --args`）。",
+      "note": "与上一个设置不同，此命令在应用生命周期内只运行一次。"
+    },
+    "initialWindow": {
+      "name": "启动时显示窗口",
+      "description": "控制运行 Ghostty 时是否创建初始窗口。仅在 Linux 和 macOS 上实现。"
+    },
+    "input": {
+      "name": "初始输入",
+      "description": "启动时作为输入发送给命令的数据。格式：\n- `raw:<string>` - 发送原始文本（Zig 字符串字面量语法）\n- `path:<path>` - 读取文件并发送其内容（最大 10MB）\n- 裸值会被视为 `raw:`\n\n可以重复；数据会直接拼接。",
+      "note": "用于 tty 启动的输入。可以是原始文本、Zig 字符串字面量或 path:/to/file。"
+    },
+    "keybind": {
+      "description": "按键绑定。格式：`trigger=action`。重复的触发键会覆盖之前的值。\n\n触发键：以 `+` 分隔的按键和修饰键列表（例如 `ctrl+a`、`ctrl+shift+b`）。\n\n物理按键可以使用 W3C 键码指定（例如 `KeyA`、`key_a`）。\n\n特殊触发键前缀：\n- `all:` - 应用于所有终端表面\n- `global:` - 使快捷键全局生效（系统范围）\n- `unconsumed:` - 不消耗输入\n- `performable:` - 仅在操作可执行时消耗\n\n特殊值：\n- `keybind=clear` - 清除所有按键绑定\n\n链式操作（自 1.3.0 起）：使用 `chain=action` 作为后续快捷键条目。\n\n按键表（自 1.3.0 起）：使用 `<table>/<binding>` 语法。"
+    },
+    "language": {
+      "name": "界面语言",
+      "description": "将 Ghostty 的图形用户界面语言设置为系统默认语言之外的语言。必须完整指定语言，包括编码。例如：`language = de_DE.UTF-8` 会强制 Ghostty 图形用户界面中的字符串使用德语，而不是系统默认语言。\n\n这不会影响 Ghostty 中运行的程序所使用的语言。它们将继续使用系统默认语言。\n\n警告：此设置无法在运行时重新加载。要更改语言，必须完全重启 Ghostty。",
+      "note": "设置 Ghostty 的 GTK GUI 语言（例如 <code>de</code>、<code>fr</code>）。需要完全重启。仅 GTK。"
+    },
+    "link": {
+      "name": "链接处理",
+      "description": "将正则表达式与终端文本匹配，并将点击与某个操作关联。较早配置的链接优先。始终存在一个匹配 URL 并在系统打开器中打开的默认链接（可通过 `link-url` 禁用）。",
+      "note": "用于创建可点击链接的正则表达式，当前已禁用。"
+    },
+    "linkPreviews": {
+      "name": "显示链接预览",
+      "description": "为匹配的 URL 显示链接预览。\n\n- `true` - 为所有匹配的 URL 显示预览\n- `false` - 从不显示链接预览\n- `osc8` - 仅显示 OSC 8 超链接的预览（链接文本可以与目标不同）",
+      "note": "设为 <code>osc8</code> 时，仅显示使用 OSC 8 序列创建的超链接预览。"
+    },
+    "linkUrl": {
+      "name": "自动链接 URL",
+      "description": "启用 URL 匹配。悬停时按住 control（Linux）或 command（macOS）匹配 URL，并使用系统默认应用打开。URL 匹配器的优先级始终低于任何已配置的链接。",
+      "note": "按住 control（Linux）或 command（macOS）键时进行匹配。"
+    },
+    "linuxCgroup": {
+      "name": "使用专用 cgroup",
+      "description": "将每个表面（标签页、分屏、窗口）放入临时 systemd scope，以便按表面管理资源。\n\n- `never` - 从不使用 cgroup\n- `always` - 始终使用 cgroup\n- `single-instance` - 仅为以单实例应用启动的 Ghostty 实例启用 cgroup（Linux 上默认）\n\n需要 systemd。会导致启动稍慢。更改不会反映在现有表面上。"
+    },
+    "linuxCgroupHardFail": {
+      "name": "启动时硬失败",
+      "description": "如果为 false，创建临时 systemd scope 失败时将被静默允许。如果为 true，任何临时 systemd scope 创建失败都会导致表面创建失败。"
+    },
+    "linuxCgroupMemoryLimit": {
+      "name": "内存上限（字节）",
+      "description": "任何单个终端进程（标签页、分屏、窗口）的内存上限，单位为字节。如果未设置，则不设限制。设置临时 systemd scope 的 `MemoryHigh`（软限制）。更改不会反映在现有表面上。"
+    },
+    "linuxCgroupProcessesLimit": {
+      "name": "最大进程数",
+      "description": "任何单个终端进程（标签页、分屏、窗口）的进程数限制。如果未设置，则不设限制。设置 `TasksMax`（硬限制）。更改不会反映在现有表面上。"
+    },
+    "macosApplescript": {
+      "name": "启用 AppleScript 支持",
+      "description": "如果为 true（默认），Ghostty 会在 macOS 上公开并处理内置 AppleScript 字典。如果为 false，所有 AppleScript 交互都会被禁用，包括 AppleScript 命令以及窗口、标签页和终端的对象查找。",
+      "note": "如果禁用，所有与 Ghostty 的 AppleScript 交互都会关闭。"
+    },
+    "macosAutoSecureInput": {
+      "name": "自动安全输入",
+      "description": "如果为 true，macOS 上的 Ghostty 会在检测到密码提示时自动启用安全输入。安全输入可防止应用程序读取键盘事件。请注意，自动检测基于启发式规则，可能无法通过 SSH 工作。"
+    },
+    "macosCustomIcon": {
+      "name": "图标文件",
+      "description": "自定义图标文件的绝对路径。支持的格式：PNG、JPEG、ICNS。默认为 `~/.config/ghostty/Ghostty.icns`。在 `macos-icon = custom` 时使用。",
+      "note": "仅在上方选择 <code>custom</code> 时使用。"
+    },
+    "macosDockDropBehavior": {
+      "name": "程序坞拖放行为",
+      "description": "控制将文件或文件夹拖放到 macOS 程序坞中的 Ghostty 图标时的窗口行为。\n\n- `new-tab` - 在当前窗口中创建新标签页（默认）\n- `new-window` - 无条件创建新窗口",
+      "note": "将文件拖放到 Ghostty 程序坞图标上时发生的情况。"
+    },
+    "macosHidden": {
+      "name": "从程序坞和切换器中隐藏",
+      "description": "控制是否将 macOS 应用从程序坞和应用切换器中排除。主要面向主要使用快速终端模式的用户。\n\n- `never` - 应用从不隐藏（默认）\n- `always` - 应用始终隐藏\n\n注意：隐藏时，键盘布局更改不会自动生效。"
+    },
+    "macosIcon": {
+      "name": "图标",
+      "description": "自定义 macOS 应用图标（影响程序坞、应用切换器等）。\n\n- `official` - 官方 Ghostty 图标\n- `blueprint`、`chalkboard`、`microchip`、`glass`、`holographic`、`paper`、`retro`、`xray` - 官方图标变体\n- `custom` - 完全自定义图标（使用 `macos-custom-icon` 设置路径）\n- `custom-style` - 带自定义样式的官方图标（需要 `macos-icon-ghost-color` 和 `macos-icon-screen-color`）",
+      "note": "自定义样式必须同时指定幽灵色和屏幕色。"
+    },
+    "macosIconFrame": {
+      "name": "图标边框",
+      "description": "用于 macOS 应用图标边框的材质。当 `macos-icon = custom-style` 时必填。\n\n- `aluminum` - 拉丝铝边框（默认）\n- `beige` - 经典 90 年代电脑米色边框\n- `plastic` - 光泽深色塑料边框\n- `chrome` - 闪亮镀铬边框"
+    },
+    "macosIconGhostColor": {
+      "name": "幽灵颜色",
+      "description": "macOS 应用图标中幽灵的颜色。当 `macos-icon = custom-style` 时必填。可指定为十六进制或 X11 颜色名称。"
+    },
+    "macosIconScreenColor": {
+      "name": "屏幕颜色",
+      "description": "macOS 应用图标中屏幕的颜色。屏幕是线性渐变；最多可指定 64 个逗号分隔的颜色。第一个颜色是渐变底部，最后一个是顶部。当 `macos-icon = custom-style` 时必填。"
+    },
+    "macosNonNativeFullscreen": {
+      "name": "使用非原生全屏",
+      "description": "如果不为 false，macOS 上的全屏将不使用原生全屏，而是使用新空间以无动画方式使窗口全屏。\n\n重要：标签页在此模式下不能使用。\n\n- `false` - 使用原生 macOS 全屏（默认）\n- `true` - 非原生全屏，隐藏菜单栏\n- `visible-menu` - 非原生全屏，保持菜单栏可见\n- `padded-notch` - 非原生全屏，隐藏菜单栏，为刘海留出空间",
+      "note": "标签页目前不能与非原生全屏窗口配合使用"
+    },
+    "macosOptionAsAlt": {
+      "name": "将 option 键用作 alt 键",
+      "description": "更改 macOS option 键的行为，使其充当 alt。\n\n默认值（未设置）取决于键盘布局：美国标准/国际布局为 `true`，其他为 `false`。\n\n- `true` - 将 Option 视为 Alt（会破坏 Unicode 输入序列）\n- `false` - 恢复 macOS Alt 键 Unicode 序列（会破坏终端 Alt 序列）\n- `left` - 仅对左 Option 键启用\n- `right` - 仅对右 Option 键启用"
+    },
+    "macosSecureInputIndication": {
+      "name": "指示安全输入",
+      "description": "如果为 true，启用安全输入时 Ghostty 会显示图形指示。"
+    },
+    "macosShortcuts": {
+      "name": "macOS 快捷指令",
+      "description": "是否允许 macOS 快捷指令控制 Ghostty。Ghostty 公开了允许快捷指令创建终端、发送文本、运行命令等操作的动作。\n\n- `ask` - 询问用户权限（会记住，像其他 macOS 权限一样）（默认）\n- `allow` - 不询问直接允许\n- `deny` - 拒绝快捷指令控制 Ghostty",
+      "note": "控制是否可以捕获 macOS 系统快捷键（例如 Cmd+Space）。"
+    },
+    "macosTitlebarProxyIcon": {
+      "name": "标题栏代理图标",
+      "description": "macOS 标题栏中的代理图标是否可见。代理图标代表当前工作目录的文件夹。仅在使用原生 macOS 标题栏样式时可见。"
+    },
+    "macosTitlebarStyle": {
+      "name": "标题栏样式",
+      "description": "macOS 标题栏的样式。\n\n- `native` - 标准原生 macOS 标题栏\n- `transparent` - 原生但透明，显示窗口背景颜色\n- `tabs` - 集成标签栏的自定义标题栏（macOS 13 及以下有限制）\n- `hidden` - 隐藏标题栏（与 `window-decoration = none` 不同，窗口边框和圆角仍保留）"
+    },
+    "macosWindowButtons": {
+      "name": "窗口按钮（红绿灯）",
+      "description": "macOS 标题栏中的窗口按钮（红绿灯）是否可见。\n\n- `visible` - 显示窗口按钮（默认）\n- `hidden` - 隐藏窗口按钮\n\n当 `window-decoration = none` 或 `macos-titlebar-style = hidden` 时无效。"
+    },
+    "macosWindowShadow": {
+      "name": "显示窗口阴影",
+      "description": "是否启用 macOS 窗口阴影。在某些窗口管理器和窗口透明度设置下，设为 false 可能更美观。"
+    },
+    "maximize": {
+      "name": "以最大化窗口启动",
+      "description": "是否以最大化状态启动窗口。仅适用于新窗口，不适用于标签页或分屏。"
+    },
+    "middleClickAction": {
+      "name": "中键点击操作",
+      "description": "用户中键点击终端表面时执行的操作。\n\n- `primary-paste` - 根据 `copy-on-select` 从选择（或系统）剪贴板粘贴（默认）\n- `ignore` - 不做任何事，忽略中键点击"
+    },
+    "minimumContrast": {
+      "name": "最小对比度",
+      "description": "前景色和背景色之间的最小对比度。值在 1 到 21 之间。值为 1 允许无对比度（例如黑底黑字）。基于 WCAG 2.0 规范。不适用于 Emoji 或图像。"
+    },
+    "mouseHideWhileTyping": {
+      "name": "输入时隐藏鼠标",
+      "description": "输入时立即隐藏鼠标。使用鼠标（按键、移动等）时鼠标会再次可见。"
+    },
+    "mouseReporting": {
+      "name": "允许鼠标报告",
+      "description": "启用或禁用鼠标报告。为 false 时，即使终端应用程序请求，也不会向其报告鼠标事件。可以在运行时使用 `toggle_mouse_reporting` 快捷键操作切换。",
+      "note": "允许终端应用程序接收鼠标事件。"
+    },
+    "mouseScrollMultiplier": {
+      "name": "鼠标滚动倍率",
+      "description": "鼠标滚轮滚动距离的倍率。可以加上 `precision:` 或 `discrete:` 前缀，以仅对特定设备类型设置倍率，用逗号分隔。如果未使用前缀，则倍率适用于所有设备。\n\n离散设备默认值为 3，精确设备默认值为 1。值会被限制在 [0.01, 10000] 范围内。"
+    },
+    "mouseShiftCapture": {
+      "name": "允许鼠标点击时按 Shift",
+      "description": "决定正在运行的程序能否检测到鼠标点击时按下的 Shift 键。通常，Shift 用于扩展鼠标选择。\n\n- `false` - 不随鼠标协议发送 Shift，将扩展选择。程序可以通过 XTSHIFTESCAPE 覆盖。\n- `true` - 随鼠标协议发送 Shift。程序可以通过 XTSHIFTESCAPE 覆盖。\n- `never` - 与 false 相同，但程序不能通过 XTSHIFTESCAPE 覆盖。\n- `always` - 与 true 相同，但程序不能通过 XTSHIFTESCAPE 覆盖。"
+    },
+    "notifyOnCommandFinish": {
+      "name": "命令完成时通知",
+      "description": "控制何时发送命令完成通知。需要 shell 集成或 OSC 133 转义序列。\n\n- `never` - 从不发送通知（默认）\n- `unfocused` - 仅在表面未聚焦时\n- `always` - 始终发送通知",
+      "note": "需要 shell 集成或 OSC 133 转义序列。"
+    },
+    "notifyOnCommandFinishAction": {
+      "name": "通知方式",
+      "description": "启用命令完成通知时如何通知用户。逗号分隔的列表。加上 `no-` 前缀可禁用。\n\n选项：\n- `bell` - 默认启用\n- `notify` - 默认禁用"
+    },
+    "notifyOnCommandFinishAfter": {
+      "name": "通知前最短运行时间",
+      "description": "命令必须运行多久才会发送通知。默认为 5 秒。时长格式：数字后跟时间单位（y、d、h、m、s、ms、us、ns）。",
+      "note": "命令运行多久后发送通知。格式如 <code>5s</code>、<code>500ms</code>。"
+    },
+    "oscColorReportFormat": {
+      "name": "OSC 颜色报告格式",
+      "description": "请求颜色信息的 OSC 序列（OSC 4、10、11）的报告格式。\n\n- `none` - OSC 查询不回复\n- `8-bit` - 返回未缩放的颜色分量（例如 `rr/gg/bb`）\n- `16-bit` - 返回缩放后的颜色分量（例如 `rrrr/gggg/bbbb`）（默认）"
+    },
+    "palette": {
+      "name": "调色板",
+      "description": "256 色形式的调色板。语法：`N=COLOR`，其中 N 为 0-255，COLOR 为 RGB 颜色代码（`#AABBCC`）或 X11 颜色名称。调色板索引可以是十进制、二进制（0b）、八进制（0o）或十六进制（0x）。"
+    },
+    "paletteGenerate": {
+      "name": "自动生成缺失的调色板颜色",
+      "description": "是否根据基础 16 种 ANSI 颜色自动生成扩展的 256 色调色板（索引 16-255）。通过 `palette` 显式设置的颜色永远不会被覆盖。",
+      "note": "启用后，Ghostty 将基于前 16 种颜色生成缺失的颜色（索引 16-231）。"
+    },
+    "paletteHarmonious": {
+      "name": "和谐调色板生成",
+      "description": "反转启用 `palette-generate` 时生成的调色板颜色，使颜色顺序相反。这使基于调色板的应用程序在浅色和深色模式下都能良好工作。如果禁用 `palette-generate` 则无效。",
+      "note": "反转生成的调色板颜色。如果禁用自动生成则无效。"
+    },
+    "progressStyle": {
+      "name": "显示进度条（OSC 9;4）",
+      "description": "如果为 true（默认），终端中运行的应用程序可以使用 ConEmu OSC 9;4 转义序列显示图形进度条。如果为 false，进度条序列将被静默忽略。",
+      "note": "允许应用程序通过 ConEmu OSC 9;4 转义序列显示图形进度条。"
+    },
+    "quickTerminalAnimationDuration": {
+      "name": "动画时长",
+      "description": "快速终端进入和退出动画的时长（秒）。设为 0 可完全禁用动画。可在运行时更改。仅在 macOS 上实现。",
+      "note": "快速终端动画时长，单位为秒，范围 0 到 10。"
+    },
+    "quickTerminalAutohide": {
+      "name": "自动隐藏",
+      "description": "当焦点转移到其他窗口时自动隐藏快速终端。macOS 上默认为 true，Linux/BSD 上默认为 false。\n\n在 Linux 上，全局快捷键需要系统配置且不太容易访问，因此最好保持终端打开。",
+      "note": "当焦点移开时自动隐藏快速终端。"
+    },
+    "quickTerminalKeyboardInteractivity": {
+      "name": "键盘输入",
+      "description": "决定快速终端何时接收键盘输入。\n\n- `none` - 不接收任何键盘输入\n- `on-demand` - 仅在聚焦时接收键盘输入（默认）\n- `exclusive` - 始终接收键盘输入，即使其他窗口聚焦\n\n仅在 Linux Wayland 上有效。在 macOS 上，行为始终等同于 `on-demand`。",
+      "note": "控制快速终端何时接收键盘输入。仅 GTK Wayland。"
+    },
+    "quickTerminalPosition": {
+      "name": "终端位置",
+      "description": "快速终端窗口的位置。\n\n- `top` - 终端出现在屏幕顶部\n- `bottom` - 终端出现在底部\n- `left` - 终端出现在左侧\n- `right` - 终端出现在右侧\n- `center` - 终端出现在中央\n\n在 macOS 上，更改此项需要重启 Ghostty。"
+    },
+    "quickTerminalScreen": {
+      "name": "屏幕位置",
+      "description": "快速终端应显示的屏幕。\n\n- `main` - 操作系统推荐的主屏幕（默认）\n- `mouse` - 鼠标当前所在的屏幕\n- `macos-menu-bar` - 包含 macOS 菜单栏的屏幕\n\n仅在 macOS 上实现。"
+    },
+    "quickTerminalSize": {
+      "name": "快速终端尺寸",
+      "description": "快速终端的尺寸。可以是百分比（例如 `50%`）或像素（例如 `300px`）。没有后缀的裸值是配置错误。\n\n指定一个尺寸时，它影响主轴（顶部/底部为高度，左侧/右侧为宽度）。用逗号分隔指定两个值可同时设置两个维度。\n\n示例：`50%,500px` 对于顶部定位的终端 = 半屏高、500px 宽。",
+      "note": "以百分比（例如 <code>50%</code>）或像素（例如 <code>800</code>）指定尺寸。可以用逗号分隔指定宽度和高度的两个值。"
+    },
+    "quickTerminalSpaceBehavior": {
+      "name": "macOS 空间行为",
+      "description": "在 macOS 空间之间切换时快速终端的行为。\n\n- `move` - 快速终端移动到当前空间（默认）\n- `remain` - 快速终端留在原空间\n\n仅在 macOS 上实现。在 Linux 上，行为始终等同于 `move`。"
+    },
+    "quitAfterLastWindowClosed": {
+      "name": "关闭最后一个窗口后退出",
+      "description": "是否在最后一个表面关闭后退出。macOS 上默认为 false（标准 macOS 行为），Linux 上默认为 true。在 Linux 上设为 true 时，Ghostty 可以使用 `quit-after-last-window-closed-delay` 延迟退出。"
+    },
+    "quitAfterLastWindowClosedDelay": {
+      "name": "自动退出前延迟",
+      "description": "控制最后一个表面关闭后 Ghostty 继续运行多久。仅在 `quit-after-last-window-closed` 为 true 时有效。最小值为 1s。时长格式：数字后跟时间单位（y、d、h、m、s、ms、us、ns）。\n\n仅在 Linux 上实现。",
+      "note": "最后一个窗口关闭后 Ghostty 继续运行多久。留空表示立即退出。格式如 <code>5s</code>、<code>500ms</code>。"
+    },
+    "resizeOverlay": {
+      "name": "显示调整大小覆盖层",
+      "description": "控制何时显示调整大小覆盖层。调整大小覆盖层是在调整窗口大小时显示终端尺寸的临时弹窗。\n\n- `always` - 始终显示调整大小覆盖层。\n- `never` - 从不显示调整大小覆盖层。\n- `after-first` - 初始创建时不显示，但后续调整大小时显示。"
+    },
+    "resizeOverlayDuration": {
+      "name": "调整大小覆盖层显示时间",
+      "description": "如果启用了调整大小覆盖层，控制覆盖层在隐藏前可见的时长。默认为 750ms。时长格式：数字后跟时间单位（y、d、h、m、s、ms、us、ns）。",
+      "note": "调整大小覆盖层保持可见的时长。格式如 <code>750ms</code>、<code>1s</code>。"
+    },
+    "resizeOverlayPosition": {
+      "name": "调整大小覆盖层位置",
+      "description": "如果启用了调整大小覆盖层，控制覆盖层的位置。"
+    },
+    "rightClickAction": {
+      "name": "右键点击操作",
+      "description": "用户右键点击终端表面时执行的操作。\n\n- `context-menu` - 显示上下文菜单（默认）\n- `paste` - 从剪贴板粘贴\n- `copy` - 复制选中的文本\n- `copy-or-paste` - 有选中内容时复制，否则粘贴\n- `ignore` - 不做任何事"
+    },
+    "scrollToBottom": {
+      "name": "滚动到底部的时机",
+      "description": "何时将表面滚动到底部。逗号分隔的选项列表。加上 `no-` 前缀可禁用。\n\n选项：\n- `keystroke` - 按下向 PTY 发送数据的键时滚动到底部（默认：开启）\n- `output` - 显示新数据时滚动到底部（默认：关闭）",
+      "note": "逗号分隔的列表。可用值：keystroke、output。"
+    },
+    "scrollbackLimit": {
+      "name": "回滚缓冲区大小（字节）",
+      "description": "回滚缓冲区的大小，单位为字节。这也包括活动屏幕。达到限制时，最旧的行会被移除。回滚缓冲区完全存在于内存中，惰性分配。按终端表面计算，而不是整个应用。",
+      "note": "此缓冲区完全存在于内存中，但会惰性分配。"
+    },
+    "scrollbar": {
+      "name": "滚动条可见性",
+      "description": "控制何时显示滚动条。\n\n- `system` - 遵循系统关于何时显示滚动条的设置。\n- `never` - 从不显示滚动条。\n\n目前仅在 macOS 上支持。GTK 尚不支持滚动条。",
+      "note": "目前仅在 macOS 上支持。"
+    },
+    "searchBackground": {
+      "name": "搜索匹配背景色",
+      "description": "非聚焦（候选）搜索匹配项的背景颜色。有效值：十六进制、X11 颜色名称、`cell-foreground` 或 `cell-background`。默认为金黄色。",
+      "note": "非聚焦（候选）搜索匹配项的背景颜色。默认为金黄色（#ffe082）。也接受 `cell-foreground` 或 `cell-background`。"
+    },
+    "searchForeground": {
+      "name": "搜索匹配前景色",
+      "description": "非聚焦（候选）搜索匹配项的前景颜色。有效值：十六进制、X11 颜色名称、`cell-foreground` 或 `cell-background`。默认为黑色。",
+      "note": "非聚焦（候选）搜索匹配项的前景颜色。也接受 `cell-foreground` 或 `cell-background`。"
+    },
+    "searchSelectedBackground": {
+      "name": "选中匹配背景色",
+      "description": "当前选中（聚焦）搜索匹配项的背景颜色。默认为柔和桃色。",
+      "note": "活动/聚焦搜索匹配项的背景颜色。默认为柔和桃色（#f2a57e）。"
+    },
+    "searchSelectedForeground": {
+      "name": "选中匹配前景色",
+      "description": "当前选中（聚焦）搜索匹配项的前景颜色。默认为黑色。",
+      "note": "活动/聚焦搜索匹配项的前景颜色。"
+    },
+    "selectionBackground": {
+      "name": "选区背景色",
+      "description": "选区的背景颜色。如果未设置，选区颜色为反转的窗口背景/前景色。可指定为十六进制或 X11 颜色名称。自 1.2.0 起，可设置为 `cell-foreground` 或 `cell-background`。"
+    },
+    "selectionClearOnCopy": {
+      "name": "复制时清除选区",
+      "description": "复制后是否清除选中的文本。为 true 时，任何 `copy_to_clipboard` 键盘绑定后都会自动清除选区。不适用于 `copy-on-select` 复制。"
+    },
+    "selectionClearOnTyping": {
+      "name": "输入时清除选区",
+      "description": "输入时是否清除选中的文本。为 false 时，输入不会清除选中的文本。仍可通过单击一次或按 `escape` 手动清除选区。"
+    },
+    "selectionForeground": {
+      "name": "选区前景色",
+      "description": "选区的前景颜色。如果未设置，选区颜色为反转的窗口背景/前景色。可指定为十六进制或 X11 颜色名称。自 1.2.0 起，可设置为 `cell-foreground` 或 `cell-background`。"
+    },
+    "selectionWordChars": {
+      "name": "单词选择字符",
+      "description": "文本选择时（例如双击）标记单词边界的字符。选择单词时，选区会在这些字符中的任意一个处停止。\n\n每个字符都会成为单词边界。空字符（U+0000）始终被视为边界。",
+      "note": "每个字符都是选区停止的单独边界，不是模式或正则表达式。"
+    },
+    "shellIntegration": {
+      "name": "Shell 集成方式",
+      "description": "是否启用 shell 集成自动注入。\n\n- `none` - 禁用 shell 集成\n- `detect` - 自动检测 shell，如果支持则注入（默认）\n- `bash`、`elvish`、`fish`、`nushell`、`zsh` - 使用特定的 shell 集成方案"
+    },
+    "shellIntegrationFeatures": {
+      "name": "Shell 集成特性",
+      "description": "要启用的 shell 集成特性。逗号分隔的列表。加上 `no-` 前缀可禁用。使用 `true`/`false` 开启或关闭所有特性。\n\n特性：\n- `cursor` - 在提示符处将光标设为竖线（默认：开启）\n- `sudo` - 设置 sudo 包装器以保留 terminfo（默认：关闭）\n- `title` - 通过 shell 集成设置窗口标题（默认：开启）\n- `ssh-env` - SSH 环境变量兼容：将 TERM 转换为 xterm-256color 并传递 COLORTERM（默认：关闭，自 1.2.0 起）\n- `ssh-terminfo` - 在远程主机上自动安装 terminfo（默认：关闭，自 1.2.0 起）\n- `path` - 将 Ghostty 的二进制目录添加到 PATH（默认：开启）",
+      "note": "可用特性：cursor、sudo、title、ssh-env、ssh-terminfo、path。显式包含会强制启用，加上 <code>no-</code> 前缀会强制禁用，省略则回退到默认值。"
+    },
+    "splitDividerColor": {
+      "name": "分屏分隔线颜色",
+      "description": "分屏分隔线的颜色。如果未设置，将自动选择默认值。可指定为十六进制或 X11 颜色名称。"
+    },
+    "splitInheritWorkingDirectory": {
+      "name": "分屏继承工作目录",
+      "description": "如果为 true，新分屏窗格将继承之前聚焦分屏的工作目录。如果之前没有聚焦的分屏，则使用 `working-directory` 选项。"
+    },
+    "splitPreserveZoom": {
+      "name": "导航时保留分屏缩放",
+      "description": "控制 Ghostty 何时保留已缩放的分屏。通常，任何改变焦点或分屏树布局的操作都会取消缩放。\n\n设为 `navigation` 可在导航到另一个分屏（例如通过 `goto_split`）时保留缩放状态。加上 `no-` 前缀可禁用。\n\n示例：`split-preserve-zoom = navigation`",
+      "note": "在分屏之间导航时保持缩放状态。"
+    },
+    "tabInheritWorkingDirectory": {
+      "name": "标签页继承工作目录",
+      "description": "如果为 true，新标签页将继承之前聚焦标签页的工作目录。如果之前没有聚焦的标签页，则使用 `working-directory` 选项。"
+    },
+    "term": {
+      "name": "TERM 环境变量",
+      "description": "要为 TERM 环境变量设置的值。"
+    },
+    "theme": {
+      "name": "颜色主题",
+      "description": "要使用的主题。可以是内置主题名称、自定义主题名称，或自定义主题文件的绝对路径。\n\n要为浅色/深色模式指定不同主题：`light:theme-name,dark:theme-name`。\n\n要查看可用主题，请运行 `ghostty +list-themes`。",
+      "note": "设置此项后选择的任何颜色都会覆盖主题的颜色。"
+    },
+    "title": {
+      "name": "所有窗口的静态标题",
+      "description": "Ghostty 用于窗口的标题。始终强制使用此标题；Ghostty 将忽略程序设置的标题转义序列。要使用空白标题，请设置为一个或多个空格（加引号）。"
+    },
+    "titleReport": {
+      "name": "CSI 21 标题报告",
+      "description": "启用或禁用标题报告（CSI 21 t）。允许正在运行的程序查询终端标题。\n\n警告：这最多可能泄露敏感信息，最坏情况下可能启用任意代码执行。",
+      "note": "这允许正在运行的应用读取终端标题。"
+    },
+    "undoTimeout": {
+      "name": "撤销超时",
+      "description": "撤销操作保持可用的时长。默认为 5 秒。时长格式：数字后跟时间单位（y、d、h、m、s、ms、us、ns）。\n\n超时为零实际上会禁用撤销。仅在 macOS 上支持。",
+      "note": "撤销操作的超时时间。格式如 <code>1h30m</code>、<code>5s</code>、<code>500ms</code>。"
+    },
+    "unfocusedSplitFill": {
+      "name": "未聚焦分屏填充色",
+      "description": "使未聚焦分屏变暗的颜色。未聚焦分屏通过在分屏上渲染半透明矩形来变暗。默认为背景颜色。可指定为十六进制或 X11 颜色名称。"
+    },
+    "unfocusedSplitOpacity": {
+      "name": "未聚焦分屏不透明度",
+      "description": "未聚焦分屏的不透明度。未聚焦分屏会略微淡出，以便更容易看出哪个分屏处于聚焦状态。要禁用此功能，请设为 1。限制在 [0.15, 1] 范围内。"
+    },
+    "vtKamAllowed": {
+      "name": "允许 VT kam 模式",
+      "description": "如果为 true，允许在终端中使用“KAM”模式（ANSI 模式 2）。KAM 会在应用程序请求时禁用键盘输入。不常见，也不推荐。",
+      "note": "如果你不知道这是什么，请不要动它！"
+    },
+    "waitAfterCommand": {
+      "name": "命令后等待输入",
+      "description": "如果为 true，命令退出后保持终端打开，直到收到任意按键。主要用于脚本或调试。"
+    },
+    "windowColorspace": {
+      "name": "窗口色彩空间",
+      "description": "解释终端颜色时使用的色彩空间。\n\n- `srgb` - 在 sRGB 色彩空间中解释颜色（默认）。\n- `display-p3` - 在 Display P3 色彩空间中解释颜色。\n\n目前仅在 macOS 上支持。"
+    },
+    "windowDecoration": {
+      "name": "窗口装饰",
+      "description": "配置窗口装饰的偏好。\n\n- `none` - 禁用所有窗口装饰（标题栏、边框）。在 macOS 上会禁用标签页。\n- `auto` - 根据操作系统/桌面环境自动使用客户端或服务端装饰。\n- `client` - 优先使用客户端装饰。（自 1.1.0 起）\n- `server` - 优先使用服务端装饰（仅 Linux GTK）。（自 1.1.0 起）\n\n也接受布尔值 `true`（= auto）和 `false`（= none）。"
+    },
+    "windowHeight": {
+      "name": "初始窗口高度",
+      "description": "初始窗口高度，以终端网格单元为单位。必须同时设置 `window-height` 和 `window-width` 才能生效。不允许小于 4 的值。设为 0 使用应用运行时默认值。",
+      "note": "此尺寸不是像素，而是终端网格单元数"
+    },
+    "windowInheritFontSize": {
+      "name": "继承字体大小",
+      "description": "如果为 true，新窗口和标签页将继承之前聚焦窗口的字体大小。如果为 false，则使用 `font-size` 中的默认字体大小。"
+    },
+    "windowInheritWorkingDirectory": {
+      "name": "继承工作目录",
+      "description": "如果为 true，新窗口将继承之前聚焦窗口的工作目录。如果之前没有聚焦的窗口，则使用 `working-directory` 选项。"
+    },
+    "windowNewTabPosition": {
+      "name": "新标签页位置",
+      "description": "创建新标签页的位置。\n\n- `current` - 插入到当前聚焦标签页之后，如果没有聚焦标签页则插入到末尾。\n- `end` - 插入到标签页列表末尾。"
+    },
+    "windowPaddingBalance": {
+      "name": "自动平衡窗口内边距",
+      "description": "如果为 true，视口中不能被单元格大小整除的额外内边距会自动在四条边之间平衡。其他 `window-padding` 选项会先应用。",
+      "note": "仅将剩余空间均匀分布到四条边。在水平/垂直内边距之后应用，而不是替代它们。"
+    },
+    "windowPaddingColor": {
+      "name": "窗口内边距颜色",
+      "description": "窗口内边距区域的颜色。\n\n- `background` - `background` 中指定的背景颜色\n- `extend` - 扩展最近网格单元的背景颜色（使用启发式规则）\n- `extend-always` - 与 `extend` 相同，但始终扩展而不应用启发式规则"
+    },
+    "windowPaddingX": {
+      "name": "水平窗口内边距",
+      "description": "终端单元格与左右窗口边框之间的水平内边距。值以磅为单位（按 DPI 缩放）。可以指定两个逗号分隔的值以设置不同的左/右内边距：`window-padding-x = 2,4`。"
+    },
+    "windowPaddingY": {
+      "name": "垂直窗口内边距",
+      "description": "终端单元格与上下窗口边框之间的垂直内边距。值以磅为单位（按 DPI 缩放）。可以指定两个逗号分隔的值以设置不同的上/下内边距：`window-padding-y = 2,4`。"
+    },
+    "windowPositionX": {
+      "name": "初始窗口 X 坐标",
+      "description": "窗口的起始 X 位置，单位为像素，相对于主显示器左上角。必须同时设置 x 和 y 才能生效。注意：仅在 macOS 上支持；GTK 不支持设置窗口位置。",
+      "note": "相对于屏幕左上角像素"
+    },
+    "windowPositionY": {
+      "name": "初始窗口 Y 坐标",
+      "description": "窗口的起始 Y 位置，单位为像素，相对于主显示器左上角。在 macOS 上，相对于可见屏幕区域的左上角。必须同时设置 x 和 y 才能生效。",
+      "note": "相对于屏幕左上角像素"
+    },
+    "windowSaveState": {
+      "name": "保存窗口状态",
+      "description": "是否启用保存和恢复窗口状态（位置、大小、标签页、分屏等）。\n\n- `default` - 使用系统默认行为（macOS：仅在强制终止或系统范围配置时）。\n- `never` - 从不保存窗口状态。\n- `always` - 退出时始终保存窗口状态。\n\n目前仅在 macOS 上支持。"
+    },
+    "windowShowTabBar": {
+      "name": "显示标签栏",
+      "description": "是否显示标签栏。\n\n- `always` - 始终显示标签栏，即使只有一个标签页。（自 1.2.0 起）\n- `auto` - 仅在有两个或更多标签页时显示标签栏。\n- `never` - 从不显示标签栏。可通过标签页总览或快捷键访问标签页。\n\n目前仅在 Linux（GTK）上支持。"
+    },
+    "windowStepResize": {
+      "name": "按网格单元增量调整窗口大小",
+      "description": "以聚焦表面单元格大小的离散增量调整窗口大小。如果禁用，则按像素增量调整表面大小。目前仅在 macOS 上支持。"
+    },
+    "windowSubtitle": {
+      "name": "窗口副标题",
+      "description": "显示在窗口副标题中的文本。\n\n- `false` - 禁用副标题\n- `working-directory` - 将副标题设为工作目录\n\n仅在 GTK 上支持。"
+    },
+    "windowTheme": {
+      "name": "窗口主题",
+      "description": "用于窗口的主题。\n\n- `auto` - 根据终端背景颜色确定。如果主题有单独的浅色/深色主题，则行为与 `system` 相同。\n- `system` - 使用系统主题。\n- `light` - 无论系统主题如何，使用浅色主题。\n- `dark` - 无论系统主题如何，使用深色主题。\n- `ghostty` - 使用 Ghostty 配置中的背景/前景颜色（仅 Linux 构建）。\n\n目前仅在 macOS 和 Linux 上支持。"
+    },
+    "windowTitleFontFamily": {
+      "name": "窗口标题字体",
+      "description": "用于应用窗口和标签页标题的字体。如果未设置，则使用系统默认字体。不需要是等宽字体。"
+    },
+    "windowTitlebarBackground": {
+      "name": "标题栏背景色",
+      "description": "窗口标题栏的背景颜色。仅在 `window-theme` 设为 `ghostty` 时生效。目前仅在 GTK 应用运行时中支持。可指定为十六进制或 X11 颜色名称。"
+    },
+    "windowTitlebarForeground": {
+      "name": "标题栏前景色",
+      "description": "窗口标题栏的前景颜色。仅在 `window-theme` 设为 `ghostty` 时生效。目前仅在 GTK 应用运行时中支持。可指定为十六进制或 X11 颜色名称。"
+    },
+    "windowVsync": {
+      "name": "启用垂直同步",
+      "description": "将渲染与屏幕刷新率同步。如果为 true，可最大限度减少撕裂并使重绘与屏幕对齐，但可能导致输入延迟。默认为 true，因为 macOS 上不同步的渲染可能导致内核恐慌（macOS 14.4+）。目前仅在 macOS 上支持。"
+    },
+    "windowWidth": {
+      "name": "初始窗口宽度",
+      "description": "初始窗口宽度，以终端网格单元为单位。必须同时设置 `window-height` 和 `window-width` 才能生效。不允许小于 10 的值。设为 0 使用应用运行时默认值。",
+      "note": "此尺寸不是像素，而是终端网格单元数"
+    },
+    "workingDirectory": {
+      "name": "启动后使用的目录",
+      "description": "启动命令后要切换到的目录。次于 `window-inherit-working-directory`。特殊值：\n- `home` - 主目录\n- `inherit` - 启动进程的工作目录\n\n在 macOS 上，如果从 launchd/open 启动，默认为 `home`。在 GTK 上，如果从桌面启动器启动，默认为 `home`。",
+      "note": "这里也允许使用特殊值 <code>home</code> 和 <code>inherit</code>。"
+    },
+    "x11InstanceName": {
+      "name": "WM_CLASS 实例名",
+      "description": "在 X11 下运行时，控制 WM_CLASS X11 属性的实例名字段。默认为 `ghostty`。",
+      "note": "默认为 <code>ghostty</code>"
+    },
+    "clipboardCodepointMap": {
+      "name": "剪贴板代码点映射",
+      "description": "将特定 Unicode 代码点映射到复制到剪贴板时的替换值。语法与 `font-codepoint-map` 相同：\n- 单个代码点：`U+1234=U+ABCD` 或 `U+1234=replacement_text`\n- 代码点范围：`U+1234-U+5678=U+ABCD`\n此配置可重复多次以指定多个映射。后条目对重叠范围优先级更高。\n注意：仅适用于文本复制操作，不适用于 URL 复制。",
+      "note": "可重复多次以指定多个映射。"
+    },
+    "clipboardWriteLimitBytes": {
+      "name": "剪贴板写入限制（字节）",
+      "description": "通过 Kitty 剪贴板协议（OSC 5522），程序在终端中单次写入剪贴板的最大字节数。超过限制的写入将失败。设为 `0` 可拒绝所有非空写入。默认 64 MiB。\n可用版本：1.4.0"
+    },
+    "commandPaletteEntry": {
+      "name": "命令面板条目",
+      "description": "命令面板的自定义条目。每个条目需要标题和对应动作。格式：`title:名称, action:动作名`。可重复多次以指定多个条目。\n可用版本：1.2.0",
+      "note": "可重复多次以指定多个条目。"
+    },
+    "dragHandle": {
+      "name": "拖动柄行为",
+      "description": "控制拆分面板上何时显示拖动柄，允许用鼠标重新排列拆分面板。\n- `always` - 始终显示拖动柄\n- `auto`（默认） - 自动显示/隐藏拖动柄\n- `never` - 从不显示拖动柄\n可用版本：1.4.0"
+    },
+    "gtkHorizontalTabScroll": {
+      "name": "横向标签页滚动",
+      "description": "如果为 true（默认），触控板双指水平滚动会在标签页间切换。设为 false 可禁用此行为。\n可用版本：1.4.0"
+    },
+    "gtkTabsInverted": {
+      "name": "反向标签页",
+      "description": "如果为 true，每个标签页的关闭按钮显示在标签页开头（从左到右语言中为左侧），标签页图标在末尾。适用于标签栏和标签页概览。仅限 GTK。\n可用版本：1.4.0"
+    },
+    "keyRemap": {
+      "name": "按键重映射",
+      "description": "在 Ghostty 内重映射修饰键。格式：`from=to`，其中 from 和 都是修饰键名称（例如 `ctrl=super`）。可重复多次指定多个重映射。\n这不会更改 Ghostty 外部的键盘布局或按键编码。",
+      "note": "可重复多次以指定多个重映射。"
+    },
+    "linkOsc8": {
+      "name": "OSC 8 超链接",
+      "description": "启用通过 OSC 8 转义序列创建的超链接。禁用时，OSC 8 超链接不会被高亮、预览、复制或打开。这不影响由 `link-url` 控制的 URL 匹配。\n可用版本：1.4.0"
+    },
+    "scrollbackCompression": {
+      "name": "压缩回滚缓冲区",
+      "description": "是否在终端空闲时压缩回滚缓冲区页面。Ghostty 尽量仅在空闲时压缩，需要时解压。压缩不会降低 IO 吞吐量。禁用压缩会增加物理内存使用，但不改变保留的历史记录量。\n运行时更改此项仅影响未来的压缩工作。"
+    },
+    "scrollbackLimitBytes": {
+      "name": "回滚缓冲区大小（字节）",
+      "description": "回滚缓冲区的字节大小，替代 `scrollback-limit`。达到此限制时，最旧的行会被移除。设为 `unlimited` 可移除字节限制。\n运行时更改此项仅影响新的终端表面。",
+      "note": "替代已弃用的 `scrollback-limit`。"
+    },
+    "scrollbackLimitLines": {
+      "name": "回滚缓冲区大小（行）",
+      "description": "要保留的回滚行数最大值。不包括活动屏幕。默认 `unlimited`。\n运行时更改此项仅影响新的终端表面。"
+    },
+    "vtWindowResizeAllowed": {
+      "name": "允许 VT 窗口调整大小",
+      "description": "如果为 true，允许运行中的程序使用 xterm CSI 8 转义序列调整窗口大小。默认禁用，因为这会让任何程序（包括远程机器上的程序）更改窗口大小。\n可用版本：1.4.0"
+    },
+    "vtXtChecksumExtension": {
+      "name": "VT XT 校验和扩展",
+      "description": "DECRQCRA 报告的校验和计算方式。有效值：`negate`、`attributes`、`trim`、`undrawn`、`full`。可用 `no-` 前缀禁用。多个值可用逗号组合。\n可用版本：1.4.0",
+      "note": "可重复多次以指定多个值。"
+    },
+    "vtXtChecksumReport": {
+      "name": "VT XT 校验和报告",
+      "description": "启用或禁用校验和报告（DECRQCRA）。终端测试套件用它检查屏幕内容。默认禁用，因为程序可逐个单元请求校验和，从而读取屏幕上的所有内容。\n可用版本：1.4.0"
+    }
+  }
+}

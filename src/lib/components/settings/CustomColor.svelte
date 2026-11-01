@@ -11,17 +11,25 @@
         resetMessage?: string; // passed through to Color's right-click toast
     }
 
-    // eslint-disable-next-line prefer-const
-    let {value = $bindable(""), presets, default: defaultValue, widget, resetMessage}: Props = $props();
+
+    /* eslint-disable prefer-const -- value is $bindable, so the destructure must stay `let` */
+    let {
+        value = $bindable(""),
+        presets,
+        default: defaultValue,
+        widget,
+        resetMessage
+    }: Props = $props();
+    /* eslint-enable prefer-const */
 </script>
 
-<CustomInput
-    bind:value
-    {presets}
-    {widget}
-    customDefault={defaultValue ?? "#ffffff"}
->
+<CustomInput bind:value {presets} {widget} customDefault={defaultValue ?? "#ffffff"}>
     {#snippet control({value: innerValue, onChange, disabled}: ControlProps)}
-        <Color bind:value={() => (innerValue || "#ffffff") as HexColor, onChange} {defaultValue} {disabled} {resetMessage} />
+        <Color
+            bind:value={() => (innerValue || "#ffffff") as HexColor, onChange}
+            {defaultValue}
+            {disabled}
+            {resetMessage}
+        />
     {/snippet}
 </CustomInput>

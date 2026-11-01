@@ -2,10 +2,11 @@
     import {dualThemeCodec, type LinkedValue} from "$lib/settings/codecs";
     import Dropdown from "./Dropdown.svelte";
     import LinkedInput from "./LinkedInput.svelte";
+    import {t} from "$lib/i18n";
 
     interface Props {
         value: string; // 'Theme Name' (one theme) or 'light:Name,dark:Name' (per light/dark)
-        options: Array<string | {name: string, value: string, icon?: string}>;
+        options: Array<string | {name: string; value: string; icon?: string}>;
     }
 
     // eslint-disable-next-line prefer-const
@@ -21,16 +22,22 @@
     }
 </script>
 
-<LinkedInput bind:value labels={["Light", "Dark"]} parse={(raw: string) => dualThemeCodec.parse(raw)} serialize={serializeTheme} collapseLinked>
+<LinkedInput
+    bind:value
+    labels={[t("ui.widgets.light"), t("ui.widgets.dark")]}
+    parse={(raw: string) => dualThemeCodec.parse(raw)}
+    serialize={serializeTheme}
+    collapseLinked
+>
     {#snippet control(theme: string, setTheme: (next: string) => void)}
         <Dropdown
             value={theme}
             {options}
             change={setTheme}
-            placeholder="Theme…"
+            placeholder={t("ui.widgets.themePlaceholder")}
             searchable
             allowEmpty
-            emptyLabel="Reset Theme"
+            emptyLabel={t("ui.widgets.resetTheme")}
             iconSize={32}
             maxWidth={150}
         />

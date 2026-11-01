@@ -2,7 +2,6 @@ import {getNode, resolveParts} from "../filesystem";
 import type {Command, FSNode, Line, Segment} from "../types";
 import {err, ok, s} from "../utils";
 
-
 const command: Command = {
     desc: "Search for a pattern in file(s)",
     usage: "[-ri] <pattern> [file...]",
@@ -10,11 +9,11 @@ const command: Command = {
         "-r  search recursively through directories",
         "-i  case-insensitive search",
         "-n  show line numbers",
-        "Matches are highlighted in the output.",
+        "Matches are highlighted in the output."
     ],
     fn(args, ctx) {
-        const flags = args.filter(a => a.startsWith("-")).join("");
-        const rest = args.filter(a => !a.startsWith("-"));
+        const flags = args.filter((a) => a.startsWith("-")).join("");
+        const rest = args.filter((a) => !a.startsWith("-"));
         const [pattern, ...filePaths] = rest;
         if (!pattern) return err("grep: missing pattern");
 
@@ -22,9 +21,17 @@ const command: Command = {
         const showNums = flags.includes("n");
         const recursive = flags.includes("r");
 
-        const regex = new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), ignoreCase ? "gi" : "g");
+        const regex = new RegExp(
+            pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+            ignoreCase ? "gi" : "g"
+        );
 
-        type Match = {file?: string; lineNum: number; line: string; ranges: Array<[number, number]>;};
+        type Match = {
+            file?: string;
+            lineNum: number;
+            line: string;
+            ranges: Array<[number, number]>;
+        };
         const matches: Match[] = [];
 
         function searchFile(content: string, displayName?: string) {
@@ -42,7 +49,7 @@ const command: Command = {
             if (node.type === "file") {
                 searchFile(node.content, displayPath);
             }
-            else if (recursive) {
+ else if (recursive) {
                 for (const [name, child] of Object.entries(node.children)) {
                     searchNode(child, `${path}/${name}`, `${displayPath}/${name}`);
                 }
@@ -81,7 +88,7 @@ const command: Command = {
             lines.push(row);
         }
         return ok(lines);
-    },
+    }
 };
 
 export default command;

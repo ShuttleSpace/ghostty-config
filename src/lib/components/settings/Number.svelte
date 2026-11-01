@@ -1,6 +1,7 @@
 <script lang="ts">
     import {countDecimalPlaces} from "$lib/utils/numbers";
     import {numberCodec} from "$lib/settings/codecs";
+    import {t} from "$lib/i18n";
 
     type Props = {
         value: string; // flat-store string; parsed to a number internally via numberCodec
@@ -16,8 +17,21 @@
     };
 
     // why is eslint like this smh
-    // eslint-disable-next-line prefer-const
-    let {value = $bindable(""), min, max, step = 1, size, placeholder, integer = true, nullable = false, onchange, disabled}: Props = $props();
+
+    /* eslint-disable prefer-const -- value is $bindable, so the destructure must stay `let` */
+    let {
+        value = $bindable(""),
+        min,
+        max,
+        step = 1,
+        size,
+        placeholder,
+        integer = true,
+        nullable = false,
+        onchange,
+        disabled
+    }: Props = $props();
+    /* eslint-enable prefer-const */
 
     // The bound `value` is a string; all the numeric math below works off this parsed number
     // (undefined means "no value" / empty input).
@@ -53,11 +67,13 @@
     const isActuallyInteger = $derived.by(() => integer && isDetectedAsInteger);
 
     // Calculate the number of decimal places to show based on step, min, and max
-    const maxDecimalPlaces = $derived(Math.max(countDecimalPlaces(min), countDecimalPlaces(max), countDecimalPlaces(step)));
+    const maxDecimalPlaces = $derived(
+        Math.max(countDecimalPlaces(min), countDecimalPlaces(max), countDecimalPlaces(step))
+    );
 
     $effect(() => {
         if (!size) {
-            const referenceValue = (num !== undefined && !Number.isNaN(num) && isValid()) ? num : (max ?? 100);
+            const referenceValue = num !== undefined && !Number.isNaN(num) && isValid() ? num : (max ?? 100);
             size = referenceValue.toString().length + 2;
         }
     });
@@ -112,7 +128,7 @@
             if (max !== undefined && constrainedValue > max) constrainedValue = max;
             commit(constrainedValue);
         }
-        else {
+ else {
             // Cleanup for this will happen onBlur rather than trying to be smart while they type
         }
     }
@@ -122,7 +138,7 @@
             event.preventDefault();
             increment();
         }
-        else if (event.key === "ArrowDown") {
+ else if (event.key === "ArrowDown") {
             event.preventDefault();
             decrement();
         }
@@ -134,7 +150,6 @@
         target.value = displayValue;
     }
 </script>
-
 
 <div class="number-input">
     <input
@@ -148,81 +163,108 @@
         {disabled}
     />
     <div class="steppers">
-        <button type="button" class="stepper up" onclick={increment} aria-label="Increment" {disabled}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6" /></svg>
+        <button
+            type="button"
+            class="stepper up"
+            onclick={increment}
+            aria-label={t("ui.widgets.increment")}
+            {disabled}
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="m18 15-6-6-6 6" /></svg
+            >
         </button>
-        <button type="button" class="stepper down" onclick={decrement} aria-label="Decrement" {disabled}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+        <button
+            type="button"
+            class="stepper down"
+            onclick={decrement}
+            aria-label={t("ui.widgets.decrement")}
+            {disabled}
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg
+            >
         </button>
     </div>
 </div>
 
-
 <style>
-.number-input {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-}
+    .number-input {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
 
-.number-input input {
-    background: var(--bg-level-2);
-    border: 1px solid var(--border-input);
-    border-radius: var(--radius-level-5);
-    outline: none;
-    color: inherit;
-    text-align: right;
-    max-width: 175px;
-    padding-right: 24px;
-    padding-left: 8px;
-    padding-top: 4px;
-    padding-bottom: 5px;
-    font-size: inherit;
-}
+    .number-input input {
+        background: var(--bg-level-2);
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius-level-5);
+        outline: none;
+        color: inherit;
+        text-align: right;
+        max-width: 175px;
+        padding-right: 24px;
+        padding-left: 8px;
+        padding-top: 4px;
+        padding-bottom: 5px;
+        font-size: inherit;
+    }
 
-.number-input input:focus {
-    background: var(--bg-input-focus);
-    outline: var(--border-input-focus);
-}
+    .number-input input:focus {
+        background: var(--bg-input-focus);
+        outline: var(--border-input-focus);
+    }
 
-.steppers {
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-}
+    .steppers {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+    }
 
-.stepper {
-    background: var(--bg-stepper);
-    border: none;
-    padding: 0px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 11px;
-    width: 14px;
-}
+    .stepper {
+        background: var(--bg-stepper);
+        border: none;
+        padding: 0px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 11px;
+        width: 14px;
+    }
 
-.stepper.up {
-    border-radius: 4px 4px 0 0;
-}
+    .stepper.up {
+        border-radius: 4px 4px 0 0;
+    }
 
-.stepper.down {
-    border-radius: 0 0 4px 4px;
-}
+    .stepper.down {
+        border-radius: 0 0 4px 4px;
+    }
 
-.stepper:active {
-    filter: brightness(1.2);
-}
+    .stepper:active {
+        filter: brightness(1.2);
+    }
 
-.stepper svg {
-    stroke: var(--input-icon-color);
-}
+    .stepper svg {
+        stroke: var(--input-icon-color);
+    }
 
-.stepper:hover svg {
-    opacity: 1;
-}
+    .stepper:hover svg {
+        opacity: 1;
+    }
 </style>

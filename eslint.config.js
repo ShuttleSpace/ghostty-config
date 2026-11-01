@@ -39,6 +39,6 @@ export default defineConfig(
         },
     },
     {
-        ignores: ["build/", ".svelte-kit/", "dist/", "custom/", "config/", "sverdle/", "notes/"]
+        ignores: ["build/", ".svelte-kit/", "dist/", "custom/", "config/", "sverdle/", "notes/", "src-tauri/", "x18n.config.ts"]
     },
 );

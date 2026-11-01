@@ -13,6 +13,7 @@
     import {numberCodec, numberUnitsCodec, type NumberUnit} from "$lib/settings/codecs";
     import PillButtonGroup from "./PillButtons.svelte";
     import Number from "./Number.svelte";
+    import {t} from "$lib/i18n";
 
     interface Props {
         value: string; // '' | '2' | '-1' | '20%' | '-15%'
@@ -37,8 +38,8 @@
         // Re-serialize the same numeric value under the new unit, clamped to the new unit's bounds
         const newBounds = unit === "pct" ? PCT_BOUNDS : PX_BOUNDS;
         const clamped = parsed.num === undefined
-            ? undefined
-            : Math.min(newBounds.max, Math.max(newBounds.min, parsed.num));
+                ? undefined
+                : Math.min(newBounds.max, Math.max(newBounds.min, parsed.num));
         value = numberUnitsCodec.serialize({num: clamped, unit});
     }
 </script>
@@ -51,14 +52,14 @@
         step={1}
         integer
         nullable
-        placeholder="unset"
+        placeholder={t("ui.widgets.unset")}
         onchange={onNumberChange}
     />
     <PillButtonGroup
         value={parsed.unit}
         options={[
             {label: "px", value: "px", variant: "neutral"},
-            {label: "%", value: "pct", variant: "neutral"},
+            {label: "%", value: "pct", variant: "neutral"}
         ]}
         onchange={onUnitChange}
         size="compact"
@@ -66,9 +67,9 @@
 </div>
 
 <style>
-.adjust {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
+    .adjust {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
 </style>

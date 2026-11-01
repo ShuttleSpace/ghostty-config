@@ -1,0 +1,176 @@
+{
+    "selectionWordChars": {
+        "name": "单词选择字符",
+        "description": "文本选择时（例如双击）标记单词边界的字符。选择单词时，选区会在这些字符中的任意一个处停止。\n\n每个字符都会成为单词边界。空字符（U+0000）始终被视为边界。",
+        "note": "每个字符都是选区停止的单独边界，不是模式或正则表达式。"
+    },
+    "shellIntegration": {
+        "name": "Shell 集成方式",
+        "description": "是否启用 shell 集成自动注入。\n\n- `none` - 禁用 shell 集成\n- `detect` - 自动检测 shell，如果支持则注入（默认）\n- `bash`、`elvish`、`fish`、`nushell`、`zsh` - 使用特定的 shell 集成方案"
+    },
+    "shellIntegrationFeatures": {
+        "name": "Shell 集成特性",
+        "description": "要启用的 shell 集成特性。逗号分隔的列表。加上 `no-` 前缀可禁用。使用 `true`/`false` 开启或关闭所有特性。\n\n特性：\n- `cursor` - 在提示符处将光标设为竖线（默认：开启）\n- `sudo` - 设置 sudo 包装器以保留 terminfo（默认：关闭）\n- `title` - 通过 shell 集成设置窗口标题（默认：开启）\n- `ssh-env` - SSH 环境变量兼容：将 TERM 转换为 xterm-256color 并传递 COLORTERM（默认：关闭，自 1.2.0 起）\n- `ssh-terminfo` - 在远程主机上自动安装 terminfo（默认：关闭，自 1.2.0 起）\n- `path` - 将 Ghostty 的二进制目录添加到 PATH（默认：开启）",
+        "note": "可用特性：cursor、sudo、title、ssh-env、ssh-terminfo、path。显式包含会强制启用，加上 <code>no-</code> 前缀会强制禁用，省略则回退到默认值。"
+    },
+    "splitDividerColor": {
+        "name": "分屏分隔线颜色",
+        "description": "分屏分隔线的颜色。如果未设置，将自动选择默认值。可指定为十六进制或 X11 颜色名称。"
+    },
+    "splitInheritWorkingDirectory": {
+        "name": "分屏继承工作目录",
+        "description": "如果为 true，新分屏窗格将继承之前聚焦分屏的工作目录。如果之前没有聚焦的分屏，则使用 `working-directory` 选项。"
+    },
+    "splitPreserveZoom": {
+        "name": "导航时保留分屏缩放",
+        "description": "控制 Ghostty 何时保留已缩放的分屏。通常，任何改变焦点或分屏树布局的操作都会取消缩放。\n\n设为 `navigation` 可在导航到另一个分屏（例如通过 `goto_split`）时保留缩放状态。加上 `no-` 前缀可禁用。\n\n示例：`split-preserve-zoom = navigation`",
+        "note": "在分屏之间导航时保持缩放状态。"
+    },
+    "tabInheritWorkingDirectory": {
+        "name": "标签页继承工作目录",
+        "description": "如果为 true，新标签页将继承之前聚焦标签页的工作目录。如果之前没有聚焦的标签页，则使用 `working-directory` 选项。"
+    },
+    "term": {
+        "name": "TERM 环境变量",
+        "description": "要为 TERM 环境变量设置的值。"
+    },
+    "theme": {
+        "name": "颜色主题",
+        "description": "要使用的主题。可以是内置主题名称、自定义主题名称，或自定义主题文件的绝对路径。\n\n要为浅色/深色模式指定不同主题：`light:theme-name,dark:theme-name`。\n\n要查看可用主题，请运行 `ghostty +list-themes`。",
+        "note": "设置此项后选择的任何颜色都会覆盖主题的颜色。"
+    },
+    "title": {
+        "name": "所有窗口的静态标题",
+        "description": "Ghostty 用于窗口的标题。始终强制使用此标题；Ghostty 将忽略程序设置的标题转义序列。要使用空白标题，请设置为一个或多个空格（加引号）。"
+    },
+    "titleReport": {
+        "name": "CSI 21 标题报告",
+        "description": "启用或禁用标题报告（CSI 21 t）。允许正在运行的程序查询终端标题。\n\n警告：这最多可能泄露敏感信息，最坏情况下可能启用任意代码执行。",
+        "note": "这允许正在运行的应用读取终端标题。"
+    },
+    "undoTimeout": {
+        "name": "撤销超时",
+        "description": "撤销操作保持可用的时长。默认为 5 秒。时长格式：数字后跟时间单位（y、d、h、m、s、ms、us、ns）。\n\n超时为零实际上会禁用撤销。仅在 macOS 上支持。",
+        "note": "撤销操作的超时时间。格式如 <code>1h30m</code>、<code>5s</code>、<code>500ms</code>。"
+    },
+    "unfocusedSplitFill": {
+        "name": "未聚焦分屏填充色",
+        "description": "使未聚焦分屏变暗的颜色。未聚焦分屏通过在分屏上渲染半透明矩形来变暗。默认为背景颜色。可指定为十六进制或 X11 颜色名称。"
+    },
+    "unfocusedSplitOpacity": {
+        "name": "未聚焦分屏不透明度",
+        "description": "未聚焦分屏的不透明度。未聚焦分屏会略微淡出，以便更容易看出哪个分屏处于聚焦状态。要禁用此功能，请设为 1。限制在 [0.15, 1] 范围内。"
+    },
+    "vtKamAllowed": {
+        "name": "允许 VT kam 模式",
+        "description": "如果为 true，允许在终端中使用“KAM”模式（ANSI 模式 2）。KAM 会在应用程序请求时禁用键盘输入。不常见，也不推荐。",
+        "note": "如果你不知道这是什么，请不要动它！"
+    },
+    "waitAfterCommand": {
+        "name": "命令后等待输入",
+        "description": "如果为 true，命令退出后保持终端打开，直到收到任意按键。主要用于脚本或调试。"
+    },
+    "windowColorspace": {
+        "name": "窗口色彩空间",
+        "description": "解释终端颜色时使用的色彩空间。\n\n- `srgb` - 在 sRGB 色彩空间中解释颜色（默认）。\n- `display-p3` - 在 Display P3 色彩空间中解释颜色。\n\n目前仅在 macOS 上支持。"
+    },
+    "windowDecoration": {
+        "name": "窗口装饰",
+        "description": "配置窗口装饰的偏好。\n\n- `none` - 禁用所有窗口装饰（标题栏、边框）。在 macOS 上会禁用标签页。\n- `auto` - 根据操作系统/桌面环境自动使用客户端或服务端装饰。\n- `client` - 优先使用客户端装饰。（自 1.1.0 起）\n- `server` - 优先使用服务端装饰（仅 Linux GTK）。（自 1.1.0 起）\n\n也接受布尔值 `true`（= auto）和 `false`（= none）。"
+    },
+    "windowHeight": {
+        "name": "初始窗口高度",
+        "description": "初始窗口高度，以终端网格单元为单位。必须同时设置 `window-height` 和 `window-width` 才能生效。不允许小于 4 的值。设为 0 使用应用运行时默认值。",
+        "note": "此尺寸不是像素，而是终端网格单元数"
+    },
+    "windowInheritFontSize": {
+        "name": "继承字体大小",
+        "description": "如果为 true，新窗口和标签页将继承之前聚焦窗口的字体大小。如果为 false，则使用 `font-size` 中的默认字体大小。"
+    },
+    "windowInheritWorkingDirectory": {
+        "name": "继承工作目录",
+        "description": "如果为 true，新窗口将继承之前聚焦窗口的工作目录。如果之前没有聚焦的窗口，则使用 `working-directory` 选项。"
+    },
+    "windowNewTabPosition": {
+        "name": "新标签页位置",
+        "description": "创建新标签页的位置。\n\n- `current` - 插入到当前聚焦标签页之后，如果没有聚焦标签页则插入到末尾。\n- `end` - 插入到标签页列表末尾。"
+    },
+    "windowPaddingBalance": {
+        "name": "自动平衡窗口内边距",
+        "description": "如果为 true，视口中不能被单元格大小整除的额外内边距会自动在四条边之间平衡。其他 `window-padding` 选项会先应用。",
+        "note": "仅将剩余空间均匀分布到四条边。在水平/垂直内边距之后应用，而不是替代它们。"
+    },
+    "windowPaddingColor": {
+        "name": "窗口内边距颜色",
+        "description": "窗口内边距区域的颜色。\n\n- `background` - `background` 中指定的背景颜色\n- `extend` - 扩展最近网格单元的背景颜色（使用启发式规则）\n- `extend-always` - 与 `extend` 相同，但始终扩展而不应用启发式规则"
+    },
+    "windowPaddingX": {
+        "name": "水平窗口内边距",
+        "description": "终端单元格与左右窗口边框之间的水平内边距。值以磅为单位（按 DPI 缩放）。可以指定两个逗号分隔的值以设置不同的左/右内边距：`window-padding-x = 2,4`。"
+    },
+    "windowPaddingY": {
+        "name": "垂直窗口内边距",
+        "description": "终端单元格与上下窗口边框之间的垂直内边距。值以磅为单位（按 DPI 缩放）。可以指定两个逗号分隔的值以设置不同的上/下内边距：`window-padding-y = 2,4`。"
+    },
+    "windowPositionX": {
+        "name": "初始窗口 X 坐标",
+        "description": "窗口的起始 X 位置，单位为像素，相对于主显示器左上角。必须同时设置 x 和 y 才能生效。注意：仅在 macOS 上支持；GTK 不支持设置窗口位置。",
+        "note": "相对于屏幕左上角像素"
+    },
+    "windowPositionY": {
+        "name": "初始窗口 Y 坐标",
+        "description": "窗口的起始 Y 位置，单位为像素，相对于主显示器左上角。在 macOS 上，相对于可见屏幕区域的左上角。必须同时设置 x 和 y 才能生效。",
+        "note": "相对于屏幕左上角像素"
+    },
+    "windowSaveState": {
+        "name": "保存窗口状态",
+        "description": "是否启用保存和恢复窗口状态（位置、大小、标签页、分屏等）。\n\n- `default` - 使用系统默认行为（macOS：仅在强制终止或系统范围配置时）。\n- `never` - 从不保存窗口状态。\n- `always` - 退出时始终保存窗口状态。\n\n目前仅在 macOS 上支持。"
+    },
+    "windowShowTabBar": {
+        "name": "显示标签栏",
+        "description": "是否显示标签栏。\n\n- `always` - 始终显示标签栏，即使只有一个标签页。（自 1.2.0 起）\n- `auto` - 仅在有两个或更多标签页时显示标签栏。\n- `never` - 从不显示标签栏。可通过标签页总览或快捷键访问标签页。\n\n目前仅在 Linux（GTK）上支持。"
+    },
+    "windowStepResize": {
+        "name": "按网格单元增量调整窗口大小",
+        "description": "以聚焦表面单元格大小的离散增量调整窗口大小。如果禁用，则按像素增量调整表面大小。目前仅在 macOS 上支持。"
+    },
+    "windowSubtitle": {
+        "name": "窗口副标题",
+        "description": "显示在窗口副标题中的文本。\n\n- `false` - 禁用副标题\n- `working-directory` - 将副标题设为工作目录\n\n仅在 GTK 上支持。"
+    },
+    "windowTheme": {
+        "name": "窗口主题",
+        "description": "用于窗口的主题。\n\n- `auto` - 根据终端背景颜色确定。如果主题有单独的浅色/深色主题，则行为与 `system` 相同。\n- `system` - 使用系统主题。\n- `light` - 无论系统主题如何，使用浅色主题。\n- `dark` - 无论系统主题如何，使用深色主题。\n- `ghostty` - 使用 Ghostty 配置中的背景/前景颜色（仅 Linux 构建）。\n\n目前仅在 macOS 和 Linux 上支持。"
+    },
+    "windowTitleFontFamily": {
+        "name": "窗口标题字体",
+        "description": "用于应用窗口和标签页标题的字体。如果未设置，则使用系统默认字体。不需要是等宽字体。"
+    },
+    "windowTitlebarBackground": {
+        "name": "标题栏背景色",
+        "description": "窗口标题栏的背景颜色。仅在 `window-theme` 设为 `ghostty` 时生效。目前仅在 GTK 应用运行时中支持。可指定为十六进制或 X11 颜色名称。"
+    },
+    "windowTitlebarForeground": {
+        "name": "标题栏前景色",
+        "description": "窗口标题栏的前景颜色。仅在 `window-theme` 设为 `ghostty` 时生效。目前仅在 GTK 应用运行时中支持。可指定为十六进制或 X11 颜色名称。"
+    },
+    "windowVsync": {
+        "name": "启用垂直同步",
+        "description": "将渲染与屏幕刷新率同步。如果为 true，可最大限度减少撕裂并使重绘与屏幕对齐，但可能导致输入延迟。默认为 true，因为 macOS 上不同步的渲染可能导致内核恐慌（macOS 14.4+）。目前仅在 macOS 上支持。"
+    },
+    "windowWidth": {
+        "name": "初始窗口宽度",
+        "description": "初始窗口宽度，以终端网格单元为单位。必须同时设置 `window-height` 和 `window-width` 才能生效。不允许小于 10 的值。设为 0 使用应用运行时默认值。",
+        "note": "此尺寸不是像素，而是终端网格单元数"
+    },
+    "workingDirectory": {
+        "name": "启动后使用的目录",
+        "description": "启动命令后要切换到的目录。次于 `window-inherit-working-directory`。特殊值：\n- `home` - 主目录\n- `inherit` - 启动进程的工作目录\n\n在 macOS 上，如果从 launchd/open 启动，默认为 `home`。在 GTK 上，如果从桌面启动器启动，默认为 `home`。",
+        "note": "这里也允许使用特殊值 <code>home</code> 和 <code>inherit</code>。"
+    },
+    "x11InstanceName": {
+        "name": "WM_CLASS 实例名",
+        "description": "在 X11 下运行时，控制 WM_CLASS X11 属性的实例名字段。默认为 `ghostty`。",
+        "note": "默认为 <code>ghostty</code>"
+    }
+}

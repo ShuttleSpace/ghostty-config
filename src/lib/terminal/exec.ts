@@ -1,7 +1,6 @@
 import type {ExecContext, ExecResult, Line} from "./types";
 import {err, s} from "./utils";
 
-
 const chainRegex = /"[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*'|&&/g;
 export function execChain(input: string, ctx: ExecContext): ExecResult {
     chainRegex.lastIndex = 0; // reset regex state in case of reuse
@@ -38,26 +37,28 @@ export function execSingle(input: string, ctx: ExecContext): ExecResult {
     if (!trimmed) return {lines: []};
 
     const rawArgv = trimmed.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) ?? [];
-    const argv = rawArgv.map(a => a.replace(/^["']|["']$/g, "")); // Remove surrounding quotes if present
+    const argv = rawArgv.map((a) => a.replace(/^["']|["']$/g, "")); // Remove surrounding quotes if present
     const [cmd, ...args] = argv;
     if (!cmd) return {lines: []};
 
     const def = ctx.commands[cmd];
     if (!def) {
         return {
-            lines: [[
-                s.error(`${cmd}: command not found`),
-                s.plain(". Type "),
-                s.bold("help"),
-                s.plain(" to list available commands."),
-            ]]
+            lines: [
+                [
+                    s.error(`${cmd}: command not found`),
+                    s.plain(". Type "),
+                    s.bold("help"),
+                    s.plain(" to list available commands.")
+                ]
+            ]
         };
     }
 
     try {
         return def.fn(args, ctx);
     }
-    catch {
+ catch {
         return err(`${cmd}: unexpected error`);
     }
 }

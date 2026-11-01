@@ -1,11 +1,19 @@
 <script lang="ts">
     import GhosttyIcon from "$lib/components/GhosttyIcon.svelte";
     import config from "$lib/stores/config.svelte";
+    import {t} from "$lib/i18n";
 
-
-    const iconLabel = $derived(config.macosIcon === "custom-style" ? "Custom style" : config.macosIcon === "custom" ? "Custom file" : config.macosIcon);
+    const iconLabel = $derived(
+        config.macosIcon === "custom-style"
+            ? t("ui.appIcon.customStyle")
+            : config.macosIcon === "custom"
+              ? t("ui.appIcon.customFile")
+              : config.macosIcon
+    );
     const isCustomStyle = $derived(config.macosIcon === "custom-style");
-    const hasCustomColors = $derived(Boolean(config.macosIconGhostColor && config.macosIconScreenColor));
+    const hasCustomColors = $derived(
+        Boolean(config.macosIconGhostColor && config.macosIconScreenColor)
+    );
 </script>
 
 <div class="app-icon-preview">
@@ -14,7 +22,7 @@
     <div class="label">{iconLabel}</div>
     {#if isCustomStyle && !hasCustomColors}
         <div class="note">
-            Set the icon frame and both colors for a fully custom preview.
+            {t("ui.appIcon.hint")}
         </div>
     {/if}
 </div>

@@ -147,7 +147,8 @@ function parseEnums(src: string): Map<string, string[]> {
 
         // Extract enum values: lines that look like `    valueName,` or `    @"value-name",`
         const values: string[] = [];
-        const valuePattern = /^\s+(?:@"([^"]+)"|([a-zA-Z_][a-zA-Z0-9_]*))\s*(?:=\s*[^,]+\s*)?(?:,|$)/gm;
+        const valuePattern =
+            /^\s+(?:@"([^"]+)"|([a-zA-Z_][a-zA-Z0-9_]*))\s*(?:=\s*[^,]+\s*)?(?:,|$)/gm;
 
         for (const vMatch of valuesSection.matchAll(valuePattern)) {
             const val = vMatch[1] ?? vMatch[2];
@@ -251,7 +252,9 @@ function parseFields(src: string): RawField[] {
         // @"field-name": ?SomeType = null,
         // @"field-name": ?[:0]const u8 = null,
         // @"field-name": []const u8 = "",
-        const fieldMatch = line.match(/^(?:@"([^"]+)"|([a-z_]\w*)): (\??(?:\[:[^\]]*\]const u8|\[\](?:const )?u8|[^\s=,]+))/);
+        const fieldMatch = line.match(
+            /^(?:@"([^"]+)"|([a-z_]\w*)): (\??(?:\[:[^\]]*\]const u8|\[\](?:const )?u8|[^\s=,]+))/
+        );
         if (fieldMatch) {
             const key = fieldMatch[1] ?? fieldMatch[2];
             const typeStr = fieldMatch[3];
@@ -281,7 +284,7 @@ function parseFields(src: string): RawField[] {
                     zigType: rawType,
                     defaultRaw,
                     optional,
-                    docLines: [...docLines],
+                    docLines: [...docLines]
                 });
             }
 
@@ -323,7 +326,7 @@ const REPEATABLE_TYPES = new Set([
     "RepeatableLink",
     "RepeatableCommand",
     "Keybinds",
-    "RepeatableReadableIO",
+    "RepeatableReadableIO"
 ]);
 
 /** Extracts platform hints from doc comments */
@@ -358,14 +361,18 @@ function parseDefault(raw: string, zigType: string, optional: boolean): unknown 
     // Struct-literal defaults
     if (raw.startsWith(".{") || raw.startsWith("{")) {
         // Duration struct like `.{ .duration = 5 * std.time.ns_per_s }`
-        const durationStructMatch = raw.match(/\.duration = (\d+)\s*\*\s*std\.time\.(ns_per_s|ns_per_ms)/);
+        const durationStructMatch = raw.match(
+            /\.duration = (\d+)\s*\*\s*std\.time\.(ns_per_s|ns_per_ms)/
+        );
         if (durationStructMatch) {
             const n = parseInt(durationStructMatch[1], 10);
             return durationStructMatch[2] === "ns_per_s" ? `${n}s` : `${n}ms`;
         }
 
         // Color struct like `.{ .r = 0x28, .g = 0x2C, .b = 0x34 }`
-        const colorMatch = raw.match(/\.r = (0x[0-9a-fA-F]+|\d+),\s*\.g = (0x[0-9a-fA-F]+|\d+),\s*\.b = (0x[0-9a-fA-F]+|\d+)/);
+        const colorMatch = raw.match(
+            /\.r = (0x[0-9a-fA-F]+|\d+),\s*\.g = (0x[0-9a-fA-F]+|\d+),\s*\.b = (0x[0-9a-fA-F]+|\d+)/
+        );
         if (colorMatch) {
             const r = parseInt(colorMatch[1], 16).toString(16).padStart(2, "0");
             const g = parseInt(colorMatch[2], 16).toString(16).padStart(2, "0");
@@ -449,13 +456,21 @@ const rawFields = parseFields(configBody);
 console.log(`Found ${rawFields.length} raw fields.`);
 
 // Filter out private/internal fields
-const publicFields = rawFields.filter(f =>
-    !f.key.startsWith("_") && !["_arena", "_diagnostics", "_conditional_state", "_conditional_set", "_replay_steps"].includes(f.key)
+const publicFields = rawFields.filter(
+    (f) =>
+        !f.key.startsWith("_")
+        && ![
+            "_arena",
+            "_diagnostics",
+            "_conditional_state",
+            "_conditional_set",
+            "_replay_steps"
+        ].includes(f.key)
 );
 
 console.log(`Processing ${publicFields.length} public fields...`);
 
-const schemaEntries: SchemaEntry[] = publicFields.map(field => {
+const schemaEntries: SchemaEntry[] = publicFields.map((field) => {
     const doc = buildDescription(field.docLines);
     const type = mapZigType(field.zigType);
     const defaultVal = parseDefault(field.defaultRaw, field.zigType, field.optional);
@@ -480,7 +495,7 @@ const schemaEntries: SchemaEntry[] = publicFields.map(field => {
         "key": field.key,
         type,
         "default": defaultVal,
-        "description": doc,
+        "description": doc
     };
 
     if (repeatable) entry.repeatable = true;
@@ -505,9 +520,9 @@ function toTsValue(val: unknown): string {
 }
 
 function generateTypesList(entries: SchemaEntry[]): string {
-    const types = new Set(entries.map(e => e.type));
+    const types = new Set(entries.map((e) => e.type));
     const sorted = [...types].sort();
-    return sorted.map(t => `    | ${JSON.stringify(t)}`).join("\n");
+    return sorted.map((t) => `    | ${JSON.stringify(t)}`).join("\n");
 }
 
 function generateEntry(entry: SchemaEntry): string {
@@ -525,12 +540,20 @@ function generateEntry(entry: SchemaEntry): string {
     lines.push(`        description: \`${escapedDesc}\`,`);
 
     if (entry.repeatable) lines.push(`        repeatable: true,`);
-    if (entry.enum) lines.push(`        enum: [${entry.enum.map(v => JSON.stringify(v)).join(", ")}],`);
+    if (entry.enum) {lines.push(`        enum: [${entry.enum.map((v) => JSON.stringify(v)).join(", ")}],`);}
     if (entry.min !== undefined) lines.push(`        min: ${entry.min},`);
     if (entry.max !== undefined) lines.push(`        max: ${entry.max},`);
-    if (entry.platform) lines.push(`        platform: [${entry.platform.map(p => JSON.stringify(p)).join(", ")}],`);
+    if (entry.platform) {
+lines.push(
+            `        platform: [${entry.platform.map((p) => JSON.stringify(p)).join(", ")}],`
+        );
+}
     if (entry.since) lines.push(`        since: ${JSON.stringify(entry.since)},`);
-    if (entry.deprecated) lines.push(`        deprecated: ${typeof entry.deprecated === "string" ? JSON.stringify(entry.deprecated) : entry.deprecated},`);
+    if (entry.deprecated) {
+lines.push(
+            `        deprecated: ${typeof entry.deprecated === "string" ? JSON.stringify(entry.deprecated) : entry.deprecated},`
+        );
+}
 
     lines.push("    }");
     return lines.join("\n");
@@ -609,7 +632,7 @@ const output = generateOutput(schemaEntries, REF);
 if (DRY_RUN) {
     console.log(output);
 }
-else {
+ else {
     writeFileSync(OUT, output, "utf8");
     console.log(`\nWritten ${schemaEntries.length} settings to ${OUT}`);
     console.log("Done!");

@@ -5,42 +5,70 @@
     import Group from "$lib/components/settings/Group.svelte";
     import {resolve} from "$app/paths";
     import Checkbox from "$lib/components/settings/Checkbox.svelte";
+    import {t} from "$lib/i18n";
+
+    const githubIssues = "https://github.com/zerebos/ghostty-config/issues";
+    const iterm2Schemes = "https://github.com/mbadolato/iTerm2-Color-Schemes/";
+    const macosSettings = resolve("/settings/macos");
 </script>
 
 <Page title="Ghostty Config">
     <section>
         <div class="user">
             <div class="user-avatar">
-                <img src={logo} alt="Ghostty Config Logo" />
+                <img src={logo} alt={t("ui.app.logoAlt")} />
             </div>
             <div class="user-label">
                 <div class="user-name">Ghostty Config</div>
-                <div class="user-subtext">by <a href="https://zerebos.com" target="_blank" rel="noopener noreferrer">@zerebos</a></div>
+                <div class="user-subtext">
+                    {t("ui.app.byBefore")}<a
+                        href="https://zerebos.com"
+                        target="_blank"
+                        rel="noopener noreferrer">@zerebos</a
+                    >
+                </div>
             </div>
         </div>
         <Admonition>
-            This tool <em>will</em> have bugs! If you run into any, or have suggestions, please submit them
-            <a href="https://github.com/zerebos/ghostty-config/issues" target="_blank" rel="noopener noreferrer">on GitHub</a>.
+            {t("ui.home.bugsBefore")}{t("ui.home.bugsWill")}{t("ui.home.bugsMiddle")}<a
+                href={githubIssues}
+                target="_blank"
+                rel="noopener noreferrer">{t("ui.home.onGithub")}</a
+            >{t("ui.home.bugsAfter")}
         </Admonition>
-        <Group title="Recent Changes">
+        <Group title={t("ui.home.recentChanges")}>
             <ul>
-                <li><Checkbox checked />New custom inputs for settings: sliders, number, color, and duration pickers</li>
-                <li><Checkbox checked />Repeatable settings like font features now have a dedicated list editor</li>
-                <li><Checkbox checked />Reworked import, export, and config sharing flow</li>
-                <li><Checkbox checked /><span>Themes now automatically sync from upstream <a href="https://github.com/mbadolato/iTerm2-Color-Schemes/" target="_blank" rel="noopener noreferrer">iTerm2 Color Schemes</a></span></li>
-                <li><Checkbox checked /><span>More accurate custom app icon preview on the <a href={resolve("/settings/macos")}>macOS page</a></span></li>
-                <li><Checkbox checked />Settings rebuilt on a single unified, typed schema</li>
-                <li><Checkbox checked />Interactive terminal preview that re-themes live as you edit</li>
-                <li><Checkbox checked />Added a scroll multiplier setting</li>
+                <li><Checkbox checked />{t("ui.home.recent.inputs")}</li>
+                <li><Checkbox checked />{t("ui.home.recent.repeatable")}</li>
+                <li><Checkbox checked />{t("ui.home.recent.flow")}</li>
+                <li>
+                    <Checkbox checked /><span
+                        >{t("ui.home.recent.themesBefore")}<a
+                            href={iterm2Schemes}
+                            target="_blank"
+                            rel="noopener noreferrer">{t("ui.home.iterm")}</a
+                        >{t("ui.home.recent.themesAfter")}</span
+                    >
+                </li>
+                <li>
+                    <Checkbox checked /><span
+                        >{t("ui.home.recent.appIconBefore")}<a href={macosSettings}
+                            >{t("ui.home.macosPage")}</a
+                        >{t("ui.home.recent.appIconAfter")}</span
+                    >
+                </li>
+                <li><Checkbox checked />{t("ui.home.recent.schema")}</li>
+                <li><Checkbox checked />{t("ui.home.recent.terminal")}</li>
+                <li><Checkbox checked />{t("ui.home.recent.scroll")}</li>
             </ul>
         </Group>
-        <Group title="Roadmap">
+        <Group title={t("ui.home.roadmap")}>
             <ul>
-                <li><Checkbox />Command palette builder</li>
-                <li><Checkbox />Unify color scheme</li>
-                <li><Checkbox />Community presets for quick setup</li>
-                <li><Checkbox />Desktop build of Ghostty Config for direct config integration</li>
-                <li><Checkbox />Real component testing</li>
+                <li><Checkbox checked />{t("ui.home.roadmapItems.palette")}</li>
+                <li><Checkbox checked />{t("ui.home.roadmapItems.colors")}</li>
+                <li><Checkbox />{t("ui.home.roadmapItems.presets")}</li>
+                <li><Checkbox />{t("ui.home.roadmapItems.desktop")}</li>
+                <li><Checkbox />{t("ui.home.roadmapItems.testing")}</li>
             </ul>
         </Group>
     </section>

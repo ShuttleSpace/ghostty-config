@@ -3,6 +3,7 @@
     import {sequoiaFlyFast} from "$lib/utils/animations";
     import type {Snippet} from "svelte";
     import {fade, fly} from "svelte/transition";
+    import {t} from "$lib/i18n";
 
     interface Props {
         title: string;
@@ -55,7 +56,12 @@
             {/if}
             <h2>{title}</h2>
             {#if onclose}
-                <button type="button" class="close-btn" onclick={onclose} aria-label="Dismiss">&times;</button>
+                <button
+                    type="button"
+                    class="close-btn"
+                    onclick={onclose}
+                    aria-label={t("ui.modals.dismiss")}>&times;</button
+                >
             {/if}
         </header>
 
@@ -72,89 +78,89 @@
 </div>
 
 <style>
-.dialog-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(18, 18, 18, 0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    border-radius: var(--radius-level-1);
-}
+    .dialog-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(18, 18, 18, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        border-radius: var(--radius-level-1);
+    }
 
-.dialog {
-    background: var(--bg-modal);
-    /* background: rgba(from var(--bg-modal) r g b / 0.7); */
-    /* backdrop-filter: blur(20px); */
-    border: 1px solid var(--border-level-3);
-    border-radius: var(--radius-level-2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-    width: 90%;
-    max-width: var(--dialog-max-width);
-    display: flex;
-    flex-direction: column;
-    max-height: 80%;
-}
+    .dialog {
+        background: var(--bg-modal);
+        /* background: rgba(from var(--bg-modal) r g b / 0.7); */
+        /* backdrop-filter: blur(20px); */
+        border: 1px solid var(--border-level-3);
+        border-radius: var(--radius-level-2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        width: 90%;
+        max-width: var(--dialog-max-width);
+        display: flex;
+        flex-direction: column;
+        max-height: 80%;
+    }
 
-.dialog-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 20px 20px 12px;
-}
+    .dialog-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 20px 20px 12px;
+    }
 
-.dialog-header h2 {
-    flex: 1;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-}
+    .dialog-header h2 {
+        flex: 1;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+    }
 
-.dialog-icon {
-    display: flex;
-    align-items: center;
-    color: var(--color-input-accent);
-}
+    .dialog-icon {
+        display: flex;
+        align-items: center;
+        color: var(--color-input-accent);
+    }
 
-.close-btn {
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    font-size: 1.4rem;
-    padding: 0 4px;
-    line-height: 1;
-    color: var(--font-color-muted);
-    cursor: pointer;
-}
+    .close-btn {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        font-size: 1.4rem;
+        padding: 0 4px;
+        line-height: 1;
+        color: var(--font-color-muted);
+        cursor: pointer;
+    }
 
-.close-btn:hover {
-    color: var(--font-color);
-}
+    .close-btn:hover {
+        color: var(--font-color);
+    }
 
-.dialog-body {
-    padding: 0 20px 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+    .dialog-body {
+        padding: 0 20px 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 
-.dialog-footer {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    padding: 20px;
-    position: relative;
-}
+    .dialog-footer {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        padding: 20px;
+        position: relative;
+    }
 
-.dialog-footer::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 1px;
-    background: var(--bg-level-3);
-}
+    .dialog-footer::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 1px;
+        background: var(--bg-level-3);
+    }
 </style>

@@ -2,16 +2,15 @@ import {dev} from "$app/environment";
 import {registry, type SettingDefaults, type SettingValues} from "$lib/settings/registry";
 import {runInitializers} from "$lib/settings/initializers";
 
-
 // Run initializers before setting up defaults to ensure that any dynamic options are populated
 void runInitializers();
 
-const buildDefaults = () => Object.fromEntries(Object.entries(registry).map(([k, v]) => [k, v.default])) as SettingDefaults;
+const buildDefaults = () =>
+    Object.fromEntries(Object.entries(registry).map(([k, v]) => [k, v.default])) as SettingDefaults;
 const defaults = buildDefaults();
 if (dev) console.log(defaults); // eslint-disable-line no-console
 
 const config: SettingValues = $state(buildDefaults());
-
 
 // diff() is just diffFromDefaults() applied to the live store: every key in `config` exists in
 // the registry, and (for palette) every slot is always a real color — so the extra guards in
@@ -30,10 +29,10 @@ export function diffFromDefaults(conf: Partial<SettingValues>) {
         const settingKey = registry[settingId]?.key;
         if (!settingKey) continue;
         if (Array.isArray(conf[settingId]) && settingId === "keybind") {
-            const toAdd = conf[settingId].filter(c => !defaults[settingId].includes(c as never));
+            const toAdd = conf[settingId].filter((c) => !defaults[settingId].includes(c as never));
             if (toAdd.length) output[settingKey] = toAdd;
         }
-        else if (Array.isArray(conf[settingId]) && settingId === "palette") {
+ else if (Array.isArray(conf[settingId]) && settingId === "palette") {
             const toAdd: string[] = [];
             for (let p = 0; p < defaults[settingId].length; p++) {
                 if (!conf[settingId][p]) continue;
@@ -42,13 +41,13 @@ export function diffFromDefaults(conf: Partial<SettingValues>) {
             }
             if (toAdd.length) output[settingKey] = toAdd;
         }
-        else if (Array.isArray(conf[settingId])) {
+ else if (Array.isArray(conf[settingId])) {
             const cur = conf[settingId] as string[];
             const def = defaults[settingId] as string[];
             const changed = cur.length !== def.length || cur.some((v, i) => v !== def[i]);
-            if (changed) output[settingKey] = cur.filter(v => v.trim() !== "");
+            if (changed) output[settingKey] = cur.filter((v) => v.trim() !== "");
         }
-        else if (conf[settingId] !== undefined && conf[settingId] != defaults[settingId]) {
+ else if (conf[settingId] !== undefined && conf[settingId] != defaults[settingId]) {
             output[settingKey] = conf[settingId];
         }
     }
@@ -62,10 +61,10 @@ export function load(conf: Partial<typeof config>) {
         if (key !== "keybind" && key !== "palette") {
             setSetting(key as keyof typeof config, conf[key as keyof typeof config]!);
         }
-        else if (key === "keybind") {
+ else if (key === "keybind") {
             config.keybind = [...config.keybind, ...conf.keybind!];
         }
-        else if (key === "palette") {
+ else if (key === "palette") {
             for (let p = 0; p < conf.palette!.length; p++) {
                 if (!conf.palette![p]) continue;
                 config.palette[p] = conf.palette![p];

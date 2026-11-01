@@ -62,11 +62,7 @@ export const navigation = [
             {
                 id: "bell",
                 name: "Bell",
-                settings: [
-                    "bellFeatures",
-                    "bellAudioPath",
-                    "bellAudioVolume"
-                ]
+                settings: ["bellFeatures", "bellAudioPath", "bellAudioVolume"]
             },
             {
                 id: "startup",
@@ -116,12 +112,7 @@ export const navigation = [
             {
                 id: "shell",
                 name: "",
-                settings: [
-                    "shellIntegration",
-                    "shellIntegrationFeatures",
-                    "term",
-                    "titleReport"
-                ]
+                settings: ["shellIntegration", "shellIntegrationFeatures", "term", "titleReport"]
             },
             {
                 id: "notifications",
@@ -137,22 +128,22 @@ export const navigation = [
                 name: "Display",
                 settings: [
                     "scrollbackLimit",
+                    "scrollbackLimitBytes",
+                    "scrollbackLimitLines",
+                    "scrollbackCompression",
                     "scrollToBottom",
                     "imageStorageLimit",
                     "progressStyle",
                     "customShader",
-                    "customShaderAnimation"
+                    "customShaderAnimation",
+                    "linkOsc8"
                 ]
             },
             {
                 id: "compatibility",
                 name: "Protocol & Compatibility",
                 note: "These settings control low-level terminal protocol behavior. Only change these if you know what you're doing.",
-                settings: [
-                    "oscColorReportFormat",
-                    "enquiryResponse",
-                    "vtKamAllowed"
-                ]
+                settings: ["oscColorReportFormat", "enquiryResponse", "vtKamAllowed", "vtWindowResizeAllowed", "vtXtChecksumReport", "vtXtChecksumExtension"]
             }
         ]
     },
@@ -167,6 +158,8 @@ export const navigation = [
                 settings: [
                     "clipboardRead",
                     "clipboardWrite",
+                    "clipboardCodepointMap",
+                    "clipboardWriteLimitBytes",
                     "copyOnSelect",
                     "clipboardTrimTrailingSpaces",
                     "clipboardPasteProtection",
@@ -217,6 +210,7 @@ export const navigation = [
                     "backgroundImagePosition",
                     "backgroundImageFit",
                     "backgroundImageRepeat",
+                    "dragHandle",
                     "scrollbar",
                     "unfocusedSplitOpacity",
                     "unfocusedSplitFill",
@@ -300,9 +294,7 @@ export const navigation = [
                 name: "Color Palette",
                 note: "The first 16 colors are the most commonly displayed colors in the terminal.\n\nColors 1-8 are typically black, red, green, yellow, blue, magenta, cyan, and white.\nColors 9-16 are typically \"brighter\" variants of these colors.",
                 preview: "palette",
-                settings: [
-                    "palette"
-                ]
+                settings: ["palette"]
             }
         ]
     },
@@ -342,12 +334,7 @@ export const navigation = [
                 id: "styles",
                 name: "Font Styles",
                 note: "Named font styles for the fields above. For example for <code>Ioveska Heavy</code> you would use a style of <code>Heavy</code>. Alternately you can set the style to <code>false</code> to completely disable the style and revert to default style.",
-                settings: [
-                    "fontStyle",
-                    "fontStyleBold",
-                    "fontStyleItalic",
-                    "fontStyleBoldItalic"
-                ]
+                settings: ["fontStyle", "fontStyleBold", "fontStyleItalic", "fontStyleBoldItalic"]
             },
             {
                 id: "variations",
@@ -390,9 +377,7 @@ export const navigation = [
             {
                 id: "keybinds",
                 name: "",
-                settings: [
-                    "keybind"
-                ]
+                settings: ["keybind", "keyRemap", "commandPaletteEntry"]
             }
         ]
     },
@@ -442,6 +427,8 @@ export const navigation = [
                 settings: [
                     "gtkToolbarStyle",
                     "gtkTitlebarStyle",
+                    "gtkHorizontalTabScroll",
+                    "gtkTabsInverted",
                     "gtkTabsLocation",
                     "gtkWideTabs",
                     "gtkTitlebar",
@@ -514,7 +501,7 @@ export const navigation = [
 
 export default navigation;
 
-type TopLevelPanelIDs = typeof navigation[number]["id"];
+type TopLevelPanelIDs = (typeof navigation)[number]["id"];
 type TabGroups = TopLevelPanelIDs[][];
 
 export const tabGroups: TabGroups = [
@@ -542,7 +529,11 @@ export function validateNavigation() {
     walk(navigation);
 
     for (const id of Object.keys(registry)) {
-        if (!seen.has(id)) throw new Error(`Setting "${id}" exists in registry but is not categorized in navigation`);
+        if (!seen.has(id)) {
+throw new Error(
+                `Setting "${id}" exists in registry but is not categorized in navigation`
+            );
+}
     }
 }
 

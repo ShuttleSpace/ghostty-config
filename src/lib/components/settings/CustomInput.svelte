@@ -16,6 +16,7 @@
     import type {Snippet} from "svelte";
     import Dropdown from "./Dropdown.svelte";
     import PillButtonGroup, {type PillOption} from "./PillButtons.svelte";
+    import {t, tWidgetLabel} from "$lib/i18n";
 
     interface Props {
         value: string; // the inner control's string value, a preset value, or '' (unset)
@@ -28,12 +29,12 @@
     // eslint-disable-next-line prefer-const
     let {value = $bindable(""), presets, widget, customDefault = "", control}: Props = $props();
 
-    const isPreset = (v: string): boolean => presets.some(s => s.value === v);
+    const isPreset = (v: string): boolean => presets.some((s) => s.value === v);
 
     const mode = $derived(isPreset(value) ? value : "custom");
 
     // Use an iife because svelte linting
-    let customValue = $state<string>((() => isPreset(value) ? customDefault : value)());
+    let customValue = $state<string>((() => (isPreset(value) ? customDefault : value))());
 
     // Use an effect to keep the customValue in sync with the value prop, but only if the value is not a preset
     // This allows the customValue to be updated when the value prop changes, but not when the user is actively editing the custom control
@@ -50,15 +51,22 @@
     });
 
     const pillOptions = $derived<PillOption[]>([
-        {label: "Custom", value: "custom", variant: "neutral"},
-        ...presets.map(s => ({label: s.label, value: s.value, variant: "accent" as const})),
+        {label: t("ui.widgets.custom"), value: "custom", variant: "neutral"},
+        ...presets.map((s) => ({
+            label: tWidgetLabel(s.label),
+            value: s.value,
+            variant: "accent" as const
+        }))
     ]);
 
     const dropdownOptions = $derived([
-        {name: "Custom", value: "custom"},
-        ...presets.map(s => ({name: s.label, value: s.value, description: s.description})),
+        {name: t("ui.widgets.custom"), value: "custom"},
+        ...presets.map((s) => ({
+            name: tWidgetLabel(s.label),
+            value: s.value,
+            description: s.description
+        }))
     ]);
-
 
     function onModeChange(next: string) {
         if (next === "custom") value = customValue;
@@ -75,41 +83,39 @@
 
 <div class="custom-input">
     {#if shouldUseDropdown}
-        <Dropdown
-            value={mode}
-            options={dropdownOptions}
-            change={onModeChange}
-        />
+        <Dropdown value={mode} options={dropdownOptions} change={onModeChange} />
     {/if}
 
     <div class="custom-wrapper" class:dimmed={mode !== "custom"}>
-        {@render control({value: customValue, onChange: onCustomChange, disabled: mode !== "custom"})}
+        {@render control({
+            value: customValue,
+            onChange: onCustomChange,
+            disabled: mode !== "custom"
+        })}
     </div>
 
     {#if !shouldUseDropdown}
-        <PillButtonGroup
-            value={mode}
-            options={pillOptions}
-            onchange={onModeChange}
-        />
+        <PillButtonGroup value={mode} options={pillOptions} onchange={onModeChange} />
     {/if}
 </div>
 
 <style>
-.custom-input {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
+    .custom-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-.custom-wrapper {
-    display: inline-flex;
-    align-items: center;
-    transition: opacity 0.2s ease, filter 0.2s ease;
-}
+    .custom-wrapper {
+        display: inline-flex;
+        align-items: center;
+        transition:
+            opacity 0.2s ease,
+            filter 0.2s ease;
+    }
 
-.dimmed {
-    opacity: 0.5;
-    filter: brightness(0.8);
-}
+    .dimmed {
+        opacity: 0.5;
+        filter: brightness(0.8);
+    }
 </style>

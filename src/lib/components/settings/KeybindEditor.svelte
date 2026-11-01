@@ -7,9 +7,7 @@
         VALID_PREFIXES,
         VALID_MODIFIERS,
         KEY_NAMES,
-
         resizeDirectionOptions
-
     } from "$lib/utils/keybinds";
     import {createTooltipAttachment} from "$lib/attachments/tooltip";
     import {fly, scale} from "svelte/transition";
@@ -21,6 +19,8 @@
     import Text from "./Text.svelte";
     import Checkbox from "./Checkbox.svelte";
     import Button from "../Button.svelte";
+    import {t} from "$lib/i18n";
+    import {translateKeybindError} from "$lib/i18n/keybind-errors";
 
     interface Props {
         value?: string;
@@ -68,19 +68,18 @@
         const currentAction = getCurrentAction();
         if (!currentAction || currentAction.type !== "enum") return [];
         const options = [];
-        if (getAllowEmpty()) options.push({name: "default", value: ""});
+        if (getAllowEmpty()) options.push({name: t("ui.keybinds.defaultOption"), value: ""});
         if (currentAction.options) {
             options.push(...currentAction.options.map((option) => ({name: option, value: option})));
         }
         return options;
     });
 
-
     function togglePrefix(prefix: string) {
         if (prefixes.includes(prefix)) {
             prefixes = prefixes.filter((v) => v !== prefix);
         }
-        else {
+ else {
             prefixes = [...prefixes, prefix];
             if ((prefix === "global" || prefix === "all") && steps.length > 1) {
                 steps = [steps[0]];
@@ -146,7 +145,7 @@
     }
 
     function getErrors() {
-        return parseKeybind(getPreview()).error ?? [];
+        return parseKeybind(getPreview()).error?.map(translateKeybindError) ?? [];
     }
 
     function handleSave() {
@@ -170,29 +169,31 @@
     const isAddStepDisabled = $derived(hasGlobalOrAllPrefix || hasMaxSequenceSteps);
 
     function getAddStepTooltipMessage() {
-        if (hasGlobalOrAllPrefix) return "Global/all keybinds cannot be sequences";
-        if (hasMaxSequenceSteps) return "Maximum of 4 sequence steps";
-        return "Add sequence step";
+        if (hasGlobalOrAllPrefix) return t("ui.keybinds.sequenceGlobal");
+        if (hasMaxSequenceSteps) return t("ui.keybinds.sequenceMax");
+        return t("ui.keybinds.addSequenceStep");
     }
 
     const addStepTooltipAttachment = createTooltipAttachment(getAddStepTooltipMessage);
 </script>
 
-
 <div class="editor" in:fly={{y: 30, duration: 200}}>
     <Group>
-        <Item name="Prefixes">
+        <Item name={t("ui.keybinds.prefixes")}>
             <div class="prefix-row">
                 {#each VALID_PREFIXES as prefix (prefix)}
                     <label>
-                        <Checkbox checked={prefixes.includes(prefix)} onchange={() => togglePrefix(prefix)} />
+                        <Checkbox
+                            checked={prefixes.includes(prefix)}
+                            onchange={() => togglePrefix(prefix)}
+                        />
                         {prefix}
                     </label>
                 {/each}
             </div>
         </Item>
     </Group>
-    <Group title="Trigger" borderless>
+    <Group title={t("ui.keybinds.trigger")} borderless>
         <div class="sequence">
             <datalist id="key-options">
                 {#each KEY_NAMES as keyName (keyName)}
@@ -202,16 +203,29 @@
             {#each steps as step, index (index)}
                 <div class="sequence-step" class:invalid={!step.key}>
                     {#if steps.length > 1}
-                        <button transition:scale={{duration: 200}} type="button" class="remove" onclick={() => removeSequenceStep(index)} disabled={steps.length === 1}>
+                        <button
+                            transition:scale={{duration: 200}}
+                            type="button"
+                            class="remove"
+                            onclick={() => removeSequenceStep(index)}
+                            disabled={steps.length === 1}
+                        >
                             &times;
                         </button>
                     {/if}
 
-                    <Item name={steps.length > 1 ? `Key Name ${index + 1}` : "Key Name"} note={steps.length > 1 ? `The key to use for step ${index + 1} in the sequence.` : "The key to use for this action."}>
+                    <Item
+                        name={steps.length > 1
+                            ? t("ui.keybinds.keyNameN", {index: index + 1})
+                            : t("ui.keybinds.keyName")}
+                        note={steps.length > 1
+                            ? t("ui.keybinds.keyNameNoteN", {index: index + 1})
+                            : t("ui.keybinds.keyNameNote")}
+                    >
                         <div class="key-entry">
                             <input
                                 type="text"
-                                placeholder="key"
+                                placeholder={t("ui.keybinds.placeholderKey")}
                                 bind:value={step.key}
                                 list="key-options"
                                 oninput={(event) => updateStepKey(index, event.currentTarget.value)}
@@ -219,11 +233,14 @@
                         </div>
                     </Item>
                     <Separator />
-                    <Item name="Modifiers">
+                    <Item name={t("ui.keybinds.modifiers")}>
                         <div class="modifiers">
                             {#each VALID_MODIFIERS as modifier (modifier)}
                                 <label>
-                                    <Checkbox checked={step.modifiers.includes(modifier)} onchange={() => toggleModifier(index, modifier)} />
+                                    <Checkbox
+                                        checked={step.modifiers.includes(modifier)}
+                                        onchange={() => toggleModifier(index, modifier)}
+                                    />
                                     <span>{modifier}</span>
                                 </label>
                             {/each}
@@ -242,18 +259,32 @@
                 {@attach addStepTooltipAttachment}
             >
                 <!-- Add Step -->
-                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg
+                >
             </button>
         </div>
     </Group>
-    <Group title="Action">
-        <Item name="Name" note="The action to perform when the keybind is triggered.">
+    <Group title={t("ui.keybinds.action")}>
+        <Item name={t("ui.keybinds.name")} note={t("ui.keybinds.nameNote")}>
             <Dropdown
                 bind:value={actionName}
                 options={ACTION_DEFINITIONS.map((action) => ({
                     name: action.name,
                     value: action.name,
-                    description: action.description
+                    description: t(
+                        `ui.keybinds.actions.${action.name}`,
+                        undefined,
+                        action.description
+                    )
                 }))}
                 change={actionChanged}
                 searchable
@@ -262,39 +293,50 @@
 
         {#if getCurrentAction()?.type !== "none"}
             <Separator />
-            <Item name="Argument" note="Optional argument for the action, format depends on the action type.">
-            {#if getCurrentAction()?.type === "enum"}
-                <Dropdown bind:value={actionArg} options={dropdownOptions} />
-            {:else if getCurrentAction()?.type === "number"}
-                <Number bind:value={actionArg} integer={false} nullable />
-            {:else if getCurrentAction()?.type === "integer"}
-                <Number bind:value={actionArg} step={1} nullable />
-            {:else if getCurrentAction()?.type === "unsignedInteger"}
-                <Number bind:value={actionArg} min={getCurrentAction()?.min ?? 0} step={1} nullable />
-            {:else if getCurrentAction()?.type === "resize"}
-                <!-- TODO: should these be split to separate rows? -->
-                <Dropdown
-                    bind:value={resizeDirection}
-                    options={resizeDirectionOptions.map((direction) => ({
-                        name: direction,
-                        value: direction
-                    }))}
-                />
-                <Number bind:value={resizeAmount} min={0} step={1} placeholder="pixels" nullable />
-            {:else if getCurrentAction()?.type === "text"}
-                <Text bind:value={actionArg} placeholder="Zig string literal" />
-            {:else if getCurrentAction()?.type === "free"}
-                <Text bind:value={actionArg} placeholder="raw sequence" />
-            {/if}
+            <Item name={t("ui.keybinds.argument")} note={t("ui.keybinds.argumentNote")}>
+                {#if getCurrentAction()?.type === "enum"}
+                    <Dropdown bind:value={actionArg} options={dropdownOptions} />
+                {:else if getCurrentAction()?.type === "number"}
+                    <Number bind:value={actionArg} integer={false} nullable />
+                {:else if getCurrentAction()?.type === "integer"}
+                    <Number bind:value={actionArg} step={1} nullable />
+                {:else if getCurrentAction()?.type === "unsignedInteger"}
+                    <Number
+                        bind:value={actionArg}
+                        min={getCurrentAction()?.min ?? 0}
+                        step={1}
+                        nullable
+                    />
+                {:else if getCurrentAction()?.type === "resize"}
+                    <!-- TODO: should these be split to separate rows? -->
+                    <Dropdown
+                        bind:value={resizeDirection}
+                        options={resizeDirectionOptions.map((direction) => ({
+                            name: direction,
+                            value: direction
+                        }))}
+                    />
+                    <Number
+                        bind:value={resizeAmount}
+                        min={0}
+                        step={1}
+                        placeholder={t("ui.keybinds.placeholderPixels")}
+                        nullable
+                    />
+                {:else if getCurrentAction()?.type === "text"}
+                    <Text bind:value={actionArg} placeholder={t("ui.keybinds.placeholderZig")} />
+                {:else if getCurrentAction()?.type === "free"}
+                    <Text bind:value={actionArg} placeholder={t("ui.keybinds.placeholderRaw")} />
+                {/if}
             </Item>
         {/if}
-     </Group>
-    <Group title="Result" borderless>
+    </Group>
+    <Group title={t("ui.keybinds.result")} borderless>
         <div class="preview-box">
             <div class="row">
-                    <span class="p4">{getTrigger()}</span>
-                    <span> = </span>
-                    <span class="p5">{actionName}{getComputedArg() ? `:${getComputedArg()}` : ""}</span>
+                <span class="p4">{getTrigger()}</span>
+                <span> = </span>
+                <span class="p5">{actionName}{getComputedArg() ? `:${getComputedArg()}` : ""}</span>
             </div>
         </div>
         {#if getErrors().length}
@@ -306,17 +348,12 @@
         {/if}
     </Group>
     <div class="actions">
-        <Button onclick={close}>Cancel</Button>
-        <Button
-            primary
-            onclick={handleSave}
-            disabled={getErrors().length > 0}
-        >
-            Done
+        <Button onclick={close}>{t("ui.keybinds.cancel")}</Button>
+        <Button primary onclick={handleSave} disabled={getErrors().length > 0}>
+            {t("ui.keybinds.done")}
         </Button>
     </div>
 </div>
-
 
 <style>
     .editor {
@@ -396,7 +433,7 @@
     }
 
     .key-entry input:focus {
-        background:var(--bg-input-focus);
+        background: var(--bg-input-focus);
         outline: var(--border-input-focus);
     }
 
@@ -461,13 +498,17 @@
         white-space: pre;
     }
 
-    .p4 {color: var(--config-palette-4);}
-    .p5 {color: var(--config-palette-5);}
+    .p4 {
+        color: var(--config-palette-4);
+    }
+    .p5 {
+        color: var(--config-palette-5);
+    }
 
     .errors {
         margin-top: 8px;
         padding-left: 16px;
-        color: #ff9b9b;
+        color: var(--color-danger-text);
     }
 
     .actions {

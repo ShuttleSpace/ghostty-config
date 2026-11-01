@@ -60,7 +60,7 @@
     left: 4px;
     top: 5px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--color-on-accent);
 }
 
 .radio-input {
@@ -74,7 +74,11 @@
     flex: 0 0 auto;
     margin: 0;
     border-radius: 50%;
-    background: linear-gradient(0deg, #615E65, #4E4B53);
+    background: linear-gradient(
+        0deg,
+        var(--color-control-unchecked-top),
+        var(--color-control-unchecked-bottom)
+    );
     width: 15px;
     height: 15px;
     border: 0;
@@ -88,7 +92,11 @@
 }
 
 .radio-input:checked {
-    background: linear-gradient(0deg, #3C6EC9, #437AE2);
+    background: linear-gradient(
+        0deg,
+        var(--color-control-checked-top),
+        var(--color-control-checked-bottom)
+    );
 }
 
 .radio-input::marker {

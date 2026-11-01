@@ -60,7 +60,7 @@
 
 .setting svg {
     height: 16px;
-    fill: #A7A3AA;
+    fill: var(--font-color-muted);
 }
 
 .note {

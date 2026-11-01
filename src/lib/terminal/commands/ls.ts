@@ -2,19 +2,37 @@ import {getNode, resolveParts} from "../filesystem";
 import type {Command, FSNode, Line, Segment} from "../types";
 import {err, fileSegment, ok, s} from "../utils";
 
-
 const permissions = {
     "d": s.p("d", 12),
     ".": s.p(".", 7),
     "-": s.p("-", 8),
     "r": s.p("r", 11),
     "w": s.p("w", 9),
-    "x": s.p("x", 10),
+    "x": s.p("x", 10)
 };
 
-
-const RWX = [permissions.r, permissions.w, permissions.x, permissions.r, permissions["-"], permissions.x, permissions.r, permissions["-"], permissions.x];
-const RW = [permissions.r, permissions.w, permissions["-"], permissions.r, permissions["-"], permissions["-"], permissions.r, permissions["-"], permissions["-"]];
+const RWX = [
+    permissions.r,
+    permissions.w,
+    permissions.x,
+    permissions.r,
+    permissions["-"],
+    permissions.x,
+    permissions.r,
+    permissions["-"],
+    permissions.x
+];
+const RW = [
+    permissions.r,
+    permissions.w,
+    permissions["-"],
+    permissions.r,
+    permissions["-"],
+    permissions["-"],
+    permissions.r,
+    permissions["-"],
+    permissions["-"]
+];
 
 function buildPermissions(name: string, node: FSNode): Segment[] {
     const isDir = node.type === "dir";
@@ -28,7 +46,17 @@ function buildPermissions(name: string, node: FSNode): Segment[] {
 
     // Special perms for dotfiles: rwx for owner, --- for group and others
     if (isDir && isDot) {
-        chars.push(permissions.r, permissions.w, permissions.x, permissions["-"], permissions["-"], permissions["-"], permissions["-"], permissions["-"], permissions["-"]);
+        chars.push(
+            permissions.r,
+            permissions.w,
+            permissions.x,
+            permissions["-"],
+            permissions["-"],
+            permissions["-"],
+            permissions["-"],
+            permissions["-"],
+            permissions["-"]
+        );
     }
 
     // Generic permissions: rwx for dirs, rw- for executables, r-- for regular files
@@ -37,7 +65,6 @@ function buildPermissions(name: string, node: FSNode): Segment[] {
     chars.push(s.plain(" ")); // spacer after permissions
     return chars;
 }
-
 
 // const LONG_HEADER = [s.underline("Permissions"), s.plain(" "), s.underline("Size"), s.plain(" "), s.underline("User"), s.plain(" "), s.underline("Date Modified"), s.plain(" "), s.underline("Name")];
 
@@ -48,11 +75,11 @@ const command: Command = {
         "-l  long listing format",
         "-a  include hidden files (dotfiles)",
         "Directories shown in blue, executables in green, archives in red,",
-        "images in magenta, documents in cyan, data files in yellow.",
+        "images in magenta, documents in cyan, data files in yellow."
     ],
     fn(args, ctx) {
-        const flagStr = args.filter(a => a.startsWith("-")).join("");
-        const paths = args.filter(a => !a.startsWith("-"));
+        const flagStr = args.filter((a) => a.startsWith("-")).join("");
+        const paths = args.filter((a) => !a.startsWith("-"));
         const long = flagStr.includes("l");
         const all = flagStr.includes("a");
 
@@ -91,11 +118,17 @@ const command: Command = {
                 const randomDate = new Date(Date.now() - Math.floor(Math.random() * 31536000000)); // random date within the last year
                 const day = String(randomDate.getDate()).padStart(2, " ");
                 const month = randomDate.toLocaleString("en-US", {month: "short"});
-                const time = randomDate.toLocaleTimeString("en-US", {hour: "2-digit", minute: "2-digit", hour12: false});
+                const time = randomDate.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false
+                });
                 const now = `${day} ${month} ${time}`;
                 const isDir = node.type === "dir";
                 const perms = buildPermissions(name, node);
-                const size = isDir ? s.p("-".padStart(4, " "), 8) : s.p(`${String(node.content.length).padStart(4)}`, 2);
+                const size = isDir
+                    ? s.p("-".padStart(4, " "), 8)
+                    : s.p(`${String(node.content.length).padStart(4)}`, 2);
                 lines.push([
                     ...perms,
                     s.plain(" "),
@@ -105,15 +138,17 @@ const command: Command = {
                     s.plain(" "),
                     s.p(`${now}`, 4),
                     s.plain("  "),
-                    fileSegment(name, node),
+                    fileSegment(name, node)
                 ]);
             }
             return ok(lines);
         }
 
         // Grid layout — measure col width from actual entries
-        const names = entries.map(([n, node]) => n + (node.type === "dir" ? "/" : node.executable ? "*" : ""));
-        const maxLen = Math.max(...names.map(n => n.length), 1);
+        const names = entries.map(
+            ([n, node]) => n + (node.type === "dir" ? "/" : node.executable ? "*" : "")
+        );
+        const maxLen = Math.max(...names.map((n) => n.length), 1);
         const colWidth = maxLen + 2;
         const cols = Math.max(1, Math.floor(72 / colWidth));
         const lines: Line[] = [];
@@ -126,12 +161,12 @@ const command: Command = {
                 const seg = fileSegment(name, node);
                 row.push(seg);
                 const displayLen = seg.text.length;
-                if (j < slice.length - 1) row.push(s.plain(" ".repeat(Math.max(1, colWidth - displayLen))));
+                if (j < slice.length - 1) {row.push(s.plain(" ".repeat(Math.max(1, colWidth - displayLen))));}
             }
             lines.push(row);
         }
         return ok(lines);
-    },
+    }
 };
 
 export default command;

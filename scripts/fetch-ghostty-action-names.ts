@@ -21,15 +21,15 @@ function extractActionBlock(source: string) {
         if (!inLineComment && !inBlockComment && char === "/" && next === "*") {
             inBlockComment = true;
         }
-        else if (inBlockComment && char === "*" && next === "/") {
+ else if (inBlockComment && char === "*" && next === "/") {
             inBlockComment = false;
             i += 1;
             continue;
         }
-        else if (!inBlockComment && !inLineComment && char === "/" && next === "/") {
+ else if (!inBlockComment && !inLineComment && char === "/" && next === "/") {
             inLineComment = true;
         }
-        else if (inLineComment && char === "\n") {
+ else if (inLineComment && char === "\n") {
             inLineComment = false;
         }
         if (inBlockComment || inLineComment) continue;

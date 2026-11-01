@@ -89,8 +89,11 @@ Override detection is value-inferred (`isNonDefault`, i.e. value ≠ app default
 |------|-----------|
 | `src/lib/data/themes.ts` | `scripts/generate-themes.ts` |
 | `src/lib/data/macicons.ts` | `scripts/generate-macicons.ts` |
+| `src/lib/data/styles.ts` | `scripts/generate-styles.ts` |
 
 These are overwritten on the next CI sync. If the output needs to change, edit the generator script, not the generated file.
+
+`styles.ts` is the community style catalog synced from ghostty.style. A style is a **complete config preset**, applied through the import pipeline — it is not a named color theme, so never put styles in `themeOptions` or the theme dropdown. Hand-written starter presets live in `src/lib/styles/starter.ts`; remote configs are sanitized by `src/lib/styles/sanitize.ts` before they can reach the import preview.
 
 ## `notes/` is local-only
 
@@ -122,6 +125,22 @@ A real emulator like `ghostty-web` keeps its state inside a surface that must be
 - The fake shell under `src/lib/terminal/` (`filesystem`, `commands`, `completion`, `exec`, `utils`) is a **curated demo surface, not a shell emulator**. Add commands only when they meaningfully showcase config; resist turning it into a general-purpose shell.
 - `ghostty-web` was removed as a dependency along with the old `LivePreview.svelte` / `InteractiveTerminal.svelte` views and the dev-only `/app/live-preview` route. Don't reintroduce them.
 - A genuinely-usable in-browser terminal is a *different product* (a "playground"), not the config preview. If that's ever built, it lives as a separate surface — it does not replace the DOM preview.
+
+## Internationalization
+
+The UI is English + Simplified Chinese; the runtime lives in `src/lib/i18n/index.svelte.ts`
+and the sidebar language selector persists the choice in `localStorage`.
+
+- `locales/{locale}/ui.json` is hand-written. `locales/{locale}/settings.json` is generated
+  from `registry.ts` + `navigation.ts` — never hand-edit the English settings file.
+- After adding or renaming a setting/group/panel, run `bun run i18n:sync`, then add the
+  matching keys to `locales/zh-CN/settings.json`. `bun run i18n:check` is the gate.
+- Render setting metadata through `tSetting(id, field, fallback)` and navigation labels
+  through `panelName` / `groupName` / `groupNote`. Do not read `registry.*.name` or
+  `navigation.*.name` directly in a component; the fallback exists for generated-file drift.
+- Widget labels from registry metadata go through `tWidgetLabel`; dynamic keys are declared
+  in `x18n.config.ts` (`keysInUse`) because `unused-key` cannot trace them.
+- `bun run i18n:ui` opens the x18n UI for bulk editing.
 
 ## Other conventions
 

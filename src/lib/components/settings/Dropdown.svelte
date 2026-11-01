@@ -1,18 +1,19 @@
 <script lang="ts">
     import {toRoot} from "$lib/attachments/portal";
     import {fly, scale} from "svelte/transition";
+    import {t} from "$lib/i18n";
 
     type DropdownOptionInput =
         | string
         | {
-            name: string;
-            value: string;
-            description?: string;
-            icon?: string;
-            group?: string;
-            disabled?: boolean;
-            search?: string[];
-        };
+              name: string;
+              value: string;
+              description?: string;
+              icon?: string;
+              group?: string;
+              disabled?: boolean;
+              search?: string[];
+          };
 
     type DropdownGroupInput = {
         label: string;
@@ -57,11 +58,11 @@
         value = $bindable(""),
         options = [],
         groups,
-        placeholder = "Select",
+        placeholder = t("ui.widgets.select"),
         searchable = false,
         allowEmpty = false,
-        emptyLabel = "Clear selection",
-        noResultsLabel = "No results",
+        emptyLabel = t("ui.widgets.clearSelection"),
+        noResultsLabel = t("ui.widgets.noResults"),
         disabled = false,
         iconSize = 16,
         maxWidth = 320,
@@ -80,7 +81,11 @@
     let menuEl = $state<HTMLDivElement>();
     let optionsContainerEl = $state<HTMLDivElement>();
 
-    function normalizeOption(input: DropdownOptionInput, index: number, group: string | null): DropdownOption {
+    function normalizeOption(
+        input: DropdownOptionInput,
+        index: number,
+        group: string | null
+    ): DropdownOption {
         if (typeof input === "string") {
             return {
                 id: `${group || "default"}-${index}-${input}`,
@@ -101,7 +106,8 @@
             icon: input.icon,
             group: group ?? input.group ?? null,
             disabled: Boolean(input.disabled),
-            searchText: `${input.name} ${input.value} ${input.description || ""} ${extraSearch}`.toLowerCase()
+            searchText:
+                `${input.name} ${input.value} ${input.description || ""} ${extraSearch}`.toLowerCase()
         };
     }
 
@@ -110,7 +116,9 @@
             return groups.map((group, groupIndex) => ({
                 label: group.label,
                 separatorBefore: Boolean(group.separatorBefore && groupIndex > 0),
-                options: group.options.map((option, optionIndex) => normalizeOption(option, optionIndex, group.label))
+                options: group.options.map((option, optionIndex) =>
+                    normalizeOption(option, optionIndex, group.label)
+                )
             }));
         }
 
@@ -128,7 +136,7 @@
             if (existingGroup) {
                 existingGroup.options.push(option);
             }
-            else {
+ else {
                 grouped.push({label: option.group, options: [option]});
             }
         }
@@ -138,7 +146,11 @@
             output.push({label: null, separatorBefore: false, options: ungrouped});
         }
         for (const group of grouped) {
-            output.push({label: group.label, separatorBefore: output.length > 0, options: group.options});
+            output.push({
+                label: group.label,
+                separatorBefore: output.length > 0,
+                options: group.options
+            });
         }
 
         return output;
@@ -150,7 +162,9 @@
 
         const output: DropdownGroup[] = [];
         for (const group of allGroups) {
-            const matches = group.options.filter((option) => option.searchText.includes(normalizedQuery));
+            const matches = group.options.filter((option) =>
+                option.searchText.includes(normalizedQuery)
+            );
             if (!matches.length) continue;
             output.push({
                 label: group.label,
@@ -176,7 +190,7 @@
         if (!available.length) {
             highlightedValue = null;
         }
-        else if (!available.some((option) => option.value === highlightedValue)) {
+ else if (!available.some((option) => option.value === highlightedValue)) {
             highlightedValue = available[0].value;
         }
     });
@@ -222,7 +236,9 @@
     // Scroll highlighted option into view when it changes
     $effect(() => {
         if (!isOpen || !highlightedValue || !optionsContainerEl) return;
-        const highlightedEl = optionsContainerEl.querySelector(`[data-option-value="${CSS.escape(highlightedValue)}"]`);
+        const highlightedEl = optionsContainerEl.querySelector(
+            `[data-option-value="${CSS.escape(highlightedValue)}"]`
+        );
         if (highlightedEl) {
             highlightedEl.scrollIntoView({block: "nearest", behavior: "smooth"});
         }
@@ -233,7 +249,9 @@
         if (!isOpen || !value || !optionsContainerEl) return;
         const container = optionsContainerEl;
         queueMicrotask(() => {
-            const selectedEl = container.querySelector(`[data-option-value="${CSS.escape(value)}"]`);
+            const selectedEl = container.querySelector(
+                `[data-option-value="${CSS.escape(value)}"]`
+            );
             if (selectedEl) {
                 selectedEl.scrollIntoView({block: "center", behavior: "instant"});
             }
@@ -315,8 +333,8 @@
 
         const currentIndex = available.findIndex((option) => option.value === highlightedValue);
         const nextIndex = currentIndex === -1
-            ? 0
-            : (currentIndex + direction + available.length) % available.length;
+                ? 0
+                : (currentIndex + direction + available.length) % available.length;
         highlightedValue = available[nextIndex].value;
     }
 
@@ -364,6 +382,33 @@
             triggerEl?.focus();
         }
     }
+
+    const OPTION_TRANSLATIONS: Record<string, {name: string; description?: string}> = {
+        "custom": {name: "ui.options.customIcon", description: "ui.options.customIconDescription"},
+        "custom-style": {
+            name: "ui.options.customStyle",
+            description: "ui.options.customStyleDescription"
+        }
+    };
+
+    function optionName(option: DropdownOption): string {
+        const keys = OPTION_TRANSLATIONS[option.value];
+        return keys ? t(keys.name, undefined, option.name) : option.name;
+    }
+
+    function optionDescription(option: DropdownOption): string | undefined {
+        if (!option.description) return undefined;
+        const keys = OPTION_TRANSLATIONS[option.value];
+        return keys?.description
+            ? t(keys.description, undefined, option.description)
+            : option.description;
+    }
+
+    function groupLabel(label: string): string {
+        if (label === "Predefined icons") return t("ui.options.predefinedIcons");
+        if (label === "Custom") return t("ui.options.custom");
+        return label;
+    }
 </script>
 
 <div class="dropdown" bind:this={rootEl}>
@@ -377,24 +422,36 @@
         type="button"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label={selectedOption ? selectedOption.name : placeholder}
+        aria-label={selectedOption ? optionName(selectedOption) : placeholder}
         onclick={toggle}
         onkeydown={handleTriggerKeydown}
     >
         <span class="value-wrap">
             {#if selectedOption?.icon}
                 <span class="option-icon" aria-hidden="true">
-                {#if selectedOption.icon.startsWith("http") || selectedOption.icon.startsWith("/") || selectedOption.icon.startsWith("data:") || selectedOption.icon.includes(".")}
-                    <img src={selectedOption.icon} alt={selectedOption.name} loading="lazy" />
-                {:else}
-                    {selectedOption.icon}
-                {/if}
+                    {#if selectedOption.icon.startsWith("http") || selectedOption.icon.startsWith("/") || selectedOption.icon.startsWith("data:") || selectedOption.icon.includes(".")}
+                        <img
+                            src={selectedOption.icon}
+                            alt={optionName(selectedOption)}
+                            loading="lazy"
+                        />
+                    {:else}
+                        {selectedOption.icon}
+                    {/if}
                 </span>
             {/if}
-            <span class="value">{selectedOption ? selectedOption.name : placeholder}</span>
+            <span class="value">{selectedOption ? optionName(selectedOption) : placeholder}</span>
         </span>
         <span class="icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5" /><path d="m7 9 5-5 5 5" /></svg>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="m7 15 5 5 5-5" /><path d="m7 9 5-5 5 5" /></svg
+            >
         </span>
     </button>
 
@@ -417,18 +474,13 @@
                         bind:this={searchEl}
                         bind:value={query}
                         type="text"
-                        placeholder="Search"
+                        placeholder={t("ui.nav.search")}
                     />
                 </div>
             {/if}
 
             {#if allowEmpty}
-                <button
-                    class="clear"
-                    type="button"
-                    onclick={clearSelection}
-                    disabled={!value}
-                >
+                <button class="clear" type="button" onclick={clearSelection} disabled={!value}>
                     {emptyLabel}
                 </button>
             {/if}
@@ -443,7 +495,7 @@
                         {/if}
 
                         {#if group.label}
-                            <div class="group-label">{group.label}</div>
+                            <div class="group-label">{groupLabel(group.label)}</div>
                         {/if}
 
                         {#each group.options as option (option.id)}
@@ -464,18 +516,29 @@
                                 <div class="option-main" class:has-icon={Boolean(option.icon)}>
                                     <div class="option-title-row">
                                         {#if option.icon}
-                                            <span class="option-icon" aria-hidden="true" style:height="{iconSize}px" style:width="{iconSize}px">
-                                            {#if option.icon.startsWith("http") || option.icon.startsWith("/") || option.icon.startsWith("data:") || option.icon.includes(".")}
-                                                <img src={option.icon} alt={option.name} loading="lazy" />
-                                            {:else}
-                                                {option.icon}
-                                            {/if}
+                                            <span
+                                                class="option-icon"
+                                                aria-hidden="true"
+                                                style:height="{iconSize}px"
+                                                style:width="{iconSize}px"
+                                            >
+                                                {#if option.icon.startsWith("http") || option.icon.startsWith("/") || option.icon.startsWith("data:") || option.icon.includes(".")}
+                                                    <img
+                                                        src={option.icon}
+                                                        alt={optionName(option)}
+                                                        loading="lazy"
+                                                    />
+                                                {:else}
+                                                    {option.icon}
+                                                {/if}
                                             </span>
                                         {/if}
-                                        <span class="option-name">{option.name}</span>
+                                        <span class="option-name">{optionName(option)}</span>
                                     </div>
                                     {#if option.description}
-                                        <span class="option-description">{option.description}</span>
+                                        <span class="option-description"
+                                            >{optionDescription(option)}</span
+                                        >
                                     {/if}
                                 </div>
                             </button>

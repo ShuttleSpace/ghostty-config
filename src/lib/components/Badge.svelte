@@ -64,14 +64,14 @@
 
 /* TODO: rethink these colors */
 .badge.platform {
-    color: #6B8CFF;
+    color: var(--color-badge-platform);
 }
 
 .badge.version {
-    color: #F0A500;
+    color: var(--color-badge-version);
 }
 
 .badge.theme {
-    color: #B583FF;
+    color: var(--color-badge-theme);
 }
 </style>

@@ -1,0 +1,54 @@
+{
+    "nav": {
+        "application": "应用程序",
+        "terminal": "终端",
+        "clipboard": "剪贴板",
+        "window": "窗口",
+        "colors": "颜色",
+        "fonts": "字体",
+        "keybinds": "快捷键",
+        "mouse": "鼠标",
+        "gtk": "GTK",
+        "linux": "Linux",
+        "macos": "macOS"
+    },
+    "group": {
+        "application": {
+            "bell": "响铃",
+            "startup": "启动",
+            "shutdown": "关闭",
+            "quickTerminal": "快速终端"
+        },
+        "terminal": {
+            "notifications": "命令通知",
+            "display": "显示",
+            "compatibility": "协议与兼容性"
+        },
+        "clipboard": {},
+        "window": {
+            "appearance": "外观",
+            "resize": "尺寸与调整"
+        },
+        "colors": {
+            "base": "基础颜色",
+            "search": "搜索颜色",
+            "cursor": "光标",
+            "palette": "调色板"
+        },
+        "fonts": {
+            "family": "字体族",
+            "styles": "字体样式",
+            "variations": "字体变体",
+            "advanced": "度量调整"
+        },
+        "keybinds": {},
+        "mouse": {},
+        "gtk": {
+            "tabs": "标题栏与标签页"
+        },
+        "linux": {},
+        "macos": {
+            "icon": "应用图标"
+        }
+    }
+}

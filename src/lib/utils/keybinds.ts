@@ -241,12 +241,24 @@ export interface ActionDefinition {
 }
 
 const ACTION_DEFINITIONS: ActionDefinition[] = [
-    {name: "ignore", description: "Ignore this key and do not forward it to the terminal.", type: "none"},
-    {name: "unbind", description: "Remove a previously defined Ghostty or user keybind.", type: "none"},
+    {
+        name: "ignore",
+        description: "Ignore this key and do not forward it to the terminal.",
+        type: "none"
+    },
+    {
+        name: "unbind",
+        description: "Remove a previously defined Ghostty or user keybind.",
+        type: "none"
+    },
     {name: "csi", description: "Send a CSI sequence without the ESC[ prefix.", type: "free"},
     {name: "esc", description: "Send a raw ESC sequence.", type: "free"},
     {name: "text", description: "Send literal text using Zig string literal syntax.", type: "text"},
-    {name: "cursor_key", description: "Send cursor-key data based on normal or application mode.", type: "none"},
+    {
+        name: "cursor_key",
+        description: "Send cursor-key data based on normal or application mode.",
+        type: "none"
+    },
     {name: "reset", description: "Reset the terminal state.", type: "none"},
     {
         name: "copy_to_clipboard",
@@ -256,33 +268,106 @@ const ACTION_DEFINITIONS: ActionDefinition[] = [
         allowEmpty: true
     },
     {name: "paste_from_clipboard", description: "Paste from the default clipboard.", type: "none"},
-    {name: "paste_from_selection", description: "Paste from the selection clipboard.", type: "none"},
-    {name: "copy_url_to_clipboard", description: "Copy URL under cursor to clipboard.", type: "none"},
-    {name: "copy_title_to_clipboard", description: "Copy terminal title to clipboard.", type: "none"},
-    {name: "increase_font_size", description: "Increase font size by a point amount.", type: "number"},
-    {name: "decrease_font_size", description: "Decrease font size by a point amount.", type: "number"},
+    {
+        name: "paste_from_selection",
+        description: "Paste from the selection clipboard.",
+        type: "none"
+    },
+    {
+        name: "copy_url_to_clipboard",
+        description: "Copy URL under cursor to clipboard.",
+        type: "none"
+    },
+    {
+        name: "copy_title_to_clipboard",
+        description: "Copy terminal title to clipboard.",
+        type: "none"
+    },
+    {
+        name: "increase_font_size",
+        description: "Increase font size by a point amount.",
+        type: "number"
+    },
+    {
+        name: "decrease_font_size",
+        description: "Decrease font size by a point amount.",
+        type: "number"
+    },
     {name: "reset_font_size", description: "Reset font size to configured default.", type: "none"},
     {name: "set_font_size", description: "Set font size to a point value.", type: "number"},
-    {name: "search", description: "Start or replace search text; use empty text to clear terms.", type: "free"},
-    {name: "search_selection", description: "Search using the current text selection.", type: "none"},
-    {name: "navigate_search", description: "Jump to previous or next search match.", type: "enum", options: ["previous", "next"]},
-    {name: "start_search", description: "Open search UI without setting search text.", type: "none"},
+    {
+        name: "search",
+        description: "Start or replace search text; use empty text to clear terms.",
+        type: "free"
+    },
+    {
+        name: "search_selection",
+        description: "Search using the current text selection.",
+        type: "none"
+    },
+    {
+        name: "navigate_search",
+        description: "Jump to previous or next search match.",
+        type: "enum",
+        options: ["previous", "next"]
+    },
+    {
+        name: "start_search",
+        description: "Open search UI without setting search text.",
+        type: "none"
+    },
     {name: "end_search", description: "End active search and hide search UI.", type: "none"},
     {name: "clear_screen", description: "Clear screen and scrollback.", type: "none"},
     {name: "select_all", description: "Select all terminal text.", type: "none"},
     {name: "scroll_to_top", description: "Scroll viewport to the top.", type: "none"},
     {name: "scroll_to_bottom", description: "Scroll viewport to the bottom.", type: "none"},
-    {name: "scroll_to_selection", description: "Scroll viewport to the current selection.", type: "none"},
-    {name: "scroll_to_row", description: "Scroll to an absolute row index starting at 0.", type: "unsignedInteger"},
+    {
+        name: "scroll_to_selection",
+        description: "Scroll viewport to the current selection.",
+        type: "none"
+    },
+    {
+        name: "scroll_to_row",
+        description: "Scroll to an absolute row index starting at 0.",
+        type: "unsignedInteger"
+    },
     {name: "scroll_page_up", description: "Scroll up by one page.", type: "none"},
     {name: "scroll_page_down", description: "Scroll down by one page.", type: "none"},
-    {name: "scroll_page_fractional", description: "Scroll by a fractional page amount.", type: "number"},
+    {
+        name: "scroll_page_fractional",
+        description: "Scroll by a fractional page amount.",
+        type: "number"
+    },
     {name: "scroll_page_lines", description: "Scroll by a number of lines.", type: "integer"},
-    {name: "adjust_selection", description: "Adjust the current selection in a direction.", type: "enum", options: adjustSelectionOptions},
-    {name: "jump_to_prompt", description: "Jump viewport by prompt count (requires shell integration).", type: "integer"},
-    {name: "write_scrollback_file", description: "Write full scrollback to temp file and copy, paste, or open its path.", type: "enum", options: writeOptions},
-    {name: "write_screen_file", description: "Write current screen to temp file and copy, paste, or open its path.", type: "enum", options: writeOptions},
-    {name: "write_selection_file", description: "Write selection to temp file and copy, paste, or open its path.", type: "enum", options: writeOptions},
+    {
+        name: "adjust_selection",
+        description: "Adjust the current selection in a direction.",
+        type: "enum",
+        options: adjustSelectionOptions
+    },
+    {
+        name: "jump_to_prompt",
+        description: "Jump viewport by prompt count (requires shell integration).",
+        type: "integer"
+    },
+    {
+        name: "write_scrollback_file",
+        description: "Write full scrollback to temp file and copy, paste, or open its path.",
+        type: "enum",
+        options: writeOptions
+    },
+    {
+        name: "write_screen_file",
+        description: "Write current screen to temp file and copy, paste, or open its path.",
+        type: "enum",
+        options: writeOptions
+    },
+    {
+        name: "write_selection_file",
+        description: "Write selection to temp file and copy, paste, or open its path.",
+        type: "enum",
+        options: writeOptions
+    },
     {name: "new_window", description: "Open a new window.", type: "none"},
     {name: "new_tab", description: "Open a new tab.", type: "none"},
     {name: "previous_tab", description: "Focus previous tab.", type: "none"},
@@ -293,43 +378,139 @@ const ACTION_DEFINITIONS: ActionDefinition[] = [
     {name: "toggle_tab_overview", description: "Toggle tab overview.", type: "none"},
     {name: "prompt_surface_title", description: "Prompt for focused surface title.", type: "none"},
     {name: "prompt_tab_title", description: "Prompt for current tab title.", type: "none"},
-    {name: "new_split", description: "Create a split in a direction or auto.", type: "enum", options: directionOptions, allowEmpty: true},
-    {name: "goto_split", description: "Focus split by direction or previous/next order.", type: "enum", options: gotoSplitOptions},
-    {name: "goto_window", description: "Focus previous or next window.", type: "enum", options: ["previous", "next"]},
+    {
+        name: "new_split",
+        description: "Create a split in a direction or auto.",
+        type: "enum",
+        options: directionOptions,
+        allowEmpty: true
+    },
+    {
+        name: "goto_split",
+        description: "Focus split by direction or previous/next order.",
+        type: "enum",
+        options: gotoSplitOptions
+    },
+    {
+        name: "goto_window",
+        description: "Focus previous or next window.",
+        type: "enum",
+        options: ["previous", "next"]
+    },
     {name: "toggle_split_zoom", description: "Zoom or unzoom the current split.", type: "none"},
-    {name: "toggle_readonly", description: "Toggle read-only mode for the focused surface.", type: "none"},
-    {name: "resize_split", description: "Resize split by direction and pixel offset.", type: "resize"},
+    {
+        name: "toggle_readonly",
+        description: "Toggle read-only mode for the focused surface.",
+        type: "none"
+    },
+    {
+        name: "resize_split",
+        description: "Resize split by direction and pixel offset.",
+        type: "resize"
+    },
     {name: "equalize_splits", description: "Equalize all split sizes in the window.", type: "none"},
     {name: "reset_window_size", description: "Reset window to default size.", type: "none"},
-    {name: "inspector", description: "Toggle, show, or hide terminal inspector.", type: "enum", options: inspectOptions},
+    {
+        name: "inspector",
+        description: "Toggle, show, or hide terminal inspector.",
+        type: "enum",
+        options: inspectOptions
+    },
     {name: "show_gtk_inspector", description: "Open GTK inspector.", type: "none"},
-    {name: "show_on_screen_keyboard", description: "Show on-screen keyboard if available.", type: "none"},
+    {
+        name: "show_on_screen_keyboard",
+        description: "Show on-screen keyboard if available.",
+        type: "none"
+    },
     {name: "open_config", description: "Open Ghostty config in default editor.", type: "none"},
-    {name: "reload_config", description: "Reload configuration and apply runtime-safe changes.", type: "none"},
-    {name: "close_surface", description: "Close focused surface (window, tab, split, etc.).", type: "none"},
-    {name: "close_tab", description: "Close this tab, other tabs, or tabs to the right.", type: "enum", options: ["this", "other", "right"], allowEmpty: true},
+    {
+        name: "reload_config",
+        description: "Reload configuration and apply runtime-safe changes.",
+        type: "none"
+    },
+    {
+        name: "close_surface",
+        description: "Close focused surface (window, tab, split, etc.).",
+        type: "none"
+    },
+    {
+        name: "close_tab",
+        description: "Close this tab, other tabs, or tabs to the right.",
+        type: "enum",
+        options: ["this", "other", "right"],
+        allowEmpty: true
+    },
     {name: "close_window", description: "Close current window.", type: "none"},
-    {name: "close_all_windows", description: "Close all windows (deprecated; prefer all:close_window).", type: "none"},
+    {
+        name: "close_all_windows",
+        description: "Close all windows (deprecated; prefer all:close_window).",
+        type: "none"
+    },
     {name: "toggle_maximize", description: "Toggle maximized window state.", type: "none"},
     {name: "toggle_fullscreen", description: "Toggle fullscreen state.", type: "none"},
-    {name: "toggle_window_decorations", description: "Toggle window decorations (titlebar/buttons).", type: "none"},
-    {name: "toggle_window_float_on_top", description: "Toggle always-on-top window mode.", type: "none"},
-    {name: "toggle_secure_input", description: "Toggle secure input mode for sensitive typing.", type: "none"},
-    {name: "toggle_mouse_reporting", description: "Toggle whether mouse events are reported to terminal apps.", type: "none"},
+    {
+        name: "toggle_window_decorations",
+        description: "Toggle window decorations (titlebar/buttons).",
+        type: "none"
+    },
+    {
+        name: "toggle_window_float_on_top",
+        description: "Toggle always-on-top window mode.",
+        type: "none"
+    },
+    {
+        name: "toggle_secure_input",
+        description: "Toggle secure input mode for sensitive typing.",
+        type: "none"
+    },
+    {
+        name: "toggle_mouse_reporting",
+        description: "Toggle whether mouse events are reported to terminal apps.",
+        type: "none"
+    },
     {name: "toggle_command_palette", description: "Toggle command palette.", type: "none"},
     {name: "toggle_quick_terminal", description: "Toggle quick drop-down terminal.", type: "none"},
     {name: "toggle_visibility", description: "Show or hide all Ghostty windows.", type: "none"},
-    {name: "toggle_background_opacity", description: "Toggle between transparent and opaque window background.", type: "none"},
+    {
+        name: "toggle_background_opacity",
+        description: "Toggle between transparent and opaque window background.",
+        type: "none"
+    },
     {name: "check_for_updates", description: "Check for Ghostty updates.", type: "none"},
     {name: "undo", description: "Undo last undoable Ghostty action.", type: "none"},
     {name: "redo", description: "Redo last undone Ghostty action.", type: "none"},
-    {name: "end_key_sequence", description: "End active key sequence and flush prior keys.", type: "none"},
-    {name: "activate_key_table", description: "Activate a named key table until deactivated.", type: "free"},
-    {name: "activate_key_table_once", description: "Activate a named key table for one successful keybind use.", type: "free"},
-    {name: "deactivate_key_table", description: "Deactivate currently active key table.", type: "none"},
-    {name: "deactivate_all_key_tables", description: "Deactivate all active key tables.", type: "none"},
+    {
+        name: "end_key_sequence",
+        description: "End active key sequence and flush prior keys.",
+        type: "none"
+    },
+    {
+        name: "activate_key_table",
+        description: "Activate a named key table until deactivated.",
+        type: "free"
+    },
+    {
+        name: "activate_key_table_once",
+        description: "Activate a named key table for one successful keybind use.",
+        type: "free"
+    },
+    {
+        name: "deactivate_key_table",
+        description: "Deactivate currently active key table.",
+        type: "none"
+    },
+    {
+        name: "deactivate_all_key_tables",
+        description: "Deactivate all active key tables.",
+        type: "none"
+    },
     {name: "quit", description: "Quit Ghostty.", type: "none"},
-    {name: "crash", description: "Force a crash in selected thread for testing.", type: "enum", options: ["main", "io", "render"]}
+    {
+        name: "crash",
+        description: "Force a crash in selected thread for testing.",
+        type: "enum",
+        options: ["main", "io", "render"]
+    }
 ];
 
 const ACTION_LOOKUP = Object.fromEntries(ACTION_DEFINITIONS.map((action) => [action.name, action]));
@@ -387,16 +568,16 @@ function parseStep(rawStep: string): ParsedTriggerStep | null {
     if (step === "+") {
         key = "+";
     }
-    else if (step.endsWith("++")) {
+ else if (step.endsWith("++")) {
         key = "+";
         modifierPart = step.slice(0, -2);
     }
-    else {
+ else {
         const lastPlusIndex = step.lastIndexOf("+");
         if (lastPlusIndex === -1) {
             key = step;
         }
-        else {
+ else {
             key = step.slice(lastPlusIndex + 1);
             modifierPart = step.slice(0, lastPlusIndex);
             if (!key) return null;
@@ -437,9 +618,7 @@ export function parseTrigger(triggerString: string): ParsedTrigger | null {
     const steps: ParsedTriggerStep[] = [];
     const normalized = triggerString.replace(/\s+/g, "");
     const {prefixes, remainder} = parsePrefixes(normalized);
-    const tokens = remainder
-        .split(">")
-        .map((segment) => segment.trim());
+    const tokens = remainder.split(">").map((segment) => segment.trim());
     if (!tokens.length) return null;
     if (tokens.some((segment) => !segment.length)) return null;
     for (const token of tokens) {
@@ -478,21 +657,25 @@ function validateAction(action: string, args: string | undefined) {
         return [];
     }
     if (definition.type === "number") {
-        if (args === undefined || args.trim() === "") return [`'${action}' requires a numeric argument`];
+        if (args === undefined || args.trim() === "") {return [`'${action}' requires a numeric argument`];}
         if (!Number.isNaN(Number(args))) return [];
         return [`'${action}' expects a number, got '${args}'`];
     }
     if (definition.type === "integer") {
-        if (args === undefined || args.trim() === "") return [`'${action}' requires an integer argument`];
+        if (args === undefined || args.trim() === "") {return [`'${action}' requires an integer argument`];}
         if (!Number.isNaN(Number(args)) && Number(args) % 1 === 0) return [];
         return [`'${action}' expects an integer, got '${args}'`];
     }
     if (definition.type === "unsignedInteger") {
-        if (args === undefined || args.trim() === "") return [`'${action}' requires a non-negative integer argument`];
+        if (args === undefined || args.trim() === "") {return [`'${action}' requires a non-negative integer argument`];}
         const min = definition.min ?? 0;
         const value = Number(args);
         if (!Number.isNaN(value) && value % 1 === 0 && value >= min) return [];
-        return [min === 0 ? `'${action}' expects a non-negative integer, got '${args}'` : `'${action}' expects an integer >= ${min}, got '${args}'`];
+        return [
+            min === 0
+                ? `'${action}' expects a non-negative integer, got '${args}'`
+                : `'${action}' expects an integer >= ${min}, got '${args}'`
+        ];
     }
     if (definition.type === "enum") {
         if (args === undefined) {
@@ -600,4 +783,11 @@ export function formatTrigger(trigger: ParsedTrigger) {
     return `${prefixPart}${stepStrings.join(">")}`;
 }
 
-export {KEY_NAMES, ACTION_DEFINITIONS, VALID_MODIFIERS, VALID_PREFIXES, directionOptions, resizeDirectionOptions};
+export {
+    KEY_NAMES,
+    ACTION_DEFINITIONS,
+    VALID_MODIFIERS,
+    VALID_PREFIXES,
+    directionOptions,
+    resizeDirectionOptions
+};

@@ -1,6 +1,7 @@
 <script lang="ts">
     import config from "$lib/stores/config.svelte";
     import {iconUrls, frameUrls, customLayerUrls} from "$lib/data/macicons";
+    import {t} from "$lib/i18n";
 
     let hasCdnError = $state(false);
 
@@ -15,9 +16,19 @@
         hasCdnError = true;
     }
 
-    const iconLabel = $derived(config.macosIcon === "custom-style" ? "Custom style" : config.macosIcon === "custom" ? "Custom file" : config.macosIcon);
-    const iconUrl = $derived(iconUrls[config.macosIcon as keyof typeof iconUrls] ?? iconUrls.official);
-    const frameUrl = $derived(frameUrls[config.macosIconFrame as keyof typeof frameUrls] ?? frameUrls.aluminum);
+    const iconLabel = $derived(
+        config.macosIcon === "custom-style"
+            ? t("ui.appIcon.customStyle")
+            : config.macosIcon === "custom"
+              ? t("ui.appIcon.customFile")
+              : config.macosIcon
+    );
+    const iconUrl = $derived(
+        iconUrls[config.macosIcon as keyof typeof iconUrls] ?? iconUrls.official
+    );
+    const frameUrl = $derived(
+        frameUrls[config.macosIconFrame as keyof typeof frameUrls] ?? frameUrls.aluminum
+    );
     const isCustomStyle = $derived(config.macosIcon === "custom-style");
     const isCustomFile = $derived(config.macosIcon === "custom");
     const ghostColor = $derived(config.macosIconGhostColor || "#f6f7fb");
@@ -31,7 +42,14 @@
     const {width = "100px", height = "100px"}: Props = $props();
 </script>
 
-<div class="icon-shell" aria-label="Ghostty icon preview" style:width style:height style:--screen={`url(${customLayerUrls.mask})`} style:--ghost={`url(${customLayerUrls.ghost})`}>
+<div
+    class="icon-shell"
+    aria-label={t("ui.appIcon.previewAria")}
+    style:width
+    style:height
+    style:--screen={`url(${customLayerUrls.mask})`}
+    style:--ghost={`url(${customLayerUrls.ghost})`}
+>
     {#if isCustomStyle && !hasCdnError}
         <!-- eslint-disable-next-line svelte/no-unused-class-name -->
         <img class="layer frame" src={frameUrl} alt="" onerror={handleAssetError} />
@@ -45,11 +63,16 @@
         <!-- eslint-disable-next-line svelte/no-unused-class-name -->
         <img class="layer gloss" src={customLayerUrls.gloss} alt="" onerror={handleAssetError} />
     {:else}
-        <img class="icon-image" src={hasCdnError ? iconUrls.official : iconUrl} alt={`Ghostty ${iconLabel} icon`} onerror={handlePrimaryIconError} />
+        <img
+            class="icon-image"
+            src={hasCdnError ? iconUrls.official : iconUrl}
+            alt={t("ui.appIcon.imageAlt", {name: iconLabel})}
+            onerror={handlePrimaryIconError}
+        />
         {#if isCustomFile}
-            <div class="custom-badge">Custom file</div>
+            <div class="custom-badge">{t("ui.appIcon.customFile")}</div>
         {:else if hasCdnError}
-            <div class="custom-badge">CDN fallback</div>
+            <div class="custom-badge">{t("ui.appIcon.cdnFallback")}</div>
         {/if}
     {/if}
 </div>

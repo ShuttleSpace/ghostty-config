@@ -19,7 +19,7 @@ export function processNavigation(navEvent: OnNavigate) {
         if (index === stack.length - 1) {
             stack = [...stack, navEvent.to.url.pathname];
         }
-        else {
+ else {
             const substack = stack.slice(0, index + 1);
             stack = [...substack, navEvent.to.url.pathname];
         }

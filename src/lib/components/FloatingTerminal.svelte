@@ -1,8 +1,15 @@
 <script lang="ts">
     import {onMount, untrack} from "svelte";
     import InteractiveTerminalDom from "$lib/views/InteractiveTerminalDom.svelte";
-    import app from "$lib/stores/state.svelte";
+    import app, {
+        bothWindowsOpen,
+        closeWindowMenu,
+        openWindowMenu,
+        restoreWindowLayout,
+        setWindowLayout
+    } from "$lib/stores/state.svelte";
     import config from "$lib/stores/config.svelte";
+    import {t} from "$lib/i18n";
 
     const DEFAULT_WIDTH = 680;
     const DEFAULT_HEIGHT = 480;
@@ -10,6 +17,9 @@
     const MIN_HEIGHT = 280;
     const MINIMIZE_DURATION = 280;
     const RESTORE_DURATION = 260;
+    // Must match the tiled `.workspace` padding/gap in +layout.svelte.
+    const TILE_PADDING = 12;
+    const TILE_GAP = 12;
 
     type ResizeDirection = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
 
@@ -30,14 +40,189 @@
     let startLeft = 0;
     let startTop = 0;
     let windowElement = $state<HTMLDivElement | null>(null);
+    let maximized = $state(false);
+    // Pre-zoom geometry, restored when leaving the maximized state.
+    let restoreGeometry: {x: number; y: number; width: number; height: number} | null = null;
+    // Shared tiling state: which split the preview is currently filling.
+    let tiled = $state<"none" | "horizontal" | "vertical">("none");
+    let preTileGeometry: {x: number; y: number; width: number; height: number} | null = null;
+
+    // The desktop workspace excludes the dock strip, so both dragging and zooming
+    // keep the terminal above the dock instead of sliding underneath it.
+    function getWorkspaceRect() {
+        const el = document.getElementById("desktop-workspace");
+        if (el) {
+            const rect = el.getBoundingClientRect();
+            return {left: rect.left, top: rect.top, width: rect.width, height: rect.height};
+        }
+        return {left: 0, top: 0, width: window.innerWidth, height: window.innerHeight};
+    }
+
+    function fitToWorkspace() {
+        const ws = getWorkspaceRect();
+        x = ws.left;
+        y = ws.top;
+        width = ws.width;
+        height = ws.height;
+    }
+
+    // The preview fills the second cell of the tiled workspace: right half for a
+    // horizontal split, bottom half for a vertical one.
+    function tileRect(layout: "horizontal" | "vertical") {
+        const ws = getWorkspaceRect();
+        if (layout === "horizontal") {
+            const cell = (ws.width - TILE_PADDING * 2 - TILE_GAP) / 2;
+            return {
+                x: ws.left + TILE_PADDING + cell + TILE_GAP,
+                y: ws.top + TILE_PADDING,
+                width: cell,
+                height: ws.height - TILE_PADDING * 2
+            };
+        }
+        const cell = (ws.height - TILE_PADDING * 2 - TILE_GAP) / 2;
+        return {
+            x: ws.left + TILE_PADDING,
+            y: ws.top + TILE_PADDING + cell + TILE_GAP,
+            width: ws.width - TILE_PADDING * 2,
+            height: cell
+        };
+    }
 
     onMount(() => {
-        x = Math.max(0, (window.innerWidth - width) / 2);
-        y = Math.max(0, (window.innerHeight - height) / 3);
+        const ws = getWorkspaceRect();
+        x = ws.left + Math.max(0, (ws.width - width) / 2);
+        y = ws.top + Math.max(0, (ws.height - height) / 3);
+    });
+
+    // Keep a maximized terminal filling the workspace when the window is resized.
+    $effect(() => {
+        if (!maximized) return;
+
+        function onResize() {
+            fitToWorkspace();
+        }
+
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    });
+
+    let zoomButton = $state<HTMLButtonElement | null>(null);
+    let menuPosition = $state({left: 0, top: 0});
+
+    function togglePreviewMenu(event: MouseEvent) {
+        // Keep the window-level click handler from immediately closing it again.
+        event.stopPropagation();
+
+        if (app.windowMenuOwner === "preview") {
+            closeWindowMenu();
+            return;
+        }
+
+        const rect = zoomButton?.getBoundingClientRect();
+        if (rect) {
+            menuPosition = {
+                left: Math.max(8, Math.min(rect.left, window.innerWidth - 216)),
+                top: rect.bottom + 6
+            };
+        }
+        openWindowMenu("preview");
+    }
+
+    function fillPreview() {
+        closeWindowMenu();
+
+        // Remember where to return to: the pre-split geometry if tiled, else the
+        // current floating geometry. Leaving a split must not snap back on its own.
+        let restoreTo: {x: number; y: number; width: number; height: number} | null = null;
+        if (app.windowLayout !== "none") {
+            restoreTo = preTileGeometry;
+            preTileGeometry = null;
+            app.windowLayout = "none";
+        }
+ else if (!maximized) {
+            restoreTo = {x, y, width, height};
+        }
+
+        if (restoreTo) restoreGeometry = restoreTo;
+        fitToWorkspace();
+        maximized = true;
+    }
+
+    function restorePreview() {
+        closeWindowMenu();
+
+        if (maximized) {
+            if (restoreGeometry) {
+                x = restoreGeometry.x;
+                y = restoreGeometry.y;
+                width = restoreGeometry.width;
+                height = restoreGeometry.height;
+            }
+            maximized = false;
+            restoreGeometry = null;
+        }
+
+        // The tiling effect restores the pre-split geometry.
+        restoreWindowLayout();
+    }
+
+    // Follow the shared layout: apply the second cell while tiled, and restore
+    // the floating geometry when tiling ends (including when the config window
+    // closes or minimizes).
+    $effect(() => {
+        const layout = app.windowLayout;
+
+        if (layout === "none") {
+            if (tiled !== "none" && preTileGeometry) {
+                x = preTileGeometry.x;
+                y = preTileGeometry.y;
+                width = preTileGeometry.width;
+                height = preTileGeometry.height;
+            }
+            tiled = "none";
+            preTileGeometry = null;
+            return;
+        }
+
+        if (!app.floatingTerminalVisible) return;
+
+        untrack(() => {
+            if (tiled === "none") {
+                // A zoomed window's pre-zoom geometry is the useful restore point.
+                preTileGeometry = maximized && restoreGeometry ? restoreGeometry : {x, y, width, height};
+                maximized = false;
+                restoreGeometry = null;
+            }
+            tiled = layout;
+            const rect = tileRect(layout);
+            x = rect.x;
+            y = rect.y;
+            width = rect.width;
+            height = rect.height;
+        });
+    });
+
+    // Keep a tiled preview in its cell when the viewport changes size.
+    $effect(() => {
+        const layout = tiled;
+        if (layout === "none") return;
+
+        function onResize() {
+            if (layout === "none") return;
+            const rect = tileRect(layout);
+            x = rect.x;
+            y = rect.y;
+            width = rect.width;
+            height = rect.height;
+        }
+
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
     });
 
     function startDrag(e: MouseEvent) {
         if (resizing || animating || !app.floatingTerminalVisible) return;
+        closeWindowMenu();
         dragging = true;
         dragOffsetX = e.clientX - x;
         dragOffsetY = e.clientY - y;
@@ -47,6 +232,7 @@
         if (animating || !app.floatingTerminalVisible) return;
         e.preventDefault();
         e.stopPropagation();
+        closeWindowMenu();
         resizing = true;
         resizeDirection = direction;
         resizeStartX = e.clientX;
@@ -61,9 +247,23 @@
         if (!dragging && !resizing) return;
 
         function onMove(e: MouseEvent) {
+            // Dragging or resizing a tiled window pops it out of the split.
+            if ((dragging || resizing) && app.windowLayout !== "none") {
+                preTileGeometry = null;
+                app.windowLayout = "none";
+            }
+
+            const ws = getWorkspaceRect();
+
             if (dragging) {
-                x = Math.max(0, Math.min(window.innerWidth - width, e.clientX - dragOffsetX));
-                y = Math.max(0, Math.min(window.innerHeight - height, e.clientY - dragOffsetY));
+                x = Math.max(
+                    ws.left,
+                    Math.min(ws.left + ws.width - width, e.clientX - dragOffsetX)
+                );
+                y = Math.max(
+                    ws.top,
+                    Math.min(ws.top + ws.height - height, e.clientY - dragOffsetY)
+                );
                 return;
             }
 
@@ -99,7 +299,7 @@
                 nextX = startLeft + (startWidth - MIN_WIDTH);
                 nextWidth = MIN_WIDTH;
             }
-            else {
+ else {
                 nextWidth = Math.max(MIN_WIDTH, nextWidth);
             }
 
@@ -107,26 +307,26 @@
                 nextY = startTop + (startHeight - MIN_HEIGHT);
                 nextHeight = MIN_HEIGHT;
             }
-            else {
+ else {
                 nextHeight = Math.max(MIN_HEIGHT, nextHeight);
             }
 
-            if (nextX < 0) {
+            if (nextX < ws.left) {
                 if (resizeDirection.includes("w")) {
-                    nextWidth += nextX;
+                    nextWidth += nextX - ws.left;
                 }
-                nextX = 0;
+                nextX = ws.left;
             }
 
-            if (nextY < 0) {
+            if (nextY < ws.top) {
                 if (resizeDirection.includes("n")) {
-                    nextHeight += nextY;
+                    nextHeight += nextY - ws.top;
                 }
-                nextY = 0;
+                nextY = ws.top;
             }
 
-            nextWidth = Math.max(MIN_WIDTH, Math.min(nextWidth, window.innerWidth - nextX));
-            nextHeight = Math.max(MIN_HEIGHT, Math.min(nextHeight, window.innerHeight - nextY));
+            nextWidth = Math.max(MIN_WIDTH, Math.min(nextWidth, ws.left + ws.width - nextX));
+            nextHeight = Math.max(MIN_HEIGHT, Math.min(nextHeight, ws.top + ws.height - nextY));
 
             x = nextX;
             y = nextY;
@@ -169,37 +369,44 @@
         if (!dockRect) return false;
 
         const sourceRect = windowElement.getBoundingClientRect();
-        const deltaX = (dockRect.left + dockRect.width / 2) - (sourceRect.left + sourceRect.width / 2);
-        const deltaY = (dockRect.top + dockRect.height / 2) - (sourceRect.top + sourceRect.height / 2);
+        const deltaX = dockRect.left + dockRect.width / 2 - (sourceRect.left + sourceRect.width / 2);
+        const deltaY = dockRect.top + dockRect.height / 2 - (sourceRect.top + sourceRect.height / 2);
         const scaleX = sourceRect.width > 0 ? Math.max(0.12, dockRect.width / sourceRect.width) : 0.12;
         const scaleY = sourceRect.height > 0 ? Math.max(0.12, dockRect.height / sourceRect.height) : 0.12;
 
         const keyframes = mode === "minimize"
-            ? [
-                {transform: "translate3d(0px, 0px, 0px) scale(1, 1)", opacity: 1},
-                {transform: `translate3d(${deltaX}px, ${deltaY}px, 0px) scale(${scaleX}, ${scaleY})`, opacity: 0.18},
-            ]
-            : [
-                {transform: `translate3d(${deltaX}px, ${deltaY}px, 0px) scale(${scaleX}, ${scaleY})`, opacity: 0.18},
-                {transform: "translate3d(0px, 0px, 0px) scale(1, 1)", opacity: 1},
-            ];
+                ? [
+                      {transform: "translate3d(0px, 0px, 0px) scale(1, 1)", opacity: 1},
+                      {
+                          transform: `translate3d(${deltaX}px, ${deltaY}px, 0px) scale(${scaleX}, ${scaleY})`,
+                          opacity: 0.18
+                      }
+                  ]
+                : [
+                      {
+                          transform: `translate3d(${deltaX}px, ${deltaY}px, 0px) scale(${scaleX}, ${scaleY})`,
+                          opacity: 0.18
+                      },
+                      {transform: "translate3d(0px, 0px, 0px) scale(1, 1)", opacity: 1}
+                  ];
 
         const animation = windowElement.animate(keyframes, {
             duration: mode === "minimize" ? MINIMIZE_DURATION : RESTORE_DURATION,
-            easing: mode === "minimize"
-                ? "cubic-bezier(0.18, 0.9, 0.22, 1)"
-                : "cubic-bezier(0.2, 0.8, 0.2, 1)",
-            fill: "both",
+            easing:
+                mode === "minimize"
+                    ? "cubic-bezier(0.18, 0.9, 0.22, 1)"
+                    : "cubic-bezier(0.2, 0.8, 0.2, 1)",
+            fill: "both"
         });
 
         try {
             await animation.finished;
             return true;
         }
-        catch {
+ catch {
             return false;
         }
-        finally {
+ finally {
             animation.cancel();
             clearAnimationStyles();
         }
@@ -208,6 +415,7 @@
     async function minimize() {
         if (!app.floatingTerminalRunning || app.floatingTerminalMinimized || animating) return;
 
+        closeWindowMenu();
         dragging = false;
         resizing = false;
         resizeDirection = null;
@@ -217,6 +425,7 @@
             app.floatingTerminalVisible = false;
             app.floatingTerminalMinimized = true;
             app.floatingTerminalRestoreRequested = false;
+            app.windowLayout = "none";
             return;
         }
 
@@ -228,12 +437,16 @@
 
         app.floatingTerminalVisible = false;
         app.floatingTerminalMinimized = true;
+        // Ends the split so the config window gets the workspace back.
+        app.windowLayout = "none";
     }
 
     $effect(() => {
-        if (!app.floatingTerminalRestoreRequested || !app.floatingTerminalRunning || app.floatingTerminalMinimized) return;
+        if (
+            !app.floatingTerminalRestoreRequested || !app.floatingTerminalRunning || app.floatingTerminalMinimized
+        ) {return;}
 
-        untrack(() => app.floatingTerminalRestoreRequested = false);
+        untrack(() => (app.floatingTerminalRestoreRequested = false));
         if (shouldReduceMotion()) return;
 
         let canceled = false;
@@ -253,21 +466,48 @@
     });
 
     function close() {
+        closeWindowMenu();
         dragging = false;
         resizing = false;
         resizeDirection = null;
         animating = false;
         clearAnimationStyles();
+
+        // Leave the window back at its pre-zoom size so relaunching from the dock
+        // doesn't reappear as a full-screen terminal on a differently-sized viewport.
+        if (maximized && restoreGeometry) {
+            x = restoreGeometry.x;
+            y = restoreGeometry.y;
+            width = restoreGeometry.width;
+            height = restoreGeometry.height;
+        }
+        maximized = false;
+        restoreGeometry = null;
+
+        // Same for a tiled window: relaunch at the pre-split floating geometry.
+        if (tiled !== "none" && preTileGeometry) {
+            x = preTileGeometry.x;
+            y = preTileGeometry.y;
+            width = preTileGeometry.width;
+            height = preTileGeometry.height;
+        }
+        tiled = "none";
+        preTileGeometry = null;
+        app.windowLayout = "none";
+
         app.floatingTerminalRunning = false;
         app.floatingTerminalVisible = false;
         app.floatingTerminalMinimized = false;
         app.floatingTerminalRestoreRequested = false;
     }
 
-    let title = $state(`Ghostty — Interactive Preview`);
+    let title = $state(t("ui.preview.previewTitle"));
     function onCwdChange(cwd: string) {
         title = `${cwd}`;
     }
+
+    const zoomed = $derived(maximized || app.windowLayout !== "none");
+    const zoomLabel = $derived(t("ui.window.layout"));
 </script>
 
 {#if app.floatingTerminalRunning}
@@ -281,20 +521,45 @@
         style:height={`${height}px`}
         style:cursor={dragging ? "grabbing" : "default"}
         role="dialog"
-        aria-label="Interactive terminal preview"
+        aria-label={t("ui.preview.previewAria")}
         aria-hidden={!app.floatingTerminalVisible && !animating}
         aria-modal="false"
     >
         <div class="titlebar" role="presentation" onmousedown={startDrag}>
-            <div class="traffic-lights">
-                <button type="button" class="dot dot-red" onclick={close} aria-label="Close preview window" title="Close">
+            <div
+                class="traffic-lights"
+                role="presentation"
+                onmousedown={(e) => e.stopPropagation()}
+            >
+                <button
+                    type="button"
+                    class="dot dot-red"
+                    onclick={close}
+                    aria-label={t("ui.preview.closePreview")}
+                    title={t("ui.window.close")}
+                >
                     <span class="dot-symbol">&times;</span>
                 </button>
-                <button type="button" class="dot dot-yellow" onclick={minimize} aria-label="Minimize" title="Minimize">
+                <button
+                    type="button"
+                    class="dot dot-yellow"
+                    onclick={minimize}
+                    aria-label={t("ui.window.minimize")}
+                    title={t("ui.window.minimize")}
+                >
                     <span class="dot-symbol">&ndash;</span>
                 </button>
-                <button type="button" class="dot dot-green" aria-label="Zoom" title="Zoom">
-                    <span class="dot-symbol">&plus;</span>
+                <button
+                    type="button"
+                    class="dot dot-green"
+                    bind:this={zoomButton}
+                    onclick={togglePreviewMenu}
+                    aria-label={zoomLabel}
+                    aria-haspopup="menu"
+                    aria-expanded={app.windowMenuOwner === "preview"}
+                    title={zoomLabel}
+                >
+                    <span class="dot-symbol">{zoomed ? "−" : "+"}</span>
                 </button>
             </div>
             <span class="window-title">{title}</span>
@@ -315,191 +580,325 @@
             />
         </div>
 
-        <div class="resize-handle resize-n" onmousedown={(e) => startResize(e, "n")} aria-hidden="true"></div>
-        <div class="resize-handle resize-s" onmousedown={(e) => startResize(e, "s")} aria-hidden="true"></div>
-        <div class="resize-handle resize-e" onmousedown={(e) => startResize(e, "e")} aria-hidden="true"></div>
-        <div class="resize-handle resize-w" onmousedown={(e) => startResize(e, "w")} aria-hidden="true"></div>
-        <div class="resize-handle resize-ne" onmousedown={(e) => startResize(e, "ne")} aria-hidden="true"></div>
-        <div class="resize-handle resize-nw" onmousedown={(e) => startResize(e, "nw")} aria-hidden="true"></div>
-        <div class="resize-handle resize-se" onmousedown={(e) => startResize(e, "se")} aria-hidden="true"></div>
-        <div class="resize-handle resize-sw" onmousedown={(e) => startResize(e, "sw")} aria-hidden="true"></div>
+        <div
+            class="resize-handle resize-n"
+            onmousedown={(e) => startResize(e, "n")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-s"
+            onmousedown={(e) => startResize(e, "s")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-e"
+            onmousedown={(e) => startResize(e, "e")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-w"
+            onmousedown={(e) => startResize(e, "w")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-ne"
+            onmousedown={(e) => startResize(e, "ne")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-nw"
+            onmousedown={(e) => startResize(e, "nw")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-se"
+            onmousedown={(e) => startResize(e, "se")}
+            aria-hidden="true"
+        ></div>
+        <div
+            class="resize-handle resize-sw"
+            onmousedown={(e) => startResize(e, "sw")}
+            aria-hidden="true"
+        ></div>
+
+        {#if app.windowMenuOwner === "preview"}
+            <div
+                class="zoom-menu"
+                role="menu"
+                aria-label={t("ui.window.layout")}
+                style:left={`${menuPosition.left}px`}
+                style:top={`${menuPosition.top}px`}
+            >
+                <button type="button" role="menuitem" class="zoom-menu-item" onclick={fillPreview}>
+                    <span>{t("ui.window.fill")}</span>
+                    {#if maximized && app.windowLayout === "none"}<span class="zoom-check">✓</span
+                        >{/if}
+                </button>
+                <button
+                    type="button"
+                    role="menuitem"
+                    class="zoom-menu-item"
+                    onclick={() => setWindowLayout("horizontal")}
+                    disabled={!bothWindowsOpen()}
+                >
+                    <span>{t("ui.window.splitHorizontal")}</span>
+                    {#if app.windowLayout === "horizontal"}<span class="zoom-check">✓</span>{/if}
+                </button>
+                <button
+                    type="button"
+                    role="menuitem"
+                    class="zoom-menu-item"
+                    onclick={() => setWindowLayout("vertical")}
+                    disabled={!bothWindowsOpen()}
+                >
+                    <span>{t("ui.window.splitVertical")}</span>
+                    {#if app.windowLayout === "vertical"}<span class="zoom-check">✓</span>{/if}
+                </button>
+                <div class="zoom-menu-separator" role="separator"></div>
+                <button
+                    type="button"
+                    role="menuitem"
+                    class="zoom-menu-item"
+                    onclick={restorePreview}
+                    disabled={!zoomed}
+                >
+                    <span>{t("ui.window.restore")}</span>
+                </button>
+            </div>
+        {/if}
     </div>
 {/if}
 
 <style>
-.ghostty-window {
-    position: fixed;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border-level-1);
-    /* box-shadow: 0 22px 70px 8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.07) inset; */
-    box-shadow: 0 0 20px -1px rgba(0,0,0,0.7);
-    pointer-events: all;
-    background: var(--config-bg);
-    transform-origin: center center;
-}
+    .ghostty-window {
+        position: fixed;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-level-1);
+        /* box-shadow: 0 22px 70px 8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.07) inset; */
+        box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.7);
+        pointer-events: all;
+        background: var(--config-bg);
+        transform-origin: center center;
+    }
 
-.ghostty-window.minimized {
-    opacity: 0;
-    pointer-events: none;
-}
+    .ghostty-window.minimized {
+        opacity: 0;
+        pointer-events: none;
+    }
 
-.ghostty-window::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    box-shadow: 0 0 1px white inset;
-    border-radius: inherit;
-    z-index: 2;
-    pointer-events: none;
-}
+    .ghostty-window::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        box-shadow: 0 0 1px white inset;
+        border-radius: inherit;
+        z-index: 2;
+        pointer-events: none;
+    }
 
-.titlebar {
-    height: 38px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    /* background: #2A2434; */
-    border-bottom: 1px solid transparent;
-    cursor: grab;
-    user-select: none;
-    transition: border-color 250ms cubic-bezier(0, 0.3, 0.7, 1);
-}
+    .titlebar {
+        height: 38px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        /* background: #2A2434; */
+        border-bottom: 1px solid transparent;
+        cursor: grab;
+        user-select: none;
+        transition: border-color 250ms cubic-bezier(0, 0.3, 0.7, 1);
+    }
 
-.titlebar:active {
-    cursor: grabbing;
-    border-bottom: 1px solid var(--border-level-1);
-}
+    .titlebar:active {
+        cursor: grabbing;
+        border-bottom: 1px solid var(--border-level-1);
+    }
 
-.traffic-lights {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-}
+    .traffic-lights {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
 
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-}
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
 
-.dot-red {background: #FF5F57;}
-.dot-yellow {background: #FEBC2E;}
-.dot-green {background: #28C840;}
+    .dot-red {
+        background: var(--color-traffic-red);
+    }
+    .dot-yellow {
+        background: var(--color-traffic-yellow);
+    }
+    .dot-green {
+        background: var(--color-traffic-green);
+    }
 
-.dot-symbol {
-    /* font-size: 8px; */
-    line-height: 1;
-    color: rgba(0, 0, 0, 0);
-    font-weight: 400;
-    margin-top: -3px;
-}
+    .dot-symbol {
+        /* font-size: 8px; */
+        line-height: 1;
+        color: rgba(0, 0, 0, 0);
+        font-weight: 400;
+        margin-top: -3px;
+    }
 
-.traffic-lights:hover .dot-symbol {
-    color: rgba(0, 0, 0, 0.6);
-}
+    .traffic-lights:hover .dot-symbol {
+        color: rgba(0, 0, 0, 0.6);
+    }
 
-.window-title {
-    flex: 1;
-    text-align: center;
-    /* font-size: 0.75rem; */
-    font-weight: 700;
-    /* color: rgba(235, 230, 238, 0.6); */
-    pointer-events: none;
-}
+    .window-title {
+        flex: 1;
+        text-align: center;
+        /* font-size: 0.75rem; */
+        font-weight: 700;
+        /* color: rgba(235, 230, 238, 0.6); */
+        pointer-events: none;
+    }
 
-.titlebar-end {
-    width: 52px;
-    flex-shrink: 0;
-}
+    .titlebar-end {
+        width: 52px;
+        flex-shrink: 0;
+    }
 
-.terminal-body {
-    flex: 1;
-    overflow: hidden;
-    min-height: 0;
-}
+    .terminal-body {
+        flex: 1;
+        overflow: hidden;
+        min-height: 0;
+    }
 
-.resize-handle {
-    position: absolute;
-    z-index: 3;
-}
+    .resize-handle {
+        position: absolute;
+        z-index: 3;
+    }
 
-.resize-n,
-.resize-s {
-    left: 10px;
-    right: 10px;
-    height: 8px;
-}
+    .resize-n,
+    .resize-s {
+        left: 10px;
+        right: 10px;
+        height: 8px;
+    }
 
-.resize-n {
-    top: -4px;
-    cursor: ns-resize;
-}
+    .resize-n {
+        top: -4px;
+        cursor: ns-resize;
+    }
 
-.resize-s {
-    bottom: -4px;
-    cursor: ns-resize;
-}
+    .resize-s {
+        bottom: -4px;
+        cursor: ns-resize;
+    }
 
-.resize-e,
-.resize-w {
-    top: 10px;
-    bottom: 10px;
-    width: 8px;
-}
+    .resize-e,
+    .resize-w {
+        top: 10px;
+        bottom: 10px;
+        width: 8px;
+    }
 
-.resize-e {
-    right: -4px;
-    cursor: ew-resize;
-}
+    .resize-e {
+        right: -4px;
+        cursor: ew-resize;
+    }
 
-.resize-w {
-    left: -4px;
-    cursor: ew-resize;
-}
+    .resize-w {
+        left: -4px;
+        cursor: ew-resize;
+    }
 
-.resize-ne,
-.resize-nw,
-.resize-se,
-.resize-sw {
-    width: 12px;
-    height: 12px;
-}
+    .resize-ne,
+    .resize-nw,
+    .resize-se,
+    .resize-sw {
+        width: 12px;
+        height: 12px;
+    }
 
-.resize-ne {
-    top: -4px;
-    right: -4px;
-    cursor: nesw-resize;
-}
+    .resize-ne {
+        top: -4px;
+        right: -4px;
+        cursor: nesw-resize;
+    }
 
-.resize-nw {
-    top: -4px;
-    left: -4px;
-    cursor: nwse-resize;
-}
+    .resize-nw {
+        top: -4px;
+        left: -4px;
+        cursor: nwse-resize;
+    }
 
-.resize-se {
-    right: -4px;
-    bottom: -4px;
-    cursor: nwse-resize;
-}
+    .resize-se {
+        right: -4px;
+        bottom: -4px;
+        cursor: nwse-resize;
+    }
 
-.resize-sw {
-    left: -4px;
-    bottom: -4px;
-    cursor: nesw-resize;
-}
+    .resize-sw {
+        left: -4px;
+        bottom: -4px;
+        cursor: nesw-resize;
+    }
+
+    .zoom-menu {
+        position: fixed;
+        z-index: 2000;
+        min-width: 208px;
+        padding: 4px;
+        border-radius: 8px;
+        background: var(--bg-modal);
+        border: 1px solid var(--border-level-2);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .zoom-menu-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        padding: 6px 10px;
+        border: 0;
+        border-radius: 5px;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .zoom-menu-item:hover:not(:disabled) {
+        background: var(--color-selected);
+    }
+
+    .zoom-menu-item:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+
+    .zoom-check {
+        font-size: 0.8em;
+        color: var(--font-color-accent);
+    }
+
+    .zoom-menu-separator {
+        height: 1px;
+        margin: 3px 6px;
+        background: var(--border-separator);
+    }
 </style>

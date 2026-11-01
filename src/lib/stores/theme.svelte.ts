@@ -15,15 +15,16 @@ export type PreviewMode = "light" | "dark";
 // Ephemeral view state: which half of a `light:A,dark:B` dual theme is being previewed.
 // Never stored in config, never serialized. Defaults to the visitor's own OS appearance
 // "what would Ghostty show *me*" falling back to dark during prerender/tests.
-const prefersLight = typeof window !== "undefined" && (window.matchMedia?.("(prefers-color-scheme: light)").matches ?? false);
-export const preview = $state<{mode: PreviewMode;}>({mode: prefersLight ? "light" : "dark"});
+const prefersLight = typeof window !== "undefined"
+    && (window.matchMedia?.("(prefers-color-scheme: light)").matches ?? false);
+export const preview = $state<{mode: PreviewMode}>({mode: prefersLight ? "light" : "dark"});
 
 const selection = $derived(parseTheme(config.theme));
 
-const activeTheme = $derived.by((): {name: string, colors: ColorScheme;} | null => {
+const activeTheme = $derived.by((): {name: string; colors: ColorScheme} | null => {
     let name: string | null = null;
-    if (selection.kind === "single") name = selection.name;
-    else if (selection.kind === "dual") name = preview.mode === "light" ? selection.light : selection.dark;
+    if (selection.kind === "single") {name = selection.name;}
+    else if (selection.kind === "dual") {name = preview.mode === "light" ? selection.light : selection.dark;}
     if (name === null) return null;
     // Unknown/custom names (or absolute paths) can't be previewed; the string still round-trips.
     const colors = (themes as Record<string, ColorScheme>)[name];
@@ -32,8 +33,15 @@ const activeTheme = $derived.by((): {name: string, colors: ColorScheme;} | null 
 
 const themeColors = $derived(activeTheme?.colors ?? null);
 
-const SCHEME_KEYS = ["background", "foreground", "cursorColor", "cursorText", "selectionBackground", "selectionForeground"] as const;
-export type SchemeColorKey = typeof SCHEME_KEYS[number];
+const SCHEME_KEYS = [
+    "background",
+    "foreground",
+    "cursorColor",
+    "cursorText",
+    "selectionBackground",
+    "selectionForeground"
+] as const;
+export type SchemeColorKey = (typeof SCHEME_KEYS)[number];
 
 /** Is this settings-registry key one of the theme-affected color keys? */
 export function isSchemeColorKey(key: string): key is SchemeColorKey {
@@ -44,7 +52,7 @@ export function isSchemeColorKey(key: string): key is SchemeColorKey {
 // explicitly set to the app default reads as "not overridden", so the theme wins. Consistent
 // with export semantics; provenance tracking would be the stricter (unshipped) alternative.
 function resolve(key: SchemeColorKey): string {
-    return isNonDefault(key) ? config[key] : themeColors?.[key] ?? config[key];
+    return isNonDefault(key) ? config[key] : (themeColors?.[key] ?? config[key]);
 }
 
 const effective = $derived.by(() => ({
@@ -55,7 +63,9 @@ const effective = $derived.by(() => ({
     selectionBackground: resolve("selectionBackground"),
     selectionForeground: resolve("selectionForeground"),
     // Element-wise: override per index > theme index (themes carry 16) > default index.
-    palette: config.palette.map((color, i) => color !== defaults.palette[i] ? color : themeColors?.palette?.[i] ?? color),
+    palette: config.palette.map((color, i) =>
+        color !== defaults.palette[i] ? color : (themeColors?.palette?.[i] ?? color)
+    )
 }));
 
 // $derived bindings can't be exported from a module directly; expose them through getters.

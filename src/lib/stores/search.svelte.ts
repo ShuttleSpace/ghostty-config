@@ -2,7 +2,7 @@ import {resolve} from "$app/paths";
 import navigation from "$lib/settings/navigation";
 import registry from "$lib/settings/registry";
 import type {SettingsRegistry} from "$lib/settings/types";
-
+import {groupName, panelName, tSetting} from "$lib/i18n";
 
 // FIXME: this is a bit of a mess, now that we separated this logic from the UI,
 // consider refactoring this to be more maintainable and testable. Also consider
@@ -13,7 +13,7 @@ export const searchState = $state({
     query: "",
     selectedIndex: -1,
     activeIndex: -1,
-    selectedId: "",
+    selectedId: ""
 });
 
 export function setQuery(query: string) {
@@ -26,7 +26,9 @@ export function setQuery(query: string) {
 const searchTokens = $derived.by(() => searchState.query.split(/\s+/).filter(Boolean));
 const searchResults = $derived.by(() => {
     if (!searchTokens.length) return [];
-    return searchableSettings.filter(result => searchTokens.every(token => result.searchableText.includes(token)));
+    return searchableSettings.filter((result) =>
+        searchTokens.every((token) => result.searchableText.includes(token))
+    );
 });
 
 export function getResults() {
@@ -46,11 +48,11 @@ const groupedSearchResults = $derived.by(() => {
         categoryName: string;
         categoryIcon: string;
         categoryRoute: string;
-        results: Array<SearchResult & {index: number;}>;
+        results: Array<SearchResult & {index: number}>;
     }> = [];
 
     searchResults.forEach((result, index) => {
-        const existing = grouped.find(group => group.categoryId === result.categoryId);
+        const existing = grouped.find((group) => group.categoryId === result.categoryId);
         if (existing) {
             existing.results.push({...result, index});
             return;
@@ -61,7 +63,7 @@ const groupedSearchResults = $derived.by(() => {
             categoryName: result.categoryName,
             categoryIcon: result.categoryIcon,
             categoryRoute: resolve("/settings/[category]", {category: result.categoryId}),
-            results: [{...result, index}],
+            results: [{...result, index}]
         });
     });
 
@@ -75,8 +77,6 @@ export function getGroupedResults() {
 export function hasGroupedResults() {
     return groupedSearchResults.length > 0;
 }
-
-
 
 export interface SearchResult {
     categoryId: string;
@@ -95,47 +95,58 @@ export interface SearchResult {
 const stripHtmlRegex = (html: string) => html.replace(/<[^>]*>/g, "");
 
 export function stripMarkdownRegex(md: string): string {
-    return md
-        // Remove inline code markers
-        .replace(/`([^`]+)`/g, "$1")
-        // Remove list markers (-, *, +, 1.)
-        .replace(/^\s*([-*+]|\d+\.)\s+/gm, "")
-        .trim();
+    return (
+        md
+            // Remove inline code markers
+            .replace(/`([^`]+)`/g, "$1")
+            // Remove list markers (-, *, +, 1.)
+            .replace(/^\s*([-*+]|\d+\.)\s+/gm, "")
+            .trim()
+    );
 }
-
 
 // TODO: this is pretty inefficient, we should probably build an index for this instead
 // of doing a linear search through all settings every time. However, it is unlikely that
 // there will be enough settings to cause performance issues, so this is good enough for now.
-const searchableSettings = (() => {
+const searchableSettings = $derived.by(() => {
     const results: SearchResult[] = [];
     for (const category of navigation) {
         if (!category.groups) continue;
+        const categoryLabel = panelName(category.id, category.name);
         for (const group of category.groups) {
+            const groupLabel = groupName(category.id, group.id, group.name);
             for (const id of group.settings) {
                 const setting = registry[id] as SettingsRegistry[keyof SettingsRegistry];
-                const cleanedNote = setting.note ? stripHtmlRegex(setting.note) : "";
-                const cleanedDescription = setting.description ? stripMarkdownRegex(setting.description) : "";
-                const searchableText = [category.name, group.name, setting.name, cleanedNote, cleanedDescription];
+                const settingLabel = tSetting(id, "name", setting.name);
+                const note = tSetting(id, "note", setting.note ?? "");
+                const description = tSetting(id, "description", setting.description ?? "");
+                const cleanedNote = note ? stripHtmlRegex(note) : "";
+                const cleanedDescription = description ? stripMarkdownRegex(description) : "";
+                const searchableText = [
+                    categoryLabel,
+                    groupLabel,
+                    settingLabel,
+                    cleanedNote,
+                    cleanedDescription
+                ];
 
                 results.push({
                     categoryId: category.id,
-                    categoryName: category.name,
+                    categoryName: categoryLabel,
                     categoryIcon: category.icon,
-                    groupName: group.name,
+                    groupName: groupLabel,
                     note: cleanedNote,
                     description: cleanedDescription,
                     routeKey: `${category.id}:${id}`,
                     settingId: id,
-                    settingName: setting.name,
-                    searchableText: searchableText.join(" ").toLocaleLowerCase(),
+                    settingName: settingLabel,
+                    searchableText: searchableText.join(" ").toLocaleLowerCase()
                 });
             }
         }
     }
     return results;
-})();
-
+});
 
 export interface HighlightPart {
     matched: boolean;
@@ -144,7 +155,7 @@ export interface HighlightPart {
 
 // TODO: this is a bit janky, consider a more robust solution for keeping track of active/selected
 // search results and their corresponding DOM elements
-export function getHighlightParts(value: string,): HighlightPart[] {
+export function getHighlightParts(value: string): HighlightPart[] {
     if (!value) return [];
 
     const tokens = searchTokens;
@@ -180,7 +191,7 @@ export function getHighlightParts(value: string,): HighlightPart[] {
         if (range[0] <= last[1]) {
             last[1] = Math.max(last[1], range[1]);
         }
-        else {
+ else {
             merged.push(range);
         }
     }
